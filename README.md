@@ -56,4 +56,9 @@ backend 팀은 매주 스프린트 방식으로 개발을 수행합니다.
 3. 작업이 완료되고 ``develop``으로 올릴 준비가 되었다면 review 를 통해 점검을 수행하고 PR을 진행합니다.
 
 
-### 
+## Architecture
+![sofa_infra](https://user-images.githubusercontent.com/15176192/169679477-d35a0026-7779-4c61-904a-8466e17c96a8.png)
+
+
+## ER Diagram
+![sofa_erd_v1](https://user-images.githubusercontent.com/15176192/169679439-9caff376-7264-45c1-bf74-2a4ca982d6bb.png)
