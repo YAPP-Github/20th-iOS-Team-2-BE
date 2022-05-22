@@ -2,7 +2,7 @@
 > [20th] iOS 2팀 BackEnd  
 > README last modified 220506
  
-## Sofa
+## 👨‍👩‍👧‍👦 SOFA: 우리 가족만의 SNS 👨‍👩‍👧‍👦
 Java 11  
 Spring Boot  
 gradle  
