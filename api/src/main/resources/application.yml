@@ -10,8 +10,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:h2:mem/test
+    url: jdbc:h2:mem://localhost/test
     username: sa
     password:
     hikari:
       maximum-pool-size: 4
+    driver-class-name: org.h2.Driver
