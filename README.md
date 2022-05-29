@@ -6,7 +6,7 @@
 Java 11  
 Spring Boot  
 Spring WebFlux  
-multi-module with gradle
+multi-module with gradle  
 CDN  
 MySQL  
 MongoDB  
