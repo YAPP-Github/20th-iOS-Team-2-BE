@@ -1,12 +1,22 @@
 # 20th-iOS-Team-2-BE
 > [20th] iOS 2팀 BackEnd  
-> README last modified 220506
+> README last modified 220529
  
 ## 👨‍👩‍👧‍👦 SOFA: 우리 가족만의 SNS 👨‍👩‍👧‍👦
 Java 11  
 Spring Boot  
-gradle  
+Spring WebFlux  
+multi-module with gradle
+CDN  
+MySQL  
+MongoDB  
+docker / docker-compose
 
+## how to run
+1. clone repository  
+2. set env
+3. ```gradle build``` (need fast, use --exclude-task test)
+4. run ```java -jar``` or ```run docker``` with PORT 8080
 
 ## Code Conventions
 
@@ -30,6 +40,10 @@ https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-me
 
 
 **test method**  
+
+테스트 명세  
+https://www.notion.so/daehwan2yo/Test-Convention-89cc1b5722f84acea9654411aa7c1daf
+
 - 단위 테스트
 
 - 통합 테스트
