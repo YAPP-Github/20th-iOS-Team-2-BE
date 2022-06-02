@@ -1,3 +1,5 @@
 rootProject.name = 'sofa'
 include 'api'
 include 'event'
+include 'core'
+
