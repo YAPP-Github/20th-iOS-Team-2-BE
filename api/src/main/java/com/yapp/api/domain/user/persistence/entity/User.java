@@ -1,5 +1,6 @@
 package com.yapp.api.domain.user.persistence.entity;
 
+import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
@@ -7,12 +8,15 @@ import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.yapp.api.domain.common.BaseEntity;
+import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.oauth.entity.OAuthInfo;
 import com.yapp.api.domain.user.persistence.entity.element.OAuthInfos;
 import com.yapp.api.domain.user.persistence.entity.element.ProfileInfo;
@@ -39,6 +43,9 @@ public class User extends BaseEntity {
 
 	@Embedded
 	private OAuthInfos oAuthInfos;
+
+	@OneToOne(fetch = LAZY)
+	private Family family;
 
 	@Builder
 	public User(String name, LocalDate birthday, ProfileInfo profileInfo, OAuthInfo... oAuthInfos) {
