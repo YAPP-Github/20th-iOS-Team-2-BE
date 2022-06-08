@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.oauth.entity.OAuthInfo;
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "USER")
 @NoArgsConstructor(access = PROTECTED)
 public class User extends BaseEntity {
 	@Id

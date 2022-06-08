@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.yapp.api.domain.common.BaseEntity;
 
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(name = "PROFILE_MESSAGE")
 @NoArgsConstructor(access = PROTECTED)
 public class ProfileMessage extends BaseEntity {
 	@Id
