@@ -19,11 +19,13 @@ public class UserCommandApi {
 
 	@DeleteMapping("/user")
 	ResponseEntity<Void> removeUser() {
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.noContent()
+							 .build();
 	}
 
 	@PatchMapping("/user")
 	ResponseEntity<Void> modifyUser() {
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok()
+							 .build();
 	}
 }

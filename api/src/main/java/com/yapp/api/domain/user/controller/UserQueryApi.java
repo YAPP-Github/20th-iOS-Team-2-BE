@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class UserQueryApi {
 	@GetMapping("/history/{userId}")
 	ResponseEntity<ProfileResponse.MessageHistory> retrieveMessageHistory(@PathVariable(value = "userId") Long userId) {
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok()
+							 .build();
 	}
 }
