@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.yapp.api.domain.album.controller.dto.AlbumResponse;
+import com.yapp.api.domain.file.controller.dto.FileResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileCommandApi {
 	@PostMapping(value = _FILES, consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
+	ResponseEntity<FileResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
 		return null;
 	}
 

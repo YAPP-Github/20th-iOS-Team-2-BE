@@ -1,7 +1,9 @@
 package com.yapp.core.constant;
 
 public class ApiConstant {
+	public static final String TYPE = "type";
 	public static final String KIND = "kind";
+	public static final String DATE = "date";
 
 	public static final String USER_ID = "userId";
 	public static final String ALBUM_ID = "albumId";

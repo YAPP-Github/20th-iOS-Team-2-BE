@@ -10,23 +10,33 @@ public class FamilyRequest {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class Create {}
+	public static class Create {
+		private String familyName;
+		private String familyMotto;
+	}
 
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class Modify {}
+	public static class Modify {
+		private String familyName;
+		private String familyMotto;
+	}
 
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GreetWithEmoji {}
+	public static class GreetWithEmoji {
+		private Integer emojiNumber;
+	}
 
 	@Getter
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GreetWithMessage {}
+	public static class GreetWithMessage {
+		private String content;
+	}
 }
