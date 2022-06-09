@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
+import com.yapp.api.domain.common.util.validator.ArgumentValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,9 +18,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AlbumQueryApi {
 	private static final String DETAILS_AS_KIND_DEFAULT = "favourite";
+	private final ArgumentValidator albumQueryArgumentValidator;
 
 	@GetMapping(value = _ALBUM, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.List> retrieveAlbumList() {
+	ResponseEntity<AlbumResponse.Elements> retrieveAlbumList(@RequestParam(value = TYPE) String type) {
+		if (albumQueryArgumentValidator.equal(KIND, type)) {
+			return ResponseEntity.ok()
+								 .body(new AlbumResponse.DateElements());
+		}
+
+		if (albumQueryArgumentValidator.equal(DATE, type)) {
+			return ResponseEntity.ok()
+								 .body(new AlbumResponse.KindElements());
+		}
 		return null;
 	}
 
