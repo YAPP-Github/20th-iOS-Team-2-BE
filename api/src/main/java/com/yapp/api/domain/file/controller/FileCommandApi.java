@@ -1,5 +1,6 @@
 package com.yapp.api.domain.file.controller;
 
+import static com.yapp.core.constant.ApiConstant.*;
 import static org.springframework.http.MediaType.*;
 
 import java.util.List;
@@ -19,13 +20,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class FileCommandApi {
-	@PostMapping(value = "/files", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
+	@PostMapping(value = _FILES, consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<AlbumResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
 		return null;
 	}
 
-	@DeleteMapping(value = "/album/{fileId}")
-	ResponseEntity<Void> removeFile(@PathVariable(value = "fileId") Long fileId) {
+	@DeleteMapping(value = _FILES_RESOURCE)
+	ResponseEntity<Void> removeFile(@PathVariable(value = FILE_ID) Long fileId) {
 		return null;
 	}
 }

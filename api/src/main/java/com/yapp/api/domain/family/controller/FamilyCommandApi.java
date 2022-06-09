@@ -1,5 +1,6 @@
 package com.yapp.api.domain.family.controller;
 
+import static com.yapp.core.constant.ApiConstant.*;
 import static org.springframework.http.MediaType.*;
 
 import org.springframework.http.ResponseEntity;
@@ -18,30 +19,30 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class FamilyCommandApi {
-	@PostMapping(value = "/family", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	@PostMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<FamilyResponse.Create> createFamily(@RequestBody FamilyRequest.Create request) {
 		return null;
 	}
 
-	@PatchMapping(value = "/family", consumes = APPLICATION_JSON_VALUE)
+	@PatchMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> modifyFamilyInfo(@RequestBody FamilyRequest.Modify request) {
 		return ResponseEntity.ok()
 							 .build();
 	}
 
-	@DeleteMapping(value = "/family/{familyId}")
-	ResponseEntity<Void> removeFamily(@PathVariable(value = "familyId") Long familyId) {
+	@DeleteMapping(value = _FAMILY_RESOURCE)
+	ResponseEntity<Void> removeFamily(@PathVariable(value = FAMILY_ID) Long familyId) {
 		return ResponseEntity.noContent()
 							 .build();
 	}
 
-	@PostMapping(value = "/family/greeting/message", consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(value = _FAMILY_GREETING_MESSAGE, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createGreetingWithMessage(@RequestBody FamilyRequest.GreetWithMessage request) {
 		return ResponseEntity.ok()
 							 .build();
 	}
 
-	@PostMapping(value = "/family/greeting/emoji", consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(value = _FAMILY_GREETING_EMOJI, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createGreetingWithEmoji(@RequestBody FamilyRequest.GreetWithEmoji request) {
 		return ResponseEntity.ok()
 							 .build();

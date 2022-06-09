@@ -1,5 +1,7 @@
 package com.yapp.api.domain.user.controller;
 
+import static com.yapp.core.constant.ApiConstant.*;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,19 +13,19 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class UserCommandApi {
-	@DeleteMapping("/history/{messageId}")
-	ResponseEntity<Void> removeProfileMessage(@PathVariable(value = "messageId") Long messageId) {
+	@DeleteMapping(_USER_HISTORY_RESOURCE)
+	ResponseEntity<Void> removeProfileMessage(@PathVariable(value = MESSAGE_ID) Long messageId) {
 		return ResponseEntity.noContent()
 							 .build();
 	}
 
-	@DeleteMapping("/user")
+	@DeleteMapping(_USER)
 	ResponseEntity<Void> removeUser() {
 		return ResponseEntity.noContent()
 							 .build();
 	}
 
-	@PatchMapping("/user")
+	@PatchMapping(_USER)
 	ResponseEntity<Void> modifyUser() {
 		return ResponseEntity.ok()
 							 .build();
