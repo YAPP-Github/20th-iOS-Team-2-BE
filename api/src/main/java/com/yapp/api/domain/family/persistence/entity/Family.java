@@ -51,9 +51,14 @@ public class Family extends BaseEntity {
 
 	@Builder
 	public Family(User user, String name, String motto) {
-		this.owner = user;
+		userAsFamily(user);
 		this.name = name;
 		this.motto = motto;
+	}
+
+	private void userAsFamily(User user) {
+		this.owner = user;
+		user.setFamily(this);
 		members.add(user);
 	}
 

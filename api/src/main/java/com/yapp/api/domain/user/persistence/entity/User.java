@@ -1,5 +1,6 @@
 package com.yapp.api.domain.user.persistence.entity;
 
+import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.oauth.entity.OAuthInfo;
+import com.yapp.api.domain.user.persistence.entity.element.Authority;
 import com.yapp.api.domain.user.persistence.entity.element.OAuthInfos;
 import com.yapp.api.domain.user.persistence.entity.element.ProfileInfo;
 
@@ -36,6 +39,9 @@ public class User extends BaseEntity {
 
 	private LocalDate birthday;
 
+	@Enumerated(STRING)
+	private Authority authority;
+
 	@Embedded
 	private ProfileInfo profileInfo;
 
@@ -50,5 +56,17 @@ public class User extends BaseEntity {
 		this.birthday = birthday;
 		this.profileInfo = profileInfo;
 		this.oAuthInfos = new OAuthInfos(Set.of(oAuthInfos));
+		authority = Authority.USER;
+	}
+
+	public static class ANONYMOUS extends User {
+		@Override
+		public Authority getAuthority() {
+			return Authority.ANONYMOUS;
+		}
+	}
+
+	public void setFamily(Family family) {
+		this.family = family;
 	}
 }
