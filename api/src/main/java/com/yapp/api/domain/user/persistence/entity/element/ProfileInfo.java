@@ -6,14 +6,12 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Embeddable;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
 public class ProfileInfo {
 	private static final String ORIGINAL = "0:";
 
@@ -24,12 +22,19 @@ public class ProfileInfo {
 	private LocalDateTime modifiedDate;
 	private Integer emoji;
 
+	private ProfileInfo(String originalNickname, String roleInFamily, String imageLink, LocalDateTime modifiedDate) {
+		this.nickname = originalNickname;
+		this.roleInFamily = roleInFamily;
+		this.imageLink = imageLink;
+		this.modifiedDate = modifiedDate;
+		this.emoji = 0;
+	}
+
 	public static ProfileInfo of(String originalNickname,
 								 String roleInFamily,
 								 String imageLink,
-								 LocalDateTime modifiedDate,
-								 Integer emoji) {
-		return new ProfileInfo(original(originalNickname), roleInFamily, imageLink, modifiedDate, emoji);
+								 LocalDateTime modifiedDate) {
+		return new ProfileInfo(original(originalNickname), roleInFamily, imageLink, modifiedDate);
 	}
 
 	private static String original(String originalNickname) {

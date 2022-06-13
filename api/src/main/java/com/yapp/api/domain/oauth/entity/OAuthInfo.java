@@ -1,6 +1,6 @@
 package com.yapp.api.domain.oauth.entity;
 
-import static com.yapp.api.domain.oauth.entity.OAuthInfo.OauthProvider.*;
+import static com.yapp.api.domain.oauth.entity.OAuthInfo.OAuthProvider.*;
 import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
@@ -27,13 +27,13 @@ public class OAuthInfo {
 	private Long id;
 
 	@Enumerated(STRING)
-	private OauthProvider provider;
+	private OAuthProvider provider;
 	private String oauthId;
 
 	@ManyToOne(fetch = LAZY)
 	private User user;
 
-	private OAuthInfo(OauthProvider provider, String oauthId) {
+	private OAuthInfo(OAuthProvider provider, String oauthId) {
 		this.provider = provider;
 		this.oauthId = oauthId;
 	}
@@ -52,7 +52,7 @@ public class OAuthInfo {
 
 	@Getter
 	@AllArgsConstructor
-	enum OauthProvider {
+	public enum OAuthProvider {
 		KAKAO("kakao"), APPLE("apple"), NULL("");
 
 		public static boolean isKakao(String providerKind) {
@@ -68,7 +68,7 @@ public class OAuthInfo {
 
 	private static class INVALID extends OAuthInfo {
 		@Override
-		public OauthProvider getProvider() {
+		public OAuthProvider getProvider() {
 			return NULL;
 		}
 	}
