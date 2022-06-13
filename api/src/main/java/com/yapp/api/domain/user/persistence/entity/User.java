@@ -65,4 +65,8 @@ public class User extends BaseEntity {
 			return Authority.ANONYMOUS;
 		}
 	}
+
+	public void setFamily(Family family) {
+		this.family = family;
+	}
 }
