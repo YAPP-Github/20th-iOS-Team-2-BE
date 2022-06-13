@@ -6,8 +6,9 @@ import lombok.Getter;
 public class BaseBusinessException extends RuntimeException {
 	private final ErrorCode errorCode;
 
-	public BaseBusinessException(ErrorCode errorCode) {
+	public BaseBusinessException(ErrorCode errorCode, Exception e) {
 		super(errorCode.getDetail());
+		errorCode.setMessage(e.toString());
 		this.errorCode = errorCode;
 	}
 
