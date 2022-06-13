@@ -1,4 +1,4 @@
-package com.yapp.global.query;
+package com.yapp.api.global.query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
