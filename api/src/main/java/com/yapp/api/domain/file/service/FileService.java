@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FileService {
+
 	private final FileCommandHandler fileCommandHandler;
 	private final FileQueryHandler fileQueryHandler;
+	private final CloudService cloudService;
+
 }

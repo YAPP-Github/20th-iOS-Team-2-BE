@@ -14,17 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yapp.api.domain.file.controller.dto.FileResponse;
+import com.yapp.api.domain.file.service.CloudService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class FileCommandApi {
+
+	private final CloudService cloudService;
+
 	@PostMapping(value = _FILES, consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<FileResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
-		return null;
+		List<String> fileLinks = cloudService.upload(files);
+
+		return ResponseEntity.ok((new FileResponse.UploadFiles(fileLinks)));
 	}
 
+	@Deprecated
 	@DeleteMapping(value = _FILES_RESOURCE)
 	ResponseEntity<Void> removeFile(@PathVariable(value = FILE_ID) Long fileId) {
 		return null;
