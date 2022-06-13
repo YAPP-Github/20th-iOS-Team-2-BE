@@ -27,7 +27,11 @@ public class EntityFactory {
 	}
 
 	public static Family family() {
-		return new Family("가족명", "가훈");
+		return new Family(user(), "가족명", "가훈");
+	}
+
+	public static Family family(User 만든이) {
+		return new Family(만든이, "가족명", "가훈");
 	}
 
 	public static Appointment appointment(User 회원) {
