@@ -22,13 +22,13 @@ public class ProfileInfo {
 	private String roleInFamily;
 	private String imageLink;
 	private LocalDateTime modifiedDate;
-	private String emoji;
+	private Integer emoji;
 
 	public static ProfileInfo of(String originalNickname,
 								 String roleInFamily,
 								 String imageLink,
 								 LocalDateTime modifiedDate,
-								 String emoji) {
+								 Integer emoji) {
 		return new ProfileInfo(original(originalNickname), roleInFamily, imageLink, modifiedDate, emoji);
 	}
 
