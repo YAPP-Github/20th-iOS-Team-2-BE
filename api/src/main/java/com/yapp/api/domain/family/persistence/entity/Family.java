@@ -7,6 +7,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -80,6 +81,10 @@ public class Family extends BaseEntity {
 
 	private boolean needChange(String target) {
 		return !isNull(target) && !target.isBlank();
+	}
+
+	public Set<User> getMembers() {
+		return new HashSet<>(familyMembers.getMembers());
 	}
 
 	@Embeddable
