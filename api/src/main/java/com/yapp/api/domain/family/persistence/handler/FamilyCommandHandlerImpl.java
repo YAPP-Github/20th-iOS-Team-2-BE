@@ -1,6 +1,21 @@
 package com.yapp.api.domain.family.persistence.handler;
 
+import java.util.function.Function;
+
 import org.springframework.stereotype.Component;
 
+import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.api.domain.family.persistence.repository.FamilyRepository;
+
+import lombok.RequiredArgsConstructor;
+
 @Component
-public class FamilyCommandHandlerImpl implements FamilyCommandHandler {}
+@RequiredArgsConstructor
+public class FamilyCommandHandlerImpl implements FamilyCommandHandler {
+	private final FamilyRepository familyRepository;
+
+	@Override
+	public Family saveFamily(Function<FamilyRepository, Family> function) {
+		return function.apply(familyRepository);
+	}
+}
