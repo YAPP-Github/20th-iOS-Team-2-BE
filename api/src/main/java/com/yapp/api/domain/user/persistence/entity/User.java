@@ -20,7 +20,6 @@ import com.yapp.api.domain.oauth.entity.OAuthInfo;
 import com.yapp.api.domain.user.persistence.entity.element.OAuthInfos;
 import com.yapp.api.domain.user.persistence.entity.element.ProfileInfo;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,7 +45,6 @@ public class User extends BaseEntity {
 	@OneToOne(fetch = LAZY)
 	private Family family;
 
-	@Builder
 	public User(String name, LocalDate birthday, ProfileInfo profileInfo, OAuthInfo... oAuthInfos) {
 		this.name = name;
 		this.birthday = birthday;

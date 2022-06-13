@@ -12,9 +12,11 @@ import javax.persistence.ManyToOne;
 import com.yapp.api.domain.calendar.element.appointment.persistence.entity.Appointment;
 import com.yapp.api.domain.user.persistence.entity.User;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Visibility {
 	@Id

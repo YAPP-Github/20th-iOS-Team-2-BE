@@ -16,9 +16,11 @@ import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.user.persistence.entity.User;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Appointment extends BaseEntity {
 	@Id

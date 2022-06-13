@@ -20,4 +20,8 @@ import lombok.NoArgsConstructor;
 public class OAuthInfos {
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL, orphanRemoval = true)
 	private Set<OAuthInfo> oAuthInfos;
+
+	public boolean contains(OAuthInfo oAuthInfo) {
+		return oAuthInfos.contains(oAuthInfo);
+	}
 }
