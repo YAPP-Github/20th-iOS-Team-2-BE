@@ -1,5 +1,6 @@
 package com.yapp.api.domain.family.persistence.entity;
 
+import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -17,7 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.yapp.api.domain.common.BaseEntity;
-import com.yapp.api.domain.family.persistence.entity.element.FamilyInfo;
 import com.yapp.api.domain.user.persistence.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -37,10 +37,6 @@ public class Family extends BaseEntity {
 	private String name;
 	private String motto;
 	private String imageLink;
-
-	@Embedded
-	@Getter(PRIVATE)
-	private FamilyInfos familyInfos = new FamilyInfos();
 
 	@OneToOne(fetch = LAZY)
 	private User owner;
@@ -66,15 +62,27 @@ public class Family extends BaseEntity {
 		return members.getCount();
 	}
 
-	public void addFamilyInfo(FamilyInfo familyInfo) {
-		this.familyInfos.add(this, familyInfo);
+	public void update(String imageLink, String familyName, String familyMotto) {
+		if (needChange(imageLink)) {
+			this.imageLink = imageLink;
+		}
+		if (needChange(familyName)) {
+			this.name = familyName;
+		}
+		if (needChange(familyMotto)) {
+			this.motto = familyMotto;
+		}
+	}
+
+	private boolean needChange(String target) {
+		return !isNull(target) && !target.isBlank();
 	}
 
 	@Embeddable
 	@Getter
 	@NoArgsConstructor(access = PROTECTED)
 	@AllArgsConstructor(access = PRIVATE)
-	private class Members {
+	class Members {
 		@OneToMany(mappedBy = "family", fetch = LAZY)
 		private Set<User> members = new HashSet<>();
 
@@ -84,20 +92,6 @@ public class Family extends BaseEntity {
 
 		int getCount() {
 			return members.size();
-		}
-	}
-
-	@Embeddable
-	@Getter
-	@NoArgsConstructor(access = PROTECTED)
-	@AllArgsConstructor(access = PRIVATE)
-	private class FamilyInfos {
-		@OneToMany(mappedBy = "family", fetch = LAZY)
-		private Set<FamilyInfo> familyInfos = new HashSet<>();
-
-		public void add(Family family, FamilyInfo familyInfo) {
-			familyInfo.setFamily(family);
-			familyInfos.add(familyInfo);
 		}
 	}
 }
