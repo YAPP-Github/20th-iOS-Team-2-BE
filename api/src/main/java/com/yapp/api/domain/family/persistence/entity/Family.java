@@ -43,7 +43,7 @@ public class Family extends BaseEntity {
 
 	@Embedded
 	@Getter(PRIVATE)
-	private Members members = new Members();
+	private FamilyMembers familyMembers = new FamilyMembers();
 
 	@Builder
 	public Family(User user, String name, String motto) {
@@ -55,11 +55,15 @@ public class Family extends BaseEntity {
 	private void userAsFamily(User user) {
 		this.owner = user;
 		user.setFamily(this);
-		members.add(user);
+		familyMembers.add(user);
 	}
 
 	public int getMemberCount() {
-		return members.getCount();
+		return familyMembers.getCount();
+	}
+
+	public void addMember(User member) {
+		this.familyMembers.add(member);
 	}
 
 	public void update(String imageLink, String familyName, String familyMotto) {
@@ -82,7 +86,7 @@ public class Family extends BaseEntity {
 	@Getter
 	@NoArgsConstructor(access = PROTECTED)
 	@AllArgsConstructor(access = PRIVATE)
-	class Members {
+	class FamilyMembers {
 		@OneToMany(mappedBy = "family", fetch = LAZY)
 		private Set<User> members = new HashSet<>();
 
