@@ -26,6 +26,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "FILE")
 @NoArgsConstructor(access = PROTECTED)
 public class File {
+	public static final String KIND_PHOTO = "photo";
+	public static final String KIND_RECORDING = "recording";
+	public static final String KIND_NULL = "null";
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
@@ -65,7 +69,7 @@ public class File {
 	@Getter
 	@AllArgsConstructor
 	enum Kind {
-		PHOTO("photo"), RECORDING("recording"), NULL("null");
+		PHOTO(KIND_PHOTO), RECORDING(KIND_RECORDING), NULL(KIND_NULL);
 		private final String value;
 
 		static boolean isPhoto(String kindName) {

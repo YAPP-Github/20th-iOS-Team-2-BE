@@ -1,3 +1,9 @@
 package com.yapp.api.domain.file.persistence.handler;
 
-public interface FileCommandHandler {}
+import java.util.function.Consumer;
+
+import com.yapp.api.domain.file.persistence.repository.FileRepository;
+
+public interface FileCommandHandler {
+	void save(Consumer<FileRepository> consumer);
+}
