@@ -34,13 +34,13 @@ public class FolderService {
 		Folder album = folderQueryHandler.findFolderByDate(date)
 										 .orElseGet(() -> new Folder(user.getFamily(), date));
 
-		fileCommandHandler.save(repository -> repository.saveAll(photos.stream()
-																	   .map(link -> File.of("-",
-																							link,
-																							KIND_PHOTO,
-																							album,
-																							date))
-																	   .collect(Collectors.toList())));
+		fileCommandHandler.save(fileRepository -> fileRepository.saveAll(photos.stream()
+																			   .map(link -> File.of("-",
+																									link,
+																									KIND_PHOTO,
+																									album,
+																									date))
+																			   .collect(Collectors.toList())));
 
 		if (album.noThumbnail()) {
 			album.setThumbnail(photos.get(FIRST_INDEX));
@@ -51,9 +51,18 @@ public class FolderService {
 	// 비동기 처리 예정
 	@Transactional
 	public void uploadRecordings(User user, LocalDate date, String title, String link) {
-		// 파일 업로드
-		// 폴더 업로그
-		// - 같은 날짜에 존재하지 않은 폴더  : 폴더 새롭게 생성
-		// - 같은 날짜에 존재하는 폴더 : 기존 폴더 그대로 사용
+		Folder album = folderQueryHandler.findFolderByDate(date)
+										 .orElseGet(() -> new Folder(user.getFamily(), date));
+
+		fileCommandHandler.save(fileRepository -> fileRepository.save(File.of(title,
+																			  link,
+																			  KIND_RECORDING,
+																			  album,
+																			  date)));
+
+		if (album.noThumbnail()) {
+			// album.setThumbnail("default image");
+			folderCommandHandler.saveFolder(repository -> repository.save(album));
+		}
 	}
 }

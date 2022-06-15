@@ -95,6 +95,7 @@ public class FolderServiceTest extends Mocker {
 
 		folderService.uploadRecordings(사용자, 날짜, 제목, 음성);
 
+		verify(folderRepository, times(1)).findByDate(any());
 		verify(fileRepository, times(1)).save(any());
 		verify(folderRepository, times(1)).save(any());
 	}
@@ -105,13 +106,14 @@ public class FolderServiceTest extends Mocker {
 		Folder 기존앨범 = new Folder(가족, 날짜);
 		기존앨범.setThumbnail("기존썸네일");
 		willReturn(Optional.of(기존앨범)).given(folderRepository)
-						.findByDate(any());
+									 .findByDate(any());
 		String 제목 = "음성 제목";
 		String 음성 = "음성 파일";
 
 		folderService.uploadRecordings(사용자, 날짜, 제목, 음성);
 
-		verify(fileRepository, times(1)).saveAll(any());
-		verify(folderRepository, times(1)).save(any());
+		verify(folderRepository, times(1)).findByDate(any());
+		verify(fileRepository, times(1)).save(any());
+		verify(folderRepository, times(0)).save(any());
 	}
 }
