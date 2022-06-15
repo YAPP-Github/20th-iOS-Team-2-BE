@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.api.domain.album.element.folder.persistence.handler.FolderCommandHandler;
 import com.yapp.api.domain.album.element.folder.persistence.handler.FolderQueryHandler;
+import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,4 +15,5 @@ import lombok.RequiredArgsConstructor;
 public class FolderService {
 	private final FolderCommandHandler folderCommandHandler;
 	private final FolderQueryHandler folderQueryHandler;
+	private final FileCommandHandler fileCommandHandler;
 }
