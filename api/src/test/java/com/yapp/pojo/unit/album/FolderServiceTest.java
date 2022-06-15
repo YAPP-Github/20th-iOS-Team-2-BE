@@ -42,7 +42,7 @@ public class FolderServiceTest extends Mocker {
 		folderService.uploadPhotos(사용자, 날짜, 사진리스트);
 
 		verify(folderRepository, times(1)).findByDate(any());
-		verify(fileRepository, times(1)).save(any());
+		verify(fileRepository, times(1)).saveAll(any());
 		verify(folderRepository, times(1)).save(any());
 	}
 
@@ -58,7 +58,7 @@ public class FolderServiceTest extends Mocker {
 		folderService.uploadPhotos(사용자, 날짜, 사진리스트);
 
 		verify(folderRepository, times(1)).findByDate(any());
-		verify(fileRepository, times(1)).save(any());
+		verify(fileRepository, times(1)).saveAll(any());
 		verify(folderRepository, times(0)).save(any());
 	}
 
@@ -68,7 +68,7 @@ public class FolderServiceTest extends Mocker {
 
 		folderService.uploadPhotos(사용자, 날짜, 사진리스트);
 
-		verify(fileRepository, times(3)).save(any());
+		verify(fileRepository, times(1)).saveAll(any());
 		verify(folderRepository, times(1)).save(any());
 	}
 
@@ -84,7 +84,7 @@ public class FolderServiceTest extends Mocker {
 		folderService.uploadPhotos(사용자, 날짜, 사진리스트);
 
 		verify(folderRepository, times(1)).findByDate(any());
-		verify(fileRepository, times(2)).save(any());
+		verify(fileRepository, times(1)).saveAll(any());
 		verify(folderRepository, times(0)).save(any());
 	}
 
@@ -111,7 +111,7 @@ public class FolderServiceTest extends Mocker {
 
 		folderService.uploadRecordings(사용자, 날짜, 제목, 음성);
 
-		verify(fileRepository, times(3)).save(any());
+		verify(fileRepository, times(1)).saveAll(any());
 		verify(folderRepository, times(1)).save(any());
 	}
 }

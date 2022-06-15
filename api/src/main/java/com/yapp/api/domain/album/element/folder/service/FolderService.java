@@ -4,6 +4,7 @@ import static com.yapp.api.domain.file.persistence.entity.File.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +34,13 @@ public class FolderService {
 		Folder album = folderQueryHandler.findFolderByDate(date)
 										 .orElseGet(() -> new Folder(user.getFamily(), date));
 
-		photos.stream()
-			  .map(link -> File.of("-", link, KIND_PHOTO, album, date))
-			  .forEach(file -> fileCommandHandler.save(repository -> repository.save(file)));
+		fileCommandHandler.save(repository -> repository.saveAll(photos.stream()
+																	   .map(link -> File.of("-",
+																							link,
+																							KIND_PHOTO,
+																							album,
+																							date))
+																	   .collect(Collectors.toList())));
 
 		if (album.noThumbnail()) {
 			album.setThumbnail(photos.get(FIRST_INDEX));
