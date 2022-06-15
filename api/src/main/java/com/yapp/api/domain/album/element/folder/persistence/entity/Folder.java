@@ -49,4 +49,8 @@ public class Folder extends BaseEntity {
 		String createdDate = date.format(ISO_LOCAL_DATE);
 		return createdDate + DEFAULT_TITLE_POSTFIX;
 	}
+
+	public boolean noThumbnail() {
+		return thumbnail.isBlank();
+	}
 }

@@ -56,4 +56,28 @@ public class FolderTest {
 		assertThat(폴더.getDate()).isEqualTo(앨범날짜);
 		assertThat(폴더.getTitle()).isEqualTo(기본제목);
 	}
+
+	@Test
+	void 정상_noThumbnail_썸네일검증_있음() {
+		Family 가족 = EntityFactory.family();
+		String 썸네일 = "imageLink";
+		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
+		String 기본제목 = "2022-06-15 앨범";
+		Folder 폴더 = new Folder(가족, 앨범날짜);
+		폴더.setThumbnail(썸네일);
+
+		assertThat(폴더.noThumbnail()).isFalse();
+	}
+
+	@Test
+	void 정상_noThumbnail_썸네일검증_없음() {
+		Family 가족 = EntityFactory.family();
+		String 썸네일 = "imageLink";
+		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
+		String 기본제목 = "2022-06-15 앨범";
+		Folder 폴더 = new Folder(가족, 앨범날짜);
+
+		assertThat(폴더.noThumbnail()).isTrue();
+
+	}
 }
