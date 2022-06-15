@@ -1,3 +1,9 @@
 package com.yapp.api.domain.album.element.folder.persistence.handler;
 
-public interface FolderCommandHandler {}
+import java.util.function.Consumer;
+
+import com.yapp.api.domain.album.element.folder.persistence.repository.FolderRepository;
+
+public interface FolderCommandHandler {
+	void saveFolder(Consumer<FolderRepository> consumer);
+}
