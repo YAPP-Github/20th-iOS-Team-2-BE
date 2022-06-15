@@ -5,7 +5,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,21 +32,20 @@ public class Folder extends BaseEntity {
 
 	private String thumbnail;
 	private String title;
+	private LocalDate date;
 
 	@ManyToOne(fetch = LAZY)
 	private Family family;
 
-	public Folder(Family family, String thumbnail) {
+	public Folder(Family family, String thumbnail, LocalDate date) {
 		this.family = family;
 		this.thumbnail = thumbnail;
+		this.date = date;
+		this.title = defaultTitle(date);
 	}
 
-	public void setDefaultTitleAsCreatedAt() {
-		this.title = defaultTitle(getCreatedAt());
-	}
-
-	private String defaultTitle(LocalDateTime createdAt) {
-		String createdDate = createdAt.format(ISO_LOCAL_DATE);
+	private String defaultTitle(LocalDate date) {
+		String createdDate = date.format(ISO_LOCAL_DATE);
 		return createdDate + DEFAULT_TITLE_POSTFIX;
 	}
 }
