@@ -18,12 +18,14 @@ public class FamilyService {
 	private final FamilyQueryHandler familyQueryHandler;
 
 	// owner 가 가족을 이미 갖고있는지 검증하는 interceptor 추가해야함
+	@Transactional
 	public Family create(User user, String familyName, String familyMotto) {
 		return familyCommandHandler.saveFamily(repository -> repository.save(new Family(user,
 																						familyName,
 																						familyMotto)));
 	}
 
+	@Transactional
 	public void modify(User user, String imageLink, String familyName, String familyMotto) {
 		user.getFamily()
 			.update(imageLink, familyName, familyMotto);
