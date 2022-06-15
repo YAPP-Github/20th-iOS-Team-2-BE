@@ -18,6 +18,7 @@ import com.yapp.api.domain.family.persistence.entity.Family;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -30,16 +31,16 @@ public class Folder extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	private String thumbnail;
+	@Setter
+	private String thumbnail = "";
 	private String title;
 	private LocalDate date;
 
 	@ManyToOne(fetch = LAZY)
 	private Family family;
 
-	public Folder(Family family, String thumbnail, LocalDate date) {
+	public Folder(Family family, LocalDate date) {
 		this.family = family;
-		this.thumbnail = thumbnail;
 		this.date = date;
 		this.title = defaultTitle(date);
 	}
