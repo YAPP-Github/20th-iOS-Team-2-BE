@@ -237,4 +237,16 @@ public class AlbumServiceTest extends Mocker {
 		assertThat(조회된_즐겨찾기).hasSize(3);
 		assertThat(조회된_즐겨찾기).containsExactly(음성1, 사진1, 음성2);
 	}
+
+	@Test
+	void 정상_makeFavourite_즐겨찾기하기() {
+		Family 가족 = family(사용자);
+		Album 앨범 = album(가족, 날짜);
+		willReturn(Optional.of(file("제목", "링크", "recording", 앨범, 날짜, 가족))).given(fileRepository)
+																		  .findById(any());
+
+		albumService.makeFavourite(사용자, 3L);
+
+		verify(fileRepository, times(1)).findById(any());
+	}
 }
