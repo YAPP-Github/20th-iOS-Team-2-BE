@@ -2,9 +2,12 @@ package com.yapp.api.domain.album.element.folder.service;
 
 import static com.yapp.api.domain.file.persistence.entity.File.*;
 import static com.yapp.core.error.exception.ErrorCode.*;
+import static java.util.Comparator.*;
+import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +23,9 @@ import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -43,21 +49,65 @@ public class AlbumService {
 	public List<Album> getList(User user) {
 		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamily(user.getFamily()))
 								.stream()
-								.sorted(Comparator.comparing(Album::getDate)
-												  .reversed())
+								.sorted(comparing(Album::getDate).reversed())
 								.collect(Collectors.toList());
 	}
 
-	public Map<String, Integer> getCountForEachCategory(User user) {
+	public Map<String, KindInfo> getCountForEachCategory(User user) {
+		HashMap<String, List<File>> kindInfoMap = new HashMap<>();
+		kindInfoMap.put(KIND_PHOTO, new ArrayList<>());
+		kindInfoMap.put(KIND_RECORDING, new ArrayList<>());
+
+		List<File> files = fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
+
+		files.forEach(file -> {
+			if (file.isPhoto()) {
+				kindInfoMap.get(KIND_PHOTO)
+						   .add(file);
+			}
+			if (file.isRecording()) {
+				kindInfoMap.get(KIND_RECORDING)
+						   .add(file);
+			}
+		});
+
 		return Map.of(FAVOURITE,
-					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByFavourite(user.getFamily(),
-																										true)),
+					  new KindInfo((int)files.stream()
+											 .filter(File::isFavourite)
+											 .count(),
+								   files.stream()
+										.filter(File::isFavourite)
+										.findFirst()
+										.orElseGet(() -> INVALID)
+										.getLink()),
 					  KIND_PHOTO,
-					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByKind(user.getFamily(),
-																								   KIND_PHOTO)),
+					  new KindInfo(kindInfoMap.get(KIND_PHOTO)
+											  .size(),
+								   kindInfoMap.get(KIND_PHOTO)
+											  .stream()
+											  .max(comparing(File::getDate))
+											  .orElse(INVALID)
+											  .getLink()),
 					  KIND_RECORDING,
-					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByKind(user.getFamily(),
-																								   KIND_RECORDING)));
+					  new KindInfo(kindInfoMap.get(KIND_RECORDING)
+											  .size(),
+								   kindInfoMap.get(KIND_RECORDING)
+											  .stream()
+											  .max(comparing(File::getDate))
+											  .orElse(INVALID)
+											  .getLink()));
+	}
+
+	public List<File> getFiles(User user, String kind) {
+		if (kind.equals(FAVOURITE)) {
+			return fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
+																										  true));
+		}
+		return fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
+																								 kind))
+								 .stream()
+								 .sorted(comparing(File::getDate).reversed())
+								 .collect(Collectors.toList());
 	}
 
 	// 비동기처리 예정
@@ -98,5 +148,13 @@ public class AlbumService {
 			// album.setThumbnail("default image");
 			albumCommandHandler.saveAlbum(repository -> repository.save(album));
 		}
+	}
+
+	@Getter
+	@NoArgsConstructor(access = PROTECTED)
+	@AllArgsConstructor
+	public static class KindInfo {
+		private int count;
+		private String link = "";
 	}
 }

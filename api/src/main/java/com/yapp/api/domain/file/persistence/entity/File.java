@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "FILE")
 @NoArgsConstructor(access = PROTECTED)
 public class File {
+	public static final File INVALID = new File.INVALID();
 	public static final String KIND_PHOTO = "photo";
 	public static final String KIND_RECORDING = "recording";
 	public static final String KIND_NULL = "null";
@@ -61,15 +62,27 @@ public class File {
 	}
 
 	public static File of(String title, String link, String kindName, Album album, LocalDate date, Family family) {
-		if (isPhoto(kindName)) {
+		if (kindIsPhoto(kindName)) {
 			return new File(null, link, PHOTO, album, date, family);
 		}
 
-		if (isRecording(kindName)) {
+		if (kindIsRecording(kindName)) {
 			return new File(title, link, RECORDING, album, date, family);
 		}
 
-		return new INVALID();
+		return INVALID;
+	}
+
+	public void doFavour() {
+		this.favourite = !this.favourite;
+	}
+
+	public boolean isPhoto() {
+		return this.kind == PHOTO;
+	}
+
+	public boolean isRecording() {
+		return this.kind == RECORDING;
 	}
 
 	@Getter
@@ -78,12 +91,12 @@ public class File {
 		PHOTO(KIND_PHOTO), RECORDING(KIND_RECORDING), NULL(KIND_NULL);
 		private final String value;
 
-		static boolean isPhoto(String kindName) {
+		static boolean kindIsPhoto(String kindName) {
 			return PHOTO.getValue()
 						.equalsIgnoreCase(kindName);
 		}
 
-		static boolean isRecording(String kindName) {
+		static boolean kindIsRecording(String kindName) {
 			return RECORDING.getValue()
 							.equalsIgnoreCase(kindName);
 		}
@@ -94,5 +107,8 @@ public class File {
 		public Kind getKind() {
 			return NULL;
 		}
+
+		@Override
+		public String getLink() {return "";}
 	}
 }
