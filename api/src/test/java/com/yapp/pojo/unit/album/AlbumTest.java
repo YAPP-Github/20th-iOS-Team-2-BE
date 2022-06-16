@@ -29,14 +29,13 @@ public class AlbumTest {
 	@Test
 	void 정상_FolderConstructor_생성() {
 		Family 가족 = EntityFactory.family();
-		String 썸네일 = "imageLink";
 		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
 		String 기본제목 = "2022-06-15 앨범";
 
 		Album 폴더 = new Album(가족, 앨범날짜);
 
 		assertThat(폴더.getFamily()).isEqualTo(가족);
-		assertThat(폴더.getThumbnail()).isEqualTo(썸네일);
+		assertThat(폴더.getThumbnail()).isEmpty();
 		assertThat(폴더.getDate()).isEqualTo(앨범날짜);
 		assertThat(폴더.getTitle()).isEqualTo(기본제목);
 	}
