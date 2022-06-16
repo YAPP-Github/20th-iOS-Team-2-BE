@@ -3,8 +3,10 @@ package com.yapp.util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.calendar.element.appointment.persistence.entity.Appointment;
 import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.oauth.entity.OAuthInfo;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.domain.user.persistence.entity.element.ProfileInfo;
@@ -40,5 +42,13 @@ public class EntityFactory {
 
 	public static User anonymousUser() {
 		return new User.ANONYMOUS();
+	}
+
+	public static Album album(Family 가족, LocalDate 날짜) {
+		return new Album(가족, 날짜);
+	}
+
+	public static File file(String 제목, String 링크, String 종류, Album 앨범, LocalDate 날짜, Family 가족) {
+		return File.of(제목, 링크, 종류, 앨범, 날짜, 가족);
 	}
 }
