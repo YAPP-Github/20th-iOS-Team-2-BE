@@ -58,7 +58,7 @@ public class AlbumService {
 		kindInfoMap.put(KIND_PHOTO, new ArrayList<>());
 		kindInfoMap.put(KIND_RECORDING, new ArrayList<>());
 
-		List<File> files = fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
+		List<File> files = fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
 
 		files.forEach(file -> {
 			if (file.isPhoto()) {
@@ -100,11 +100,11 @@ public class AlbumService {
 
 	public List<File> getFiles(User user, String kind) {
 		if (kind.equals(FAVOURITE)) {
-			return fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
-																										  true));
+			return fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
+																											true));
 		}
-		return fileCommandHandler.findBy(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
-																								 kind))
+		return fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
+																								   kind))
 								 .stream()
 								 .sorted(comparing(File::getDate).reversed())
 								 .collect(Collectors.toList());
@@ -148,6 +148,16 @@ public class AlbumService {
 			// album.setThumbnail("default image");
 			albumCommandHandler.saveAlbum(repository -> repository.save(album));
 		}
+	}
+
+	// 비동기 처리 예정
+	@Transactional
+	public void makeFavourite(User user, Long fileId) {
+		fileCommandHandler.findOne(fileRepository -> fileRepository.findById(fileId))
+						  .orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
+																	   new RuntimeException(
+																		   "FileNotFoundError : which ?fileId in POST /album/favourite?fileId")))
+						  .doFavour();
 	}
 
 	@Getter

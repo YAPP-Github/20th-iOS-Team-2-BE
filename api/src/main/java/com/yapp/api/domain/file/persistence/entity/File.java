@@ -87,7 +87,7 @@ public class File {
 
 	@Getter
 	@AllArgsConstructor
-	enum Kind {
+	public enum Kind {
 		PHOTO(KIND_PHOTO), RECORDING(KIND_RECORDING), NULL(KIND_NULL);
 		private final String value;
 
