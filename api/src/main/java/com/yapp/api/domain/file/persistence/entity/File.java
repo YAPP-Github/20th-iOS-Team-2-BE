@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
+import com.yapp.api.domain.family.persistence.entity.Family;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class File {
 	public static final String KIND_PHOTO = "photo";
 	public static final String KIND_RECORDING = "recording";
 	public static final String KIND_NULL = "null";
+	public static final String FAVOURITE = "favourite";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -45,22 +47,26 @@ public class File {
 	@ManyToOne(fetch = LAZY)
 	private Album album;
 
-	private File(String title, String link, Kind kind, Album album, LocalDate date) {
+	@ManyToOne(fetch = LAZY)
+	private Family family;
+
+	private File(String title, String link, Kind kind, Album album, LocalDate date, Family family) {
 		this.title = title;
 		this.link = link;
 		this.kind = kind;
 		this.album = album;
 		this.date = date;
 		this.favourite = false;
+		this.family = family;
 	}
 
-	public static File of(String title, String link, String kindName, Album album, LocalDate date) {
+	public static File of(String title, String link, String kindName, Album album, LocalDate date, Family family) {
 		if (isPhoto(kindName)) {
-			return new File(null, link, PHOTO, album, date);
+			return new File(null, link, PHOTO, album, date, family);
 		}
 
 		if (isRecording(kindName)) {
-			return new File(title, link, RECORDING, album, date);
+			return new File(title, link, RECORDING, album, date, family);
 		}
 
 		return new INVALID();

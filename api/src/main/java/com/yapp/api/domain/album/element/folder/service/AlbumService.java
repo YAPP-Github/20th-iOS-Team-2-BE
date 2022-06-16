@@ -1,9 +1,12 @@
 package com.yapp.api.domain.album.element.folder.service;
 
 import static com.yapp.api.domain.file.persistence.entity.File.*;
+import static com.yapp.core.error.exception.ErrorCode.*;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumQueryHa
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.error.exception.BaseBusinessException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +32,34 @@ public class AlbumService {
 	private final AlbumQueryHandler albumQueryHandler;
 	private final FileCommandHandler fileCommandHandler;
 
+	public Album get(User user, Long albumId) {
+		return albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+																								albumId))
+								.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
+																			 new RuntimeException(
+																				 "FileNotFoundErrorCode : which {albumId} in GET /albums/details/{albumId}")));
+	}
+
+	public List<Album> getList(User user) {
+		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamily(user.getFamily()))
+								.stream()
+								.sorted(Comparator.comparing(Album::getDate)
+												  .reversed())
+								.collect(Collectors.toList());
+	}
+
+	public Map<String, Integer> getCountForEachCategory(User user) {
+		return Map.of(FAVOURITE,
+					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByFavourite(user.getFamily(),
+																										true)),
+					  KIND_PHOTO,
+					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByKind(user.getFamily(),
+																								   KIND_PHOTO)),
+					  KIND_RECORDING,
+					  albumQueryHandler.countByKind(albumRepository -> albumRepository.countByKind(user.getFamily(),
+																								   KIND_RECORDING)));
+	}
+
 	// 비동기처리 예정
 	@Transactional
 	public void uploadPhotos(User user, LocalDate date, List<String> photos) {
@@ -39,7 +71,8 @@ public class AlbumService {
 																									link,
 																									KIND_PHOTO,
 																									album,
-																									date))
+																									date,
+																									user.getFamily()))
 																			   .collect(Collectors.toList())));
 
 		if (album.noThumbnail()) {
@@ -58,7 +91,8 @@ public class AlbumService {
 																			  link,
 																			  KIND_RECORDING,
 																			  album,
-																			  date)));
+																			  date,
+																			  user.getFamily())));
 
 		if (album.noThumbnail()) {
 			// album.setThumbnail("default image");
