@@ -22,9 +22,9 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Table(name = "FOLDER")
+@Table(name = "ALBUM")
 @NoArgsConstructor(access = PROTECTED)
-public class Folder extends BaseEntity {
+public class Album extends BaseEntity {
 	private static final String DEFAULT_TITLE_POSTFIX = " 앨범";
 
 	@Id
@@ -39,7 +39,7 @@ public class Folder extends BaseEntity {
 	@ManyToOne(fetch = LAZY)
 	private Family family;
 
-	public Folder(Family family, LocalDate date) {
+	public Album(Family family, LocalDate date) {
 		this.family = family;
 		this.date = date;
 		this.title = defaultTitle(date);

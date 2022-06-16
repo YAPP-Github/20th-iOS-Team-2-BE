@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.yapp.api.domain.album.element.folder.persistence.entity.Folder;
+import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 
-public interface FolderRepository extends JpaRepository<Folder, Long> {
-	Optional<Folder> findByDate(LocalDate date);
+public interface AlbumRepository extends JpaRepository<Album, Long> {
+	Optional<Album> findByDate(LocalDate date);
 }

@@ -8,13 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
-import com.yapp.api.domain.album.element.folder.persistence.entity.Folder;
+import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.util.EntityFactory;
 
 @DisplayName("Folder : Entity 단위 테스트")
-public class FolderTest {
+public class AlbumTest {
 	@Test
 	void 정상_CommentConstructor_생성() {
 		User 작성자 = EntityFactory.user();
@@ -33,7 +33,7 @@ public class FolderTest {
 		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
 		String 기본제목 = "2022-06-15 앨범";
 
-		Folder 폴더 = new Folder(가족, 앨범날짜);
+		Album 폴더 = new Album(가족, 앨범날짜);
 
 		assertThat(폴더.getFamily()).isEqualTo(가족);
 		assertThat(폴더.getThumbnail()).isEqualTo(썸네일);
@@ -47,7 +47,7 @@ public class FolderTest {
 		String 썸네일 = "imageLink";
 		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
 		String 기본제목 = "2022-06-15 앨범";
-		Folder 폴더 = new Folder(가족, 앨범날짜);
+		Album 폴더 = new Album(가족, 앨범날짜);
 
 		폴더.setThumbnail(썸네일);
 
@@ -63,7 +63,7 @@ public class FolderTest {
 		String 썸네일 = "imageLink";
 		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
 		String 기본제목 = "2022-06-15 앨범";
-		Folder 폴더 = new Folder(가족, 앨범날짜);
+		Album 폴더 = new Album(가족, 앨범날짜);
 		폴더.setThumbnail(썸네일);
 
 		assertThat(폴더.noThumbnail()).isFalse();
@@ -75,7 +75,7 @@ public class FolderTest {
 		String 썸네일 = "imageLink";
 		LocalDate 앨범날짜 = LocalDate.of(2022, 6, 15);
 		String 기본제목 = "2022-06-15 앨범";
-		Folder 폴더 = new Folder(가족, 앨범날짜);
+		Album 폴더 = new Album(가족, 앨범날짜);
 
 		assertThat(폴더.noThumbnail()).isTrue();
 
