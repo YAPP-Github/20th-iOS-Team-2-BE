@@ -14,4 +14,6 @@ public interface FileCommandHandler {
 	Optional<File> findOne(Function<FileRepository, Optional<File>> function);
 
 	List<File> findList(Function<FileRepository, List<File>> function);
+
+	void removeOne(Consumer<FileRepository> consumer);
 }

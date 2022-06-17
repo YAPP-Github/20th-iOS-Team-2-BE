@@ -281,12 +281,10 @@ public class AlbumServiceTest extends Mocker {
 
 	@Test
 	void 정상_remove_앨범삭제_존재하지않는_앨범() {
-		Family 가족 = EntityFactory.family();
-		Album 앨범 = EntityFactory.album(가족, 날짜);
 		willReturn(Optional.empty()).given(albumRepository)
 									.findByFamilyAndId(any(), any());
 
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, 앨범.getId()));
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, any()));
 		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
 		verify(albumRepository, times(0)).delete(any());
 	}

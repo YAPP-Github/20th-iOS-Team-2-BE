@@ -31,4 +31,9 @@ public class FileCommandHandlerImpl implements FileCommandHandler {
 	public Optional<File> findOne(Function<FileRepository, Optional<File>> function) {
 		return function.apply(fileRepository);
 	}
+
+	@Override
+	public void removeOne(Consumer<FileRepository> consumer) {
+		consumer.accept(fileRepository);
+	}
 }
