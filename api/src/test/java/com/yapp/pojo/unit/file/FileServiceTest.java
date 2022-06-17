@@ -21,6 +21,7 @@ import com.yapp.api.domain.file.persistence.handler.FileCommandHandlerImpl;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.file.service.FileService;
 import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.util.EntityFactory;
 import com.yapp.util.Mocker;
 
@@ -121,6 +122,8 @@ public class FileServiceTest extends Mocker {
 
 	@Test
 	void 정상_remove_파일삭제_존재하지않는_파일() {
-
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> fileService.remove(사용자, 3L));
+		verify(fileRepository, times(1)).findByFamilyAndId(any(), any());
+		verify(fileRepository, times(0)).delete(any());
 	}
 }
