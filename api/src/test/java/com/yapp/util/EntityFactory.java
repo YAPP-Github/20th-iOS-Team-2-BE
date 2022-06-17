@@ -51,4 +51,9 @@ public class EntityFactory {
 	public static File file(String 제목, String 링크, String 종류, Album 앨범, LocalDate 날짜, Family 가족) {
 		return File.of(제목, 링크, 종류, 앨범, 날짜, 가족);
 	}
+
+	public static File file(String 제목, String 링크, String 종류, User 사용자, LocalDate 날짜) {
+		Family 가족 = family(사용자);
+		return File.of(제목, 링크, 종류, album(가족, 날짜), 날짜, 가족);
+	}
 }

@@ -1,3 +1,9 @@
 package com.yapp.api.domain.album.element.comment.persistence.handler;
 
-public interface CommentCommandHandler {}
+import java.util.function.Consumer;
+
+import com.yapp.api.domain.album.element.comment.persistence.repository.CommentRepository;
+
+public interface CommentCommandHandler {
+	void create(Consumer<CommentRepository> consumer);
+}
