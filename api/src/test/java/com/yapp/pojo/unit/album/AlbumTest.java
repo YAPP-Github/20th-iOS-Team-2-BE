@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
@@ -77,6 +79,29 @@ public class AlbumTest {
 		Album 폴더 = new Album(가족, 앨범날짜);
 
 		assertThat(폴더.noThumbnail()).isTrue();
+	}
 
+	@Test
+	void 정상_modifyTitle_제목수정_올바른값() {
+		String 변경된_제목 = "제목";
+		Family 가족 = EntityFactory.family();
+		LocalDate 날짜 = LocalDate.of(2022, 6, 15);
+		Album 앨범 = EntityFactory.album(가족, 날짜);
+
+		앨범.modifyTitle(변경된_제목);
+		assertThat(앨범.getTitle()).isNotEqualTo("2022-06-15 앨범");
+		assertThat(앨범.getTitle()).isEqualTo(변경된_제목);
+	}
+
+	@Test
+	void 정상_modifyTitle_제목수정_올바르지못한_값() {
+		String 변경된_제목 = "";
+		Family 가족 = EntityFactory.family();
+		LocalDate 날짜 = LocalDate.of(2022, 6, 15);
+		Album 앨범 = EntityFactory.album(가족, 날짜);
+
+		앨범.modifyTitle(변경된_제목);
+		assertThat(앨범.getTitle()).isEqualTo("2022-06-15 앨범");
+		assertThat(앨범.getTitle()).isNotEqualTo(변경된_제목);
 	}
 }

@@ -22,6 +22,7 @@ import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.error.exception.ErrorCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -158,6 +159,17 @@ public class AlbumService {
 																	   new RuntimeException(
 																		   "FileNotFoundError : which ?fileId in POST /album/favourite?fileId")))
 						  .doFavour();
+	}
+
+	// 비동기 처리 예정
+	@Transactional
+	public void modifyTitle(User user, Long albumId, String toBe) {
+		Album album = albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+																									   albumId))
+									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND,
+																					new RuntimeException(
+																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
+		album.modifyTitle(toBe);
 	}
 
 	@Getter

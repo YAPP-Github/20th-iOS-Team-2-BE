@@ -249,4 +249,18 @@ public class AlbumServiceTest extends Mocker {
 
 		verify(fileRepository, times(1)).findById(any());
 	}
+
+	@Test
+	void 정상_modifyTitle_제목변경() {
+		String 변경될제목 = "제목";
+		Family 가족 = family(사용자);
+		Album 앨범 = album(가족, 날짜);
+		willReturn(Optional.of(앨범)).given(albumRepository).findByFamilyAndId(any(), any());
+
+		albumService.modifyTitle(사용자, 앨범.getId(), 변경될제목);
+
+		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
+		assertThat(앨범.getTitle()).isEqualTo(변경될제목);
+		assertThat(앨범.getTitle()).isNotEqualTo("2022-06-15 앨범");
+	}
 }
