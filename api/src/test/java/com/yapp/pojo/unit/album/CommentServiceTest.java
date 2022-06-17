@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentCommandHandlerImpl;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentQueryHandlerImpl;
 import com.yapp.api.domain.album.element.comment.service.CommentService;
@@ -31,7 +32,7 @@ public class CommentServiceTest extends Mocker {
 	void init() {
 		commentService = new CommentService(new FileQueryHandlerImpl(fileRepository),
 											new CommentCommandHandlerImpl(commentRepository),
-											new CommentQueryHandlerImpl());
+											new CommentQueryHandlerImpl(commentRepository));
 		사용자 = EntityFactory.user();
 		날짜 = LocalDate.of(2022, 6, 15);
 	}
@@ -59,5 +60,20 @@ public class CommentServiceTest extends Mocker {
 
 		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.create(사용자, 1L, 댓글_내용));
 		verify(commentRepository, times(0)).save(any());
+	}
+
+	@ParameterizedTest
+	@CsvSource(delimiterString = ",", value = "photo,recording")
+	void 정상_modify_댓글수정(String kind) {
+		File 파일 = EntityFactory.file("제목", "링크", kind, 사용자, 날짜);
+		String 댓글_내용 = "내용";
+		String 수정_내용 = "수정_내용";
+		Comment 댓글 = new Comment(사용자, 파일, 댓글_내용);
+		willReturn(Optional.of(댓글)).given(commentRepository)
+					  .findByUserAndId(any(), any());
+
+		commentService.modify(사용자, 3L, 수정_내용);
+
+		assertThat(댓글.getContent()).isEqualTo(수정_내용);
 	}
 }

@@ -1,5 +1,7 @@
 package com.yapp.api.domain.album.element.comment.service;
 
+import static com.yapp.core.error.exception.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,5 +34,15 @@ public class CommentService {
 																					 "FileNotFoundError : which {fileId} in PORT /album/{fileId}/comments")));
 
 		commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user, file, content)));
+	}
+
+	@Transactional
+	public void modify(User user, Long fileId, String content) {
+		Comment comment = commentQueryHandler.findOne(commentRepository -> commentRepository.findByUserAndId(user,
+																											 fileId))
+											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
+																						  new RuntimeException(
+																							  "CommentNotFoundError : which {commentId} in PATCH /album/comments/{commentId}")));
+		comment.modifyComment(content);
 	}
 }

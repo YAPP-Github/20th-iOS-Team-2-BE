@@ -38,4 +38,8 @@ public class Comment extends BaseEntity {
 		this.file = file;
 		this.content = content;
 	}
+
+	public void modifyComment(String toBe) {
+		this.content = toBe;
+	}
 }

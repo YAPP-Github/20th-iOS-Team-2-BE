@@ -28,4 +28,17 @@ public class CommentTest {
 		assertThat(댓글.getContent()).isEqualTo(댓글_내용);
 	}
 
+	@Test
+	void 정상_modifyContent_댓글수정() {
+		String 댓글_내용 = "내용";
+		String 수정_내용 = "수정 내용";
+		User 사용자 = EntityFactory.user();
+		LocalDate 날짜 = LocalDate.of(2022, 6, 15);
+		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
+		Comment 댓글 = new Comment(사용자, 파일, 댓글_내용);
+
+		댓글.modifyComment(수정_내용);
+
+		assertThat(댓글.getContent()).isEqualTo(수정_내용);
+	}
 }
