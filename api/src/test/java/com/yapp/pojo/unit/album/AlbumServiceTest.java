@@ -21,6 +21,7 @@ import com.yapp.api.domain.album.element.folder.service.AlbumService;
 import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandlerImpl;
+import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.util.EntityFactory;
@@ -38,7 +39,8 @@ public class AlbumServiceTest extends Mocker {
 		날짜 = LocalDate.of(2022, 6, 15);
 		albumService = new AlbumService(new AlbumCommandHandlerImpl(albumRepository),
 										new AlbumQueryHandlerImpl(albumRepository),
-										new FileCommandHandlerImpl(fileRepository));
+										new FileCommandHandlerImpl(fileRepository),
+										new FileQueryHandlerImpl(fileRepository));
 	}
 
 	@Test
@@ -186,72 +188,6 @@ public class AlbumServiceTest extends Mocker {
 	}
 
 	@Test
-	void 정상_getAlbumDetailsByKind_앨범상세조회_종류조회_PHOTO_최신순() {
-		Family 가족 = family(사용자);
-		Album 앨범 = album(가족, 날짜);
-		File 사진1 = file("제목1", "링크1", "photo", 앨범, 날짜, 가족);
-		File 사진2 = file("제목2", "링크2", "photo", 앨범, LocalDate.of(2022, 6, 18), 가족);
-		File 사진3 = file("제목3", "링크3", "photo", 앨범, LocalDate.of(2022, 6, 7), 가족);
-		List<File> 사진들 = List.of(사진1, 사진2, 사진3);
-		willReturn(사진들).given(fileRepository)
-					   .findAllByFamilyAndKind(any(), any());
-
-		List<File> 조회된_사진들 = albumService.getFiles(사용자, "photo");
-
-		assertThat(조회된_사진들).hasSize(3);
-		assertThat(조회된_사진들).containsExactly(사진2, 사진1, 사진3);
-	}
-
-	@Test
-	void 정상_getAlbumDetailsByKind_앨범상세조회_종류조회_RECORDING_최신순() {
-		Family 가족 = family(사용자);
-		Album 앨범 = album(가족, 날짜);
-		File 음성1 = file("제목1", "링크1", "recording", 앨범, 날짜, 가족);
-		File 음성2 = file("제목2", "링크2", "recording", 앨범, LocalDate.of(2022, 6, 18), 가족);
-		File 음성3 = file("제목3", "링크3", "recording", 앨범, LocalDate.of(2022, 6, 7), 가족);
-		List<File> 음성들 = List.of(음성1, 음성2, 음성3);
-		willReturn(음성들).given(fileRepository)
-					   .findAllByFamilyAndKind(any(), any());
-
-		List<File> 조회된_음성들 = albumService.getFiles(사용자, "photo");
-
-		assertThat(조회된_음성들).hasSize(3);
-		assertThat(조회된_음성들).containsExactly(음성2, 음성1, 음성3);
-	}
-
-	@Test
-	void 정상_getAlbumDetailsByKind_앨범상세조회_종류조회_FAVOURITE_최신순() {
-		Family 가족 = family(사용자);
-		Album 앨범 = album(가족, 날짜);
-		File 음성1 = file("음성1", "링크1", "recording", 앨범, 날짜, 가족);
-		File 사진1 = file("사진2", "링크2", "photo", 앨범, LocalDate.of(2022, 6, 18), 가족);
-		File 음성2 = file("음성2", "링크3", "recording", 앨범, LocalDate.of(2022, 6, 7), 가족);
-		음성1.doFavour();
-		사진1.doFavour();
-		음성2.doFavour();
-		List<File> 음성들 = List.of(음성1, 사진1, 음성2);
-		willReturn(음성들).given(fileRepository)
-					   .findAllByFamilyAndFavourite(any(), any());
-
-		List<File> 조회된_즐겨찾기 = albumService.getFiles(사용자, "favourite");
-
-		assertThat(조회된_즐겨찾기).hasSize(3);
-		assertThat(조회된_즐겨찾기).containsExactly(음성1, 사진1, 음성2);
-	}
-
-	@Test
-	void 정상_makeFavourite_즐겨찾기하기() {
-		Family 가족 = family(사용자);
-		Album 앨범 = album(가족, 날짜);
-		willReturn(Optional.of(file("제목", "링크", "recording", 앨범, 날짜, 가족))).given(fileRepository)
-																		  .findById(any());
-
-		albumService.makeFavourite(사용자, 3L);
-
-		verify(fileRepository, times(1)).findById(any());
-	}
-
-	@Test
 	void 정상_modifyTitle_제목변경() {
 		String 변경될제목 = "제목";
 		Family 가족 = family(사용자);
@@ -281,10 +217,10 @@ public class AlbumServiceTest extends Mocker {
 
 	@Test
 	void 정상_remove_앨범삭제_존재하지않는_앨범() {
-		willReturn(Optional.empty()).given(albumRepository)
-									.findByFamilyAndId(any(), any());
+		willReturn(Optional.ofNullable(null)).given(albumRepository)
+											 .findByFamilyAndId(any(), any());
 
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, any()));
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, 3L));
 		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
 		verify(albumRepository, times(0)).delete(any());
 	}

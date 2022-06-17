@@ -1,7 +1,7 @@
 package com.yapp.api.domain.file.persistence.handler;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
@@ -15,6 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileQueryHandlerImpl implements FileQueryHandler {
 	private final FileRepository fileRepository;
+
+	@Override
+	public List<File> findList(Function<FileRepository, List<File>> function) {
+		return function.apply(fileRepository);
+	}
 
 	@Override
 	public Optional<File> findOne(Function<FileRepository, Optional<File>> function) {
