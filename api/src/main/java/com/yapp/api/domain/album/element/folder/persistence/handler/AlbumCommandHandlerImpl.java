@@ -17,4 +17,9 @@ public class AlbumCommandHandlerImpl implements AlbumCommandHandler {
 	public void saveAlbum(Consumer<AlbumRepository> consumer) {
 		consumer.accept(albumRepository);
 	}
+
+	@Override
+	public void removeOne(Consumer<AlbumRepository> consumer) {
+		consumer.accept(albumRepository);
+	}
 }

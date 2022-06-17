@@ -22,6 +22,7 @@ import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.util.EntityFactory;
 import com.yapp.util.Mocker;
 
@@ -255,12 +256,38 @@ public class AlbumServiceTest extends Mocker {
 		String 변경될제목 = "제목";
 		Family 가족 = family(사용자);
 		Album 앨범 = album(가족, 날짜);
-		willReturn(Optional.of(앨범)).given(albumRepository).findByFamilyAndId(any(), any());
+		willReturn(Optional.of(앨범)).given(albumRepository)
+								   .findByFamilyAndId(any(), any());
 
 		albumService.modifyTitle(사용자, 앨범.getId(), 변경될제목);
 
 		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
 		assertThat(앨범.getTitle()).isEqualTo(변경될제목);
 		assertThat(앨범.getTitle()).isNotEqualTo("2022-06-15 앨범");
+	}
+
+	@Test
+	void 정상_remove_앨범삭제_존재하는_앨범() {
+		Family 가족 = EntityFactory.family();
+		Album 앨범 = EntityFactory.album(가족, 날짜);
+		willReturn(Optional.of(앨범)).given(albumRepository)
+								   .findByFamilyAndId(any(), any());
+
+		albumService.remove(사용자, 앨범.getId());
+
+		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
+		verify(albumRepository, times(1)).delete(any());
+	}
+
+	@Test
+	void 정상_remove_앨범삭제_존재하지않는_앨범() {
+		Family 가족 = EntityFactory.family();
+		Album 앨범 = EntityFactory.album(가족, 날짜);
+		willReturn(Optional.empty()).given(albumRepository)
+									.findByFamilyAndId(any(), any());
+
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, 앨범.getId()));
+		verify(albumRepository, times(1)).findByFamilyAndId(any(), any());
+		verify(albumRepository, times(0)).delete(any());
 	}
 }

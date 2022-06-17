@@ -6,4 +6,6 @@ import com.yapp.api.domain.album.element.folder.persistence.repository.AlbumRepo
 
 public interface AlbumCommandHandler {
 	void saveAlbum(Consumer<AlbumRepository> consumer);
+
+	void removeOne(Consumer<AlbumRepository> consumer);
 }
