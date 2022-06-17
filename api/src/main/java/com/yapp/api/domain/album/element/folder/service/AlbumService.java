@@ -20,6 +20,7 @@ import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumCommand
 import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumQueryHandler;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
+import com.yapp.api.domain.file.persistence.handler.FileQueryHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
 
@@ -37,6 +38,8 @@ public class AlbumService {
 	private final AlbumCommandHandler albumCommandHandler;
 	private final AlbumQueryHandler albumQueryHandler;
 	private final FileCommandHandler fileCommandHandler;
+
+	private final FileQueryHandler fileQueryHandler;
 
 	public Album get(User user, Long albumId) {
 		return albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
@@ -58,7 +61,7 @@ public class AlbumService {
 		kindInfoMap.put(KIND_PHOTO, new ArrayList<>());
 		kindInfoMap.put(KIND_RECORDING, new ArrayList<>());
 
-		List<File> files = fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
+		List<File> files = fileQueryHandler.findList(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
 
 		files.forEach(file -> {
 			if (file.isPhoto()) {
@@ -96,18 +99,6 @@ public class AlbumService {
 											  .max(comparing(File::getDate))
 											  .orElse(INVALID)
 											  .getLink()));
-	}
-
-	public List<File> getFiles(User user, String kind) {
-		if (kind.equals(FAVOURITE)) {
-			return fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
-																											true));
-		}
-		return fileCommandHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
-																								   kind))
-								 .stream()
-								 .sorted(comparing(File::getDate).reversed())
-								 .collect(Collectors.toList());
 	}
 
 	// 비동기처리 예정
@@ -152,12 +143,25 @@ public class AlbumService {
 
 	// 비동기 처리 예정
 	@Transactional
-	public void makeFavourite(User user, Long fileId) {
-		fileCommandHandler.findOne(fileRepository -> fileRepository.findById(fileId))
-						  .orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
-																	   new RuntimeException(
-																		   "FileNotFoundError : which ?fileId in POST /album/favourite?fileId")))
-						  .doFavour();
+	public void modifyTitle(User user, Long albumId, String toBe) {
+		Album album = getAlbumByUserAndId(user, albumId);
+		album.modifyTitle(toBe);
+	}
+
+	// 비동기 처리 예정
+	@Transactional
+	public void remove(User user, Long albumId) {
+		Album album = getAlbumByUserAndId(user, albumId);
+		albumCommandHandler.removeOne(albumRepository -> albumRepository.delete(album));
+	}
+
+	private Album getAlbumByUserAndId(User user, Long albumId) {
+		Album album = albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+																									   albumId))
+									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND,
+																					new RuntimeException(
+																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
+		return album;
 	}
 
 	@Getter

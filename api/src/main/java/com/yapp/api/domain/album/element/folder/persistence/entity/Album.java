@@ -1,6 +1,7 @@
 package com.yapp.api.domain.album.element.folder.persistence.entity;
 
 import static java.time.format.DateTimeFormatter.*;
+import static java.util.Objects.*;
 import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -52,5 +53,11 @@ public class Album extends BaseEntity {
 
 	public boolean noThumbnail() {
 		return thumbnail.isBlank();
+	}
+
+	public void modifyTitle(String toBe) {
+		if(!isNull(toBe) && !toBe.isEmpty()) {
+			this.title = toBe;
+		}
 	}
 }
