@@ -2,6 +2,8 @@ package com.yapp.api.domain.album.element.comment.service;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,5 +46,10 @@ public class CommentService {
 																						  new RuntimeException(
 																							  "CommentNotFoundError : which {commentId} in PATCH /album/comments/{commentId}")));
 		comment.modifyComment(content);
+	}
+
+	public List<Comment> getList(User user, Long fileId) {
+		return commentQueryHandler.findAll(commentRepository -> commentRepository.findAllByFamilyAndFileId(user.getFamily(),
+																										   fileId));
 	}
 }

@@ -1,5 +1,6 @@
 package com.yapp.api.domain.album.element.comment.persistence.handler;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -17,6 +18,11 @@ public class CommentQueryHandlerImpl implements CommentQueryHandler {
 
 	@Override
 	public Optional<Comment> findOne(Function<CommentRepository, Optional<Comment>> function) {
+		return function.apply(commentRepository);
+	}
+
+	@Override
+	public List<Comment> findAll(Function<CommentRepository, List<Comment>> function) {
 		return function.apply(commentRepository);
 	}
 }
