@@ -22,11 +22,12 @@ import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.util.BDDProcessor;
 import com.yapp.util.EntityFactory;
 import com.yapp.util.Mocker;
 
 @DisplayName("Comment : Service 단위 테스트")
-public class CommentServiceTest extends Mocker {
+public class CommentServiceTest extends Mocker implements BDDProcessor<CommentService, Object> {
 	private CommentService commentService;
 	private User 사용자;
 	private LocalDate 날짜;
@@ -48,9 +49,8 @@ public class CommentServiceTest extends Mocker {
 		willReturn(Optional.of(파일)).given(fileRepository)
 								   .findByFamilyAndId(any(), any());
 
-		commentService.create(사용자, 1L, 댓글_내용);
-
-		verify(commentRepository, times(1)).save(any());
+		whenCommand(commentService, service -> service.create(사용자, ONE_L, 댓글_내용));
+		then(() -> verify(commentRepository, times(ONE)).save(any()));
 	}
 
 	@ParameterizedTest
@@ -61,8 +61,12 @@ public class CommentServiceTest extends Mocker {
 		willReturn(Optional.empty()).given(fileRepository)
 									.findByFamilyAndId(any(), any());
 
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.create(사용자, 1L, 댓글_내용));
-		verify(commentRepository, times(0)).save(any());
+		then(() -> {
+			assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.create(사용자,
+																										  ONE_L,
+																										  댓글_내용));
+			verify(commentRepository, times(NEVER)).save(any());
+		});
 	}
 
 	@ParameterizedTest
@@ -75,9 +79,8 @@ public class CommentServiceTest extends Mocker {
 		willReturn(Optional.of(댓글)).given(commentRepository)
 								   .findByUserAndId(any(), any());
 
-		commentService.modify(사용자, 3L, 수정_내용);
-
-		assertThat(댓글.getContent()).isEqualTo(수정_내용);
+		whenCommand(commentService, service -> service.modify(사용자, THREE_L, 수정_내용));
+		then(() -> assertThat(댓글.getContent()).isEqualTo(수정_내용));
 	}
 
 	@Test
@@ -88,14 +91,14 @@ public class CommentServiceTest extends Mocker {
 		Comment 댓글3 = new Comment(사용자, 파일, "댓글3");
 		Comment 댓글4 = new Comment(사용자, 파일, "댓글4");
 		List<Comment> 댓글리스트 = List.of(댓글1, 댓글2, 댓글3, 댓글4);
-
 		willReturn(댓글리스트).given(commentRepository)
 						 .findAllByFamilyAndFileId(any(), any());
 
-		List<Comment> 조회된_댓글리스트 = commentService.getList(사용자, 3L);
-
-		assertThat(조회된_댓글리스트).hasSize(4);
-		assertThat(조회된_댓글리스트).containsExactly(댓글1, 댓글2, 댓글3, 댓글4);
+		List<Comment> 조회된_댓글리스트 = (List<Comment>)whenQuery(commentService, service -> service.getList(사용자, THREE_L));
+		then(() -> {
+			assertThat(조회된_댓글리스트).hasSize(SIZE_FOUR);
+			assertThat(조회된_댓글리스트).containsExactly(댓글1, 댓글2, 댓글3, 댓글4);
+		});
 	}
 
 	@Test
@@ -103,9 +106,8 @@ public class CommentServiceTest extends Mocker {
 		willReturn(List.of()).given(commentRepository)
 							 .findAllByFamilyAndFileId(any(), any());
 
-		List<Comment> 조회된_댓글리스트 = commentService.getList(사용자, 3L);
-
-		assertThat(조회된_댓글리스트).isEmpty();
+		List<Comment> 조회된_댓글리스트 = (List<Comment>)whenQuery(commentService, service -> service.getList(사용자, THREE_L));
+		then(() -> assertThat(조회된_댓글리스트).isEmpty());
 	}
 
 	@Test
@@ -115,10 +117,11 @@ public class CommentServiceTest extends Mocker {
 		willReturn(Optional.of(댓글)).given(commentRepository)
 								   .findByUserAndId(any(), any());
 
-		commentService.remove(사용자, 3L);
-
-		verify(commentRepository, times(1)).findByUserAndId(any(), any());
-		verify(commentRepository, times(1)).delete(any());
+		whenCommand(commentService, service -> service.remove(사용자, THREE_L));
+		then(() -> {
+			verify(commentRepository, times(ONE)).findByUserAndId(any(), any());
+			verify(commentRepository, times(ONE)).delete(any());
+		});
 	}
 
 	@Test
@@ -126,19 +129,23 @@ public class CommentServiceTest extends Mocker {
 		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
 		Comment 댓글 = new Comment(user(), 파일, "댓글1");
 		willReturn(Optional.empty()).given(commentRepository)
-								   .findByUserAndId(any(), any());
+									.findByUserAndId(any(), any());
 
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자, 3L));
-
-		verify(commentRepository, times(1)).findByUserAndId(any(), any());
-		verify(commentRepository, times(0)).delete(any());
+		then(() -> {
+			assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자,
+																										  THREE_L));
+			verify(commentRepository, times(ONE)).findByUserAndId(any(), any());
+			verify(commentRepository, times(NEVER)).delete(any());
+		});
 	}
 
 	@Test
 	void 예외_remove_없는댓글삭제() {
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자, 3L));
-
-		verify(commentRepository, times(1)).findByUserAndId(any(), any());
-		verify(commentRepository, times(0)).delete(any());
+		then(() -> {
+			assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자,
+																										  THREE_L));
+			verify(commentRepository, times(ONE)).findByUserAndId(any(), any());
+			verify(commentRepository, times(NEVER)).delete(any());
+		});
 	}
 }

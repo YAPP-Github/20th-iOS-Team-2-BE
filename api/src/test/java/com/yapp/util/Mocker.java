@@ -11,6 +11,12 @@ import com.yapp.api.domain.file.persistence.repository.FileRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class Mocker {
+	protected static final int ONE = 1;
+	protected static final Long ONE_L = 1L;
+	protected static final Long THREE_L = 3L;
+	protected static final int NEVER = 0;
+	protected static final int SIZE_FOUR = 4;
+	protected static final int SIZE_THREE = 3;
 
 	@Mock
 	protected FamilyRepository familyRepository;
