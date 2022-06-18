@@ -24,11 +24,12 @@ import com.yapp.api.domain.file.persistence.handler.FileCommandHandlerImpl;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.util.BDDProcessor;
 import com.yapp.util.EntityFactory;
 import com.yapp.util.Mocker;
 
 @DisplayName("Folder : Service 단위 테스트")
-public class AlbumServiceTest extends Mocker {
+public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumService, Object> {
 	private AlbumService albumService;
 	private User 사용자;
 	private LocalDate 날짜;
@@ -47,11 +48,13 @@ public class AlbumServiceTest extends Mocker {
 	void 정상_uploadPhotos_사진올리기_한개_앨범첫생성() {
 		List<String> 사진리스트 = List.of("사진1");
 
-		albumService.uploadPhotos(사용자, 날짜, 사진리스트);
+		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 
-		verify(albumRepository, times(ONE)).findByDate(any());
-		verify(fileRepository, times(ONE)).saveAll(any());
-		verify(albumRepository, times(ONE)).save(any());
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(fileRepository, times(ONE)).saveAll(any());
+			verify(albumRepository, times(ONE)).save(any());
+		});
 	}
 
 	@Test
@@ -63,21 +66,25 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.of(기존앨범)).given(albumRepository)
 									 .findByDate(any());
 
-		albumService.uploadPhotos(사용자, 날짜, 사진리스트);
+		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 
-		verify(albumRepository, times(ONE)).findByDate(any());
-		verify(fileRepository, times(ONE)).saveAll(any());
-		verify(albumRepository, times(NEVER)).save(any());
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(fileRepository, times(ONE)).saveAll(any());
+			verify(albumRepository, times(NEVER)).save(any());
+		});
 	}
 
 	@Test
 	void 정상_uploadPhotos_사진올리기_여러개_앨범첫생성() {
 		List<String> 사진리스트 = List.of("사진1", "사진2", "사진3");
 
-		albumService.uploadPhotos(사용자, 날짜, 사진리스트);
+		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 
-		verify(fileRepository, times(ONE)).saveAll(any());
-		verify(albumRepository, times(ONE)).save(any());
+		then(() -> {
+			verify(fileRepository, times(ONE)).saveAll(any());
+			verify(albumRepository, times(ONE)).save(any());
+		});
 	}
 
 	@Test
@@ -89,11 +96,12 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.of(기존앨범)).given(albumRepository)
 									 .findByDate(any());
 
-		albumService.uploadPhotos(사용자, 날짜, 사진리스트);
-
-		verify(albumRepository, times(ONE)).findByDate(any());
-		verify(fileRepository, times(ONE)).saveAll(any());
-		verify(albumRepository, times(NEVER)).save(any());
+		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(fileRepository, times(ONE)).saveAll(any());
+			verify(albumRepository, times(NEVER)).save(any());
+		});
 	}
 
 	@Test
@@ -101,11 +109,12 @@ public class AlbumServiceTest extends Mocker {
 		String 제목 = "음성 제목";
 		String 음성 = "음성 파일";
 
-		albumService.uploadRecordings(사용자, 날짜, 제목, 음성);
-
-		verify(albumRepository, times(ONE)).findByDate(any());
-		verify(fileRepository, times(ONE)).save(any());
-		verify(albumRepository, times(ONE)).save(any());
+		whenCommand(albumService, service -> service.uploadRecordings(사용자, 날짜, 제목, 음성));
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(fileRepository, times(ONE)).save(any());
+			verify(albumRepository, times(ONE)).save(any());
+		});
 	}
 
 	@Test
@@ -118,11 +127,12 @@ public class AlbumServiceTest extends Mocker {
 		String 제목 = "음성 제목";
 		String 음성 = "음성 파일";
 
-		albumService.uploadRecordings(사용자, 날짜, 제목, 음성);
-
-		verify(albumRepository, times(ONE)).findByDate(any());
-		verify(fileRepository, times(ONE)).save(any());
-		verify(albumRepository, times(NEVER)).save(any());
+		whenCommand(albumService, service -> service.uploadRecordings(사용자, 날짜, 제목, 음성));
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(fileRepository, times(ONE)).save(any());
+			verify(albumRepository, times(NEVER)).save(any());
+		});
 	}
 
 	@Test
@@ -136,10 +146,11 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(앨범리스트).given(albumRepository)
 						 .findByFamily(가족);
 
-		List<Album> 조회된_앨범들 = albumService.getList(사용자);
-
-		assertThat(조회된_앨범들).hasSize(SIZE_FOUR);
-		assertThat(조회된_앨범들).containsExactly(앨범_0616, 앨범_0615, 앨범_0613, 앨범_0611);
+		List<Album> 조회된_앨범들 = (List<Album>)whenQuery(albumService, service -> service.getList(사용자));
+		then(() -> {
+			assertThat(조회된_앨범들).hasSize(SIZE_FOUR);
+			assertThat(조회된_앨범들).containsExactly(앨범_0616, 앨범_0615, 앨범_0613, 앨범_0611);
+		});
 	}
 
 	@Test
@@ -159,20 +170,22 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(List.of(사진1, 사진2, 사진3, 음성1)).given(fileRepository)
 											   .findAllByFamily(가족);
 
-		Map<String, AlbumService.KindInfo> 조회된_앨범들 = albumService.getCountForEachCategory(사용자);
-
-		assertThat(조회된_앨범들.get(FAVOURITE)
-						  .getCount()).isEqualTo(SIZE_THREE);
-		assertThat(조회된_앨범들.get(FAVOURITE)
-						  .getLink()).isEqualTo("링크1");
-		assertThat(조회된_앨범들.get(KIND_PHOTO)
-						  .getCount()).isEqualTo(SIZE_THREE);
-		assertThat(조회된_앨범들.get(KIND_PHOTO)
-						  .getLink()).isEqualTo("링크1");
-		assertThat(조회된_앨범들.get(KIND_RECORDING)
-						  .getCount()).isEqualTo(ONE);
-		assertThat(조회된_앨범들.get(KIND_RECORDING)
-						  .getLink()).isEqualTo("링크4");
+		Map<String, AlbumService.KindInfo> 조회된_앨범들 = (Map)whenQuery(albumService,
+																	service -> service.getCountForEachCategory(사용자));
+		then(() -> {
+			assertThat(조회된_앨범들.get(FAVOURITE)
+							  .getCount()).isEqualTo(SIZE_THREE);
+			assertThat(조회된_앨범들.get(FAVOURITE)
+							  .getLink()).isEqualTo("링크1");
+			assertThat(조회된_앨범들.get(KIND_PHOTO)
+							  .getCount()).isEqualTo(SIZE_THREE);
+			assertThat(조회된_앨범들.get(KIND_PHOTO)
+							  .getLink()).isEqualTo("링크1");
+			assertThat(조회된_앨범들.get(KIND_RECORDING)
+							  .getCount()).isEqualTo(ONE);
+			assertThat(조회된_앨범들.get(KIND_RECORDING)
+							  .getLink()).isEqualTo("링크4");
+		});
 	}
 
 	@Test
@@ -181,10 +194,11 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.of(단일앨범)).given(albumRepository)
 									 .findByFamilyAndId(any(), any());
 
-		Album 조회된_앨범 = albumService.get(사용자, THREE_L);
-
-		assertThat(조회된_앨범).isEqualTo(단일앨범);
-		assertThat(조회된_앨범.getTitle()).isEqualTo("2022-06-15 앨범");
+		Album 조회된_앨범 = (Album)whenQuery(albumService, service -> service.get(사용자, THREE_L));
+		then(() -> {
+			assertThat(조회된_앨범).isEqualTo(단일앨범);
+			assertThat(조회된_앨범.getTitle()).isEqualTo("2022-06-15 앨범");
+		});
 	}
 
 	@Test
@@ -195,11 +209,12 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.of(앨범)).given(albumRepository)
 								   .findByFamilyAndId(any(), any());
 
-		albumService.modifyTitle(사용자, 앨범.getId(), 변경될제목);
-
-		verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
-		assertThat(앨범.getTitle()).isEqualTo(변경될제목);
-		assertThat(앨범.getTitle()).isNotEqualTo("2022-06-15 앨범");
+		whenCommand(albumService, service -> service.modifyTitle(사용자, 앨범.getId(), 변경될제목));
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
+			assertThat(앨범.getTitle()).isEqualTo(변경될제목);
+			assertThat(앨범.getTitle()).isNotEqualTo("2022-06-15 앨범");
+		});
 	}
 
 	@Test
@@ -209,10 +224,11 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.of(앨범)).given(albumRepository)
 								   .findByFamilyAndId(any(), any());
 
-		albumService.remove(사용자, 앨범.getId());
-
-		verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
-		verify(albumRepository, times(ONE)).delete(any());
+		whenCommand(albumService, service -> service.remove(사용자, 앨범.getId()));
+		then(() -> {
+			verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
+			verify(albumRepository, times(ONE)).delete(any());
+		});
 	}
 
 	@Test
@@ -220,8 +236,10 @@ public class AlbumServiceTest extends Mocker {
 		willReturn(Optional.ofNullable(null)).given(albumRepository)
 											 .findByFamilyAndId(any(), any());
 
-		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, THREE_L));
-		verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
-		verify(albumRepository, times(NEVER)).delete(any());
+		then(() -> {
+			assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> albumService.remove(사용자, THREE_L));
+			verify(albumRepository, times(ONE)).findByFamilyAndId(any(), any());
+			verify(albumRepository, times(NEVER)).delete(any());
+		});
 	}
 }
