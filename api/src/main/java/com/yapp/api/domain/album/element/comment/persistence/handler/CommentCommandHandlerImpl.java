@@ -17,4 +17,9 @@ public class CommentCommandHandlerImpl implements CommentCommandHandler {
 	public void create(Consumer<CommentRepository> consumer) {
 		consumer.accept(commentRepository);
 	}
+
+	@Override
+	public void remove(Consumer<CommentRepository> consumer) {
+		consumer.accept(commentRepository);
+	}
 }

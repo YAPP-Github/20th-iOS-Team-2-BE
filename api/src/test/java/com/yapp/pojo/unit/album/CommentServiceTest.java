@@ -1,5 +1,6 @@
 package com.yapp.pojo.unit.album;
 
+import static com.yapp.util.EntityFactory.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -17,7 +18,6 @@ import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentCommandHandlerImpl;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentQueryHandlerImpl;
 import com.yapp.api.domain.album.element.comment.service.CommentService;
-import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
@@ -36,7 +36,7 @@ public class CommentServiceTest extends Mocker {
 		commentService = new CommentService(new FileQueryHandlerImpl(fileRepository),
 											new CommentCommandHandlerImpl(commentRepository),
 											new CommentQueryHandlerImpl(commentRepository));
-		사용자 = EntityFactory.user();
+		사용자 = user();
 		날짜 = LocalDate.of(2022, 6, 15);
 	}
 
@@ -83,7 +83,6 @@ public class CommentServiceTest extends Mocker {
 	@Test
 	void 정상_getList_댓글조회() {
 		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
-		Family 가족 = EntityFactory.family(사용자);
 		Comment 댓글1 = new Comment(사용자, 파일, "댓글1");
 		Comment 댓글2 = new Comment(사용자, 파일, "댓글2");
 		Comment 댓글3 = new Comment(사용자, 파일, "댓글3");
@@ -101,14 +100,45 @@ public class CommentServiceTest extends Mocker {
 
 	@Test
 	void 정상_getList_댓글이없는경우() {
-		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
-		Family 가족 = EntityFactory.family(사용자);
-
 		willReturn(List.of()).given(commentRepository)
 							 .findAllByFamilyAndFileId(any(), any());
 
 		List<Comment> 조회된_댓글리스트 = commentService.getList(사용자, 3L);
 
 		assertThat(조회된_댓글리스트).isEmpty();
+	}
+
+	@Test
+	void 정상_remove_본인댓글삭제() {
+		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
+		Comment 댓글 = new Comment(사용자, 파일, "댓글1");
+		willReturn(Optional.of(댓글)).given(commentRepository)
+								   .findByUserAndId(any(), any());
+
+		commentService.remove(사용자, 3L);
+
+		verify(commentRepository, times(1)).findByUserAndId(any(), any());
+		verify(commentRepository, times(1)).delete(any());
+	}
+
+	@Test
+	void 예외_remove_타인댓글삭제() {
+		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
+		Comment 댓글 = new Comment(user(), 파일, "댓글1");
+		willReturn(Optional.empty()).given(commentRepository)
+								   .findByUserAndId(any(), any());
+
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자, 3L));
+
+		verify(commentRepository, times(1)).findByUserAndId(any(), any());
+		verify(commentRepository, times(0)).delete(any());
+	}
+
+	@Test
+	void 예외_remove_없는댓글삭제() {
+		assertThatExceptionOfType(BaseBusinessException.class).isThrownBy(() -> commentService.remove(사용자, 3L));
+
+		verify(commentRepository, times(1)).findByUserAndId(any(), any());
+		verify(commentRepository, times(0)).delete(any());
 	}
 }

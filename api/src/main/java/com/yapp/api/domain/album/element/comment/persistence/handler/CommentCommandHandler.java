@@ -6,4 +6,6 @@ import com.yapp.api.domain.album.element.comment.persistence.repository.CommentR
 
 public interface CommentCommandHandler {
 	void create(Consumer<CommentRepository> consumer);
+
+	void remove(Consumer<CommentRepository> consumer);
 }

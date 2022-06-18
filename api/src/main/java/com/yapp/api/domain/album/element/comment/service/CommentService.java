@@ -52,4 +52,15 @@ public class CommentService {
 		return commentQueryHandler.findAll(commentRepository -> commentRepository.findAllByFamilyAndFileId(user.getFamily(),
 																										   fileId));
 	}
+
+	@Transactional
+	public void remove(User user, Long fileId) {
+		Comment comment = commentQueryHandler.findOne(commentRepository -> commentRepository.findByUserAndId(user,
+																											 fileId))
+											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
+																						  new RuntimeException(
+																							  "CommentNotFound : which {commentId} in DELETE /album/comments/{commentId}")));
+
+		commentCommandHandler.remove(commentRepository -> commentRepository.delete(comment));
+	}
 }
