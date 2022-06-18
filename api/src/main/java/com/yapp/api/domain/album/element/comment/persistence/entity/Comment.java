@@ -7,9 +7,11 @@ import static lombok.AccessLevel.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.yapp.api.domain.common.BaseEntity;
+import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.user.persistence.entity.User;
 
 import lombok.Getter;
@@ -28,8 +30,16 @@ public class Comment extends BaseEntity {
 	@OneToOne(fetch = LAZY)
 	private User user;
 
-	public Comment(User user, String content) {
+	@ManyToOne(fetch = LAZY)
+	private File file;
+
+	public Comment(User user, File file, String content) {
 		this.user = user;
+		this.file = file;
 		this.content = content;
+	}
+
+	public void modifyComment(String toBe) {
+		this.content = toBe;
 	}
 }
