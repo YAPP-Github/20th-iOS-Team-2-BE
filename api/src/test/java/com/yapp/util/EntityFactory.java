@@ -37,7 +37,7 @@ public class EntityFactory {
 	}
 
 	public static Appointment appointment(User 회원) {
-		return new Appointment(family(), user(), "일정제목", "일정내용", LocalDateTime.of(2022, 6, 13, 20, 0));
+		return Appointment.of("제목", "내용", "2022-06-20", "20:35", false, "BLUE", family(회원), 회원);
 	}
 
 	public static User anonymousUser() {

@@ -4,8 +4,6 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,7 +27,10 @@ public class Appointment extends BaseEntity {
 
 	private String title;
 	private String content;
-	private LocalDateTime date;
+	private String date;
+	private String time;
+	private boolean allDay;
+	private String color;
 
 	@ManyToOne(fetch = LAZY)
 	private Family family;
@@ -37,11 +38,35 @@ public class Appointment extends BaseEntity {
 	@OneToOne(fetch = LAZY)
 	private User owner;
 
-	public Appointment(Family family, User user, String title, String content, LocalDateTime date) {
-		this.family = family;
-		this.owner = user;
+	private Appointment(String title,
+						String content,
+						String date,
+						String time,
+						boolean allDay,
+						String color,
+						Family family,
+						User owner) {
 		this.title = title;
 		this.content = content;
 		this.date = date;
+		this.time = time;
+		this.allDay = allDay;
+		this.color = color;
+		this.family = family;
+		this.owner = owner;
+	}
+
+	public static Appointment of(String title,
+								 String content,
+								 String date,
+								 String time,
+								 boolean allDay,
+								 String color,
+								 Family family,
+								 User owner) {
+		if (allDay) {
+			return new Appointment(title, content, date, "", allDay, color, family, owner);
+		}
+		return new Appointment(title, content, date, time, allDay, color, family, owner);
 	}
 }
