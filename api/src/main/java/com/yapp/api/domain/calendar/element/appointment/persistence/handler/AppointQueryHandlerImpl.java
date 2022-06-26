@@ -1,5 +1,6 @@
 package com.yapp.api.domain.calendar.element.appointment.persistence.handler;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -17,6 +18,11 @@ public class AppointQueryHandlerImpl implements AppointmentQueryHandler {
 
 	@Override
 	public Optional<Appointment> findOne(Function<AppointmentRepository, Optional<Appointment>> function) {
+		return function.apply(appointmentRepository);
+	}
+
+	@Override
+	public List<Appointment> findAll(Function<AppointmentRepository, List<Appointment>> function) {
 		return function.apply(appointmentRepository);
 	}
 }

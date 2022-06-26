@@ -35,7 +35,7 @@ public class CalendarTest {
 		assertThat(일정.getDate()).isEqualTo(날짜);
 
 		if (하루종일) {
-			assertThat(일정.getTime()).isEqualTo("");
+			assertThat(일정.getTime()).isNull();
 			assertThat(일정.isAllDay()).isEqualTo(하루종일);
 		}
 		if (!하루종일) {
