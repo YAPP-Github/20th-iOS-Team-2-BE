@@ -28,6 +28,7 @@ public class FamilyResponse {
 		public static class EventInfo {
 			private String title;
 			private String eventDate;
+			private String color;
 		}
 	}
 
