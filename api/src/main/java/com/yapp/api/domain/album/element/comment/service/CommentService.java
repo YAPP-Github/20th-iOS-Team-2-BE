@@ -35,7 +35,10 @@ public class CommentService {
 																				 new RuntimeException(
 																					 "FileNotFoundError : which {fileId} in PORT /album/{fileId}/comments")));
 
-		commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user, file, content)));
+		commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user,
+																							 user.getFamily(),
+																							 file,
+																							 content)));
 	}
 
 	@Transactional

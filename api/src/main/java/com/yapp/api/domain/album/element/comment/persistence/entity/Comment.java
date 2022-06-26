@@ -8,9 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import com.yapp.api.domain.common.BaseEntity;
+import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.user.persistence.entity.User;
 
@@ -27,14 +27,18 @@ public class Comment extends BaseEntity {
 
 	private String content;
 
-	@OneToOne(fetch = LAZY)
+	@ManyToOne(fetch = LAZY)
 	private User user;
+
+	@ManyToOne(fetch = LAZY)
+	private Family family;
 
 	@ManyToOne(fetch = LAZY)
 	private File file;
 
-	public Comment(User user, File file, String content) {
+	public Comment(User user, Family family, File file, String content) {
 		this.user = user;
+		this.family = family;
 		this.file = file;
 		this.content = content;
 	}

@@ -18,6 +18,7 @@ import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentCommandHandlerImpl;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentQueryHandlerImpl;
 import com.yapp.api.domain.album.element.comment.service.CommentService;
+import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
 import com.yapp.api.domain.user.persistence.entity.User;
@@ -30,6 +31,7 @@ import com.yapp.util.Mocker;
 public class CommentServiceTest extends Mocker implements BDDProcessor<CommentService, Object> {
 	private CommentService commentService;
 	private User 사용자;
+	private Family 가족;
 	private LocalDate 날짜;
 
 	@BeforeEach
@@ -38,6 +40,7 @@ public class CommentServiceTest extends Mocker implements BDDProcessor<CommentSe
 											new CommentCommandHandlerImpl(commentRepository),
 											new CommentQueryHandlerImpl(commentRepository));
 		사용자 = user();
+		가족 = family(사용자);
 		날짜 = LocalDate.of(2022, 6, 15);
 	}
 
@@ -75,7 +78,7 @@ public class CommentServiceTest extends Mocker implements BDDProcessor<CommentSe
 		File 파일 = EntityFactory.file("제목", "링크", kind, 사용자, 날짜);
 		String 댓글_내용 = "내용";
 		String 수정_내용 = "수정_내용";
-		Comment 댓글 = new Comment(사용자, 파일, 댓글_내용);
+		Comment 댓글 = new Comment(사용자, 가족, 파일, 댓글_내용);
 		willReturn(Optional.of(댓글)).given(commentRepository)
 								   .findByUserAndId(any(), any());
 
@@ -86,10 +89,10 @@ public class CommentServiceTest extends Mocker implements BDDProcessor<CommentSe
 	@Test
 	void 정상_getList_댓글조회() {
 		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
-		Comment 댓글1 = new Comment(사용자, 파일, "댓글1");
-		Comment 댓글2 = new Comment(사용자, 파일, "댓글2");
-		Comment 댓글3 = new Comment(사용자, 파일, "댓글3");
-		Comment 댓글4 = new Comment(사용자, 파일, "댓글4");
+		Comment 댓글1 = new Comment(사용자, 가족, 파일, "댓글1");
+		Comment 댓글2 = new Comment(사용자, 가족, 파일, "댓글2");
+		Comment 댓글3 = new Comment(사용자, 가족, 파일, "댓글3");
+		Comment 댓글4 = new Comment(사용자, 가족, 파일, "댓글4");
 		List<Comment> 댓글리스트 = List.of(댓글1, 댓글2, 댓글3, 댓글4);
 		willReturn(댓글리스트).given(commentRepository)
 						 .findAllByFamilyAndFileId(any(), any());
@@ -113,7 +116,7 @@ public class CommentServiceTest extends Mocker implements BDDProcessor<CommentSe
 	@Test
 	void 정상_remove_본인댓글삭제() {
 		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
-		Comment 댓글 = new Comment(사용자, 파일, "댓글1");
+		Comment 댓글 = new Comment(사용자, 가족, 파일, "댓글1");
 		willReturn(Optional.of(댓글)).given(commentRepository)
 								   .findByUserAndId(any(), any());
 
@@ -127,7 +130,7 @@ public class CommentServiceTest extends Mocker implements BDDProcessor<CommentSe
 	@Test
 	void 예외_remove_타인댓글삭제() {
 		File 파일 = EntityFactory.file("제목", "링크", "photo", 사용자, 날짜);
-		Comment 댓글 = new Comment(user(), 파일, "댓글1");
+		Comment 댓글 = new Comment(user(), 가족, 파일, "댓글1");
 		willReturn(Optional.empty()).given(commentRepository)
 									.findByUserAndId(any(), any());
 

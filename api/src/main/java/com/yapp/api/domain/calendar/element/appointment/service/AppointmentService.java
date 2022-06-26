@@ -1,10 +1,15 @@
 package com.yapp.api.domain.calendar.element.appointment.service;
 
+import static com.yapp.core.error.exception.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yapp.api.domain.calendar.element.appointment.persistence.entity.Appointment;
 import com.yapp.api.domain.calendar.element.appointment.persistence.handler.AppointmentCommandHandler;
 import com.yapp.api.domain.calendar.element.appointment.persistence.handler.AppointmentQueryHandler;
+import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.error.exception.BaseBusinessException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,4 +19,61 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentService {
 	private final AppointmentCommandHandler appointmentCommandHandler;
 	private final AppointmentQueryHandler appointmentQueryHandler;
+
+	@Transactional
+	public void create(User user,
+					   String title,
+					   String content,
+					   boolean allDay,
+					   String date,
+					   String time,
+					   boolean visibility,
+					   String color) {
+
+		// allDay 관련 작업
+		// visibility 관련 작업
+		appointmentCommandHandler.save(repository -> repository.save(Appointment.of(title,
+																					content,
+																					date,
+																					time,
+																					allDay,
+																					color,
+																					user.getFamily(),
+																					user)));
+	}
+
+	@Transactional
+	public void modify(User user,
+					   Long appointmentId,
+					   String color,
+					   String content,
+					   String date,
+					   String time,
+					   String title,
+					   boolean allDay) {
+		appointmentQueryHandler.findOne(repository -> repository.findByIdAndTitle(appointmentId, title))
+							   .orElseThrow(() -> new BaseBusinessException(APPOINTMENT_NOT_FOUND,
+																			new RuntimeException(
+																				"Appointment not found error : which occurred PATCH /calendar/{id}")));
+	}
+
+	public void retrieveAsMonth(User user, String year, String month) {
+		appointmentQueryHandler.findAll(repository -> repository.findByFamilyAndDateUntilMonth(user.getFamily(),
+																							   dateUtilMonth(year,
+																											 month)));
+	}
+
+	private String dateUtilMonth(String year, String month) {
+		if (month.length() == 1) {
+			month = "0" + month;
+		}
+		return year + "-" + month;
+	}
+
+	public void retrieveAsDay(User user, String date) {
+		appointmentQueryHandler.findOne(repository -> repository.findByFamilyAndDate(user.getFamily(), date))
+							   .orElseThrow(() -> new BaseBusinessException(APPOINTMENT_NOT_FOUND,
+																			new RuntimeException(
+																				"NOT FOUND APPOINTMENT ERROR : which occurred GET /calendar/as-day")));
+	}
 }
