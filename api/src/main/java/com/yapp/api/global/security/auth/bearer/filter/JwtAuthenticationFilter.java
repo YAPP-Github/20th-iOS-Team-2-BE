@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+	private static final int START_INDEX = 7;
 	private final BearerHandler bearerHandler;
 	private final AuthenticationProvider jwtAuthenticationProvider;
 
@@ -36,15 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 									FilterChain filterChain) throws ServletException, IOException {
 
 		bearerHandler.extractToken(request)
-					 .ifPresentOrElse(token -> validate(token, filterChain, request, response), () -> {
-						 SecurityContextHolder.getContext()
-											  .setAuthentication(JwtToken.ANONYMOUS);
-						 try {
-							 filterChain.doFilter(request, response);
-						 } catch (IOException | ServletException e) {
-							 e.printStackTrace();
-						 }
-					 });
+					 .ifPresentOrElse(token -> validate(token.substring(START_INDEX), filterChain, request, response),
+									  () -> {
+										  SecurityContextHolder.getContext()
+															   .setAuthentication(JwtToken.ANONYMOUS);
+										  try {
+											  filterChain.doFilter(request, response);
+										  } catch (IOException | ServletException e) {
+											  e.printStackTrace();
+										  }
+									  });
 
 	}
 

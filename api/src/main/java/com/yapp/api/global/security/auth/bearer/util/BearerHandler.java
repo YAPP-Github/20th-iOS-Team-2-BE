@@ -24,7 +24,7 @@ public class BearerHandler {
 	}
 
 	public Optional<String> extractToken(HttpServletRequest request) {
-		return Optional.ofNullable(request.getHeader(TOKEN_KEY));
+		return Optional.of(request.getHeader(TOKEN_KEY));
 	}
 
 	public Authentication extractPrincipal(String token) {
