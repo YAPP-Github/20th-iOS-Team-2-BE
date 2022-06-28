@@ -32,3 +32,8 @@ cloud:
 aws:
   s3:
     bucket: ${S3_BUCKET_NAME}
+
+security:
+  jwt:
+    token-key: ${JWT_TOKEN_KEY}
+    secret-key: ${JWT_SECRET_KEY}
