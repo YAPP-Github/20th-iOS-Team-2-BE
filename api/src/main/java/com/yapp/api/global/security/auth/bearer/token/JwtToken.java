@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.yapp.api.domain.user.persistence.entity.element.Authority;
 
 public class JwtToken implements Authentication {
-	public static final Authentication ANONYMOUS = anonymous("");
+	public static final Authentication ANONYMOUS = anonymous();
 	private final UserDetails userDetails;
 
 	public JwtToken(UserDetails userDetails) {
@@ -29,6 +29,45 @@ public class JwtToken implements Authentication {
 		return anonymous(principal);
 	}
 
+	@Override
+	public String getName() {
+		return userDetails.getUsername();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return userDetails.getAuthorities();
+	}
+
+	@Override
+	public Object getCredentials() {
+		return Optional.empty();
+	}
+
+	@Override
+	public Object getDetails() {
+		return userDetails;
+	}
+
+	@Override
+	public Object getPrincipal() {
+		return userDetails.getUsername();
+	}
+
+	@Override
+	public boolean isAuthenticated() {
+		return userDetails.isEnabled();
+	}
+
+	@Override
+	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {}
+
+	// --
+
+	private static Authentication anonymous() {
+		return new AnonymousToken();
+	}
+
 	private static Authentication anonymous(String principal) {
 		return new AnonymousToken(principal);
 	}
@@ -37,6 +76,11 @@ public class JwtToken implements Authentication {
 		private static final String SPLITTER = ":";
 		private final String PROVIDER;
 		private final String OAUTH_ID;
+
+		public AnonymousToken() {
+			PROVIDER = "error";
+			OAUTH_ID = "";
+		}
 
 		public AnonymousToken(String principal) {
 			this.PROVIDER = principal.split(SPLITTER)[0];
@@ -81,37 +125,4 @@ public class JwtToken implements Authentication {
 		@Override
 		public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {}
 	}
-
-	@Override
-	public String getName() {
-		return userDetails.getUsername();
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return userDetails.getAuthorities();
-	}
-
-	@Override
-	public Object getCredentials() {
-		return Optional.empty();
-	}
-
-	@Override
-	public Object getDetails() {
-		return userDetails;
-	}
-
-	@Override
-	public Object getPrincipal() {
-		return userDetails.getUsername();
-	}
-
-	@Override
-	public boolean isAuthenticated() {
-		return userDetails.isEnabled();
-	}
-
-	@Override
-	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {}
 }

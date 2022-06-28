@@ -9,6 +9,6 @@ import com.yapp.api.domain.user.persistence.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(nativeQuery = true,
-		   value = "SELECT u FROM USER u WHERE u.provider = :provider AND u.oauthId = :oauthId")
+		   value = "SELECT * FROM USERS u LEFT JOIN OAUTH_INFO o ON u.id = o.user_id WHERE o.provider = :provider AND o.oauth_Id = :oauthId")
 	Optional<User> findByProviderAndOauthId(String provider, String oauthId);
 }
