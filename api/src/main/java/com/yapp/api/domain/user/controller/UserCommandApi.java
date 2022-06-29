@@ -24,14 +24,14 @@ import lombok.RequiredArgsConstructor;
 public class UserCommandApi {
 	private final UserService userService;
 
-	@PostMapping(value = "/user", consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(value = _USER, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createUser(@MustAuthenticated User user, @RequestBody UserRequest.Create request) {
 
 		runAsync(() -> userService.create(user,
 										  request.getName(),
 										  request.getNickname(),
 										  request.getRoleInFamily(),
-										  request.getBirthday()));
+										  request.getBirthDay()));
 
 		return ResponseEntity.ok()
 							 .build();
@@ -50,7 +50,12 @@ public class UserCommandApi {
 	}
 
 	@PatchMapping(_USER)
-	ResponseEntity<Void> modifyUser() {
+	ResponseEntity<Void> modifyUser(@MustAuthenticated User user, @RequestBody UserRequest.Modify request) {
+		runAsync(() -> userService.modify(user,
+										  request.getNickname(),
+										  request.getImageLink(),
+										  request.getBirthDay(),
+										  request.getRoleInFamily()));
 		return ResponseEntity.ok()
 							 .build();
 	}

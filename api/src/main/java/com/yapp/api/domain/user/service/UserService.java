@@ -27,7 +27,14 @@ public class UserService {
 	public void create(User user, String name, String nickname, String roleInFamily, LocalDate birthday) {
 		transactionTemplate.executeWithoutResult(process -> {
 			user.update(name, nickname, roleInFamily, birthday);
-			userCommandHandler.save(repository -> repository.save(user));
+			userCommandHandler.save(userRepository -> userRepository.save(user));
+		});
+	}
+
+	public void modify(User user, String nickname, String imageLink, LocalDate birthDay, String roleInFamily) {
+		transactionTemplate.executeWithoutResult(process -> {
+			user.update(nickname, imageLink, birthDay, roleInFamily);
+			userCommandHandler.save(userRepository -> userRepository.save(user));
 		});
 	}
 }

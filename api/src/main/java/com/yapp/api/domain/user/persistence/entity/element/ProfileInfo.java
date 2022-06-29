@@ -4,6 +4,7 @@ import static com.yapp.core.constant.ServiceConstant.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
@@ -37,5 +38,28 @@ public class ProfileInfo {
 
 	private static String original(String originalNickname) {
 		return ORIGINAL + originalNickname;
+	}
+
+	public void update(String nickname, String imageLink, String roleInFamily) {
+		String originalNickname = originalNickname();
+		if (Objects.nonNull(nickname) && !originalNickname.equals(nickname)) {
+			newOriginal(originalNickname, nickname);
+		}
+
+		if(Objects.nonNull(imageLink) && !this.imageLink.equals(imageLink)) {
+			this.imageLink = imageLink;
+		}
+
+		if(Objects.nonNull(roleInFamily) && !this.roleInFamily.equals(roleInFamily)) {
+			this.roleInFamily = roleInFamily;
+		}
+	}
+
+	private void newOriginal(String beforeNickname, String modifiedNickname) {
+		nickname = nickname.replace(beforeNickname, modifiedNickname);
+	}
+
+	private String originalNickname() {
+		return this.nickname.substring(2, nickname.length());
 	}
 }
