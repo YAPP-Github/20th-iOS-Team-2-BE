@@ -5,6 +5,7 @@ import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -56,7 +57,15 @@ public class User extends BaseEntity {
 		this.birthday = birthday;
 		this.profileInfo = profileInfo;
 		this.oAuthInfos = new OAuthInfos(Set.of(oAuthInfos));
+
+		Arrays.stream(oAuthInfos)
+			  .forEach(this::connectThisUser);
+
 		authority = Authority.USER;
+	}
+
+	private void connectThisUser(OAuthInfo oAuthInfo) {
+		oAuthInfo.setUser(this);
 	}
 
 	public static class ANONYMOUS extends User {
