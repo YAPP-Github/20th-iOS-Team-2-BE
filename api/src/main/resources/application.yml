@@ -18,6 +18,10 @@ spring:
     hikari:
       maximum-pool-size: 4
     driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+
 
 cloud:
   aws:
@@ -32,3 +36,9 @@ cloud:
 aws:
   s3:
     bucket: ${S3_BUCKET_NAME}
+
+security:
+  jwt:
+    token-key: ${JWT_TOKEN_KEY}
+    secret-key: ${JWT_SECRET_KEY}
+    valid-time: ${JWT_VALID_TIME}

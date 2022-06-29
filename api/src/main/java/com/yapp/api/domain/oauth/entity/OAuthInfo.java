@@ -11,16 +11,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.yapp.api.domain.user.persistence.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Table(name = "oauth_info")
 public class OAuthInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +33,7 @@ public class OAuthInfo {
 	private OAuthProvider provider;
 	private String oauthId;
 
+	@Setter
 	@ManyToOne(fetch = LAZY)
 	private User user;
 
