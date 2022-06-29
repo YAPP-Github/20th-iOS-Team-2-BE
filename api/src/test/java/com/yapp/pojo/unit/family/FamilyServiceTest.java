@@ -6,12 +6,14 @@ import static org.mockito.BDDMockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.family.persistence.entity.Family;
 import com.yapp.api.domain.family.persistence.handler.FamilyCommandHandlerImpl;
 import com.yapp.api.domain.family.persistence.handler.FamilyQueryHandlerImpl;
 import com.yapp.api.domain.family.service.FamilyService;
 import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.api.domain.user.persistence.handler.UserCommandHandlerImpl;
 import com.yapp.util.EntityFactory;
 import com.yapp.util.Mocker;
 
@@ -21,7 +23,10 @@ public class FamilyServiceTest extends Mocker {
 
 	@BeforeEach
 	void init() {
-		familyService = new FamilyService(new FamilyCommandHandlerImpl(familyRepository), new FamilyQueryHandlerImpl());
+		familyService = new FamilyService(new FamilyCommandHandlerImpl(familyRepository),
+										  new FamilyQueryHandlerImpl(),
+										  new UserCommandHandlerImpl(userRepository),
+										  new TransactionTemplate());
 	}
 
 	@Test

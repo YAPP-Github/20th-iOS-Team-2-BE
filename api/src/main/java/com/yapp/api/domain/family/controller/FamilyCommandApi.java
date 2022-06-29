@@ -13,15 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
+import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.api.domain.family.service.FamilyService;
+import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class FamilyCommandApi {
+	private final FamilyService familyService;
+
 	@PostMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<FamilyResponse.Create> createFamily(@RequestBody FamilyRequest.Create request) {
-		return null;
+	ResponseEntity<FamilyResponse.Create> createFamily(@MustAuthenticated User user,
+													   @RequestBody FamilyRequest.Create request) {
+		Family createdFamily = familyService.create(user, request.getFamilyName(), request.getFamilyMotto());
+		return ResponseEntity.ok(new FamilyResponse.Create(createdFamily.getId()));
 	}
 
 	@PatchMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE)

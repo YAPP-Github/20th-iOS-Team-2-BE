@@ -7,7 +7,6 @@ import static lombok.AccessLevel.*;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -55,6 +54,9 @@ public class Family extends BaseEntity {
 
 	private void userAsFamily(User user) {
 		this.owner = user;
+	}
+
+	public void addUser(User user) {
 		user.setFamily(this);
 		familyMembers.add(user);
 	}
