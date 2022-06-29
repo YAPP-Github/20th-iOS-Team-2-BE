@@ -1,5 +1,6 @@
 package com.yapp.api.domain.user.persistence.entity.element;
 
+import static com.yapp.core.constant.ServiceConstant.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
@@ -22,19 +23,16 @@ public class ProfileInfo {
 	private LocalDateTime modifiedDate;
 	private Integer emoji;
 
-	private ProfileInfo(String originalNickname, String roleInFamily, String imageLink, LocalDateTime modifiedDate) {
+	private ProfileInfo(String originalNickname, String roleInFamily) {
 		this.nickname = originalNickname;
 		this.roleInFamily = roleInFamily;
-		this.imageLink = imageLink;
-		this.modifiedDate = modifiedDate;
+		this.imageLink = DEFAULT_IMAGE;
+		this.modifiedDate = LocalDateTime.now();
 		this.emoji = 0;
 	}
 
-	public static ProfileInfo of(String originalNickname,
-								 String roleInFamily,
-								 String imageLink,
-								 LocalDateTime modifiedDate) {
-		return new ProfileInfo(original(originalNickname), roleInFamily, imageLink, modifiedDate);
+	public static ProfileInfo of(String originalNickname, String roleInFamily) {
+		return new ProfileInfo(original(originalNickname), roleInFamily);
 	}
 
 	private static String original(String originalNickname) {

@@ -68,6 +68,12 @@ public class User extends BaseEntity {
 		oAuthInfo.setUser(this);
 	}
 
+	public void update(String name, String nickname, String roleInFamily, LocalDate birthday) {
+		this.name = name;
+		this.birthday = birthday;
+		this.profileInfo = ProfileInfo.of(nickname, roleInFamily);
+	}
+
 	public static class ANONYMOUS extends User {
 		@Override
 		public Authority getAuthority() {
