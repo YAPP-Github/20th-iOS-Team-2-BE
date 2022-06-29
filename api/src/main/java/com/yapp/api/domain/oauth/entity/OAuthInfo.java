@@ -18,6 +18,7 @@ import com.yapp.api.domain.user.persistence.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -32,6 +33,7 @@ public class OAuthInfo {
 	private OAuthProvider provider;
 	private String oauthId;
 
+	@Setter
 	@ManyToOne(fetch = LAZY)
 	private User user;
 

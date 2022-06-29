@@ -4,6 +4,7 @@ import static com.google.common.base.Strings.*;
 import static com.yapp.core.error.exception.ErrorCode.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.yapp.api.global.security.auth.bearer.token.JwtToken;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
 import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.error.exception.ErrorCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -35,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request,
 									HttpServletResponse response,
 									FilterChain filterChain) throws ServletException, IOException {
-
+		Optional<String> a = bearerHandler.extractToken(request);
 		bearerHandler.extractToken(request)
 					 .ifPresentOrElse(token -> validate(token.substring(START_INDEX), filterChain, request, response),
 									  () -> {
@@ -44,7 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 										  try {
 											  filterChain.doFilter(request, response);
 										  } catch (IOException | ServletException e) {
-											  e.printStackTrace();
+											  throw new BaseBusinessException(NO_AUTHENTICATION_ACCESS);
+										  } catch (StringIndexOutOfBoundsException e) {
+											  throw new BaseBusinessException(OAUTH_KIND_ERROR);
 										  }
 									  });
 

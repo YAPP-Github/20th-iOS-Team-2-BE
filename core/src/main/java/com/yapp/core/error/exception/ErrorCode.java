@@ -7,6 +7,7 @@ public enum ErrorCode {
 	BEARER_TOKEN_INVALID(400, "토큰이 비정상적입니다."),
 	BEARER_TOKEN_EXPIRED(400, "토큰이 만료되었습니다."),
 	OAUTH_KIND_ERROR(400, "허가되지 않는 OAuth 인증 타입으로 인증을 시도했습니다."),
+	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 
 	FILE_NOT_FOUND(404, "없는 파일 리소스에 대한 접근입니다."),
 	ALBUM_NOT_FOUND(404, "없는 앨범 리소스에 대한 접근입니다."),
