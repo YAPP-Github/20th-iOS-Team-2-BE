@@ -13,6 +13,7 @@ import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.domain.user.persistence.entity.element.Authority;
 import com.yapp.api.domain.user.persistence.handler.UserQueryHandler;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,7 +32,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 												   .orElseGet(User.ANONYMOUS::new));
 	}
 
-	private static class JwtUserDetails implements UserDetails {
+	public static class JwtUserDetails implements UserDetails {
+		@Getter
 		private final User user;
 
 		public JwtUserDetails(User user) {
