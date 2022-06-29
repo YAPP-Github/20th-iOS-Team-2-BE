@@ -27,7 +27,7 @@ import lombok.Setter;
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
-	private static final String KAKAO = "kakao";
+	private static final String KAKAO = "KAKAO";
 	private static final String AUTHORIZATION = "Authorization";
 	private static final String CONTENT_TYPE = "Content-type";
 	private static final String PREFIX = "Bearer ";
@@ -77,7 +77,7 @@ public class OAuthService {
 		httpHeaders.set(AUTHORIZATION, bearerToken(oauthToken));
 		httpHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
 		try {
-			if (KAKAO.equals(kind.toLowerCase())) {
+			if (KAKAO.equals(kind.toUpperCase())) {
 				OAuthResponse.FromKakao result = restTemplate.exchange(KAKAO_AUTH_URI,
 																	   GET,
 																	   new HttpEntity(httpHeaders),
@@ -100,12 +100,11 @@ public class OAuthService {
 		return PREFIX + token;
 	}
 
-	@Getter
-	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
 	private static class OAuthResponse {
 		private Long id;
+		@Setter
 		private String provider;
 
 		@Getter
@@ -144,6 +143,10 @@ public class OAuthService {
 
 		public String getIdAsString() {
 			return String.valueOf(id);
+		}
+
+		public String getProvider() {
+			return provider.toUpperCase();
 		}
 	}
 }
