@@ -21,9 +21,9 @@ public class BearerHandler {
 	private final String SECRET_KEY;
 	private final int VALID_TIME;
 
-	public BearerHandler(@Value("security.jwt.token-key") String TOKEN_KEY,
-						 @Value("security.jwt.secret-key") String SECRET_KEY,
-						 @Value("security.jwt.valid-time") String VALID_TIME) {
+	public BearerHandler(@Value("${security.jwt.token-key}") String TOKEN_KEY,
+						 @Value("${security.jwt.secret-key}") String SECRET_KEY,
+						 @Value("${security.jwt.valid-time}") String VALID_TIME) {
 		this.TOKEN_KEY = TOKEN_KEY;
 		this.SECRET_KEY = SECRET_KEY;
 		this.VALID_TIME = Integer.parseInt("3600");
