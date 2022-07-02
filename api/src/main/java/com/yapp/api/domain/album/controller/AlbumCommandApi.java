@@ -37,12 +37,24 @@ public class AlbumCommandApi {
 							 log.error("[ERROR] {}" + throwable.getMessage());
 							 return null;
 						 });
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok()
+							 .build();
 	}
 
+	// async
 	@PostMapping(value = _ALBUM_RECORDINGS, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> uploadRecordings(@RequestBody AlbumRequest.Upload request) {
-		return null;
+	ResponseEntity<Void> uploadRecordings(@MustAuthenticated User user, @RequestBody AlbumRequest.Upload request) {
+		CompletableFuture.runAsync(() -> albumService.uploadRecordings(user,
+																	   request.getDate(),
+																	   request.getTitle(),
+																	   request.getLinks()
+																			  .get(0)))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
+		return ResponseEntity.ok()
+							 .build();
 	}
 
 	@PostMapping(value = _ALBUM_FAVOURITE)

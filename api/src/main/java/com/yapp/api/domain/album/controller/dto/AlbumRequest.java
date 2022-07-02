@@ -16,6 +16,7 @@ public class AlbumRequest {
 	@AllArgsConstructor
 	public static class Upload {
 		private LocalDate date;
+		private String title;
 		private List<String> links = new ArrayList<>();
 	}
 
