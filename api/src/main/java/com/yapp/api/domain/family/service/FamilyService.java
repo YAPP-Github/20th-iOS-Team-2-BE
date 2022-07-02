@@ -3,7 +3,6 @@ package com.yapp.api.domain.family.service;
 import static java.util.concurrent.CompletableFuture.*;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.family.persistence.entity.Family;
@@ -11,6 +10,8 @@ import com.yapp.api.domain.family.persistence.handler.FamilyCommandHandler;
 import com.yapp.api.domain.family.persistence.handler.FamilyQueryHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.domain.user.persistence.handler.UserCommandHandler;
+import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,9 +37,16 @@ public class FamilyService {
 		});
 	}
 
-	@Transactional
 	public void modify(User user, String imageLink, String familyName, String familyMotto) {
-		user.getFamily()
-			.update(imageLink, familyName, familyMotto);
+		// non-block
+		transactionTemplate.executeWithoutResult(process -> {
+			// block
+			Family targetFamily = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(user.getFamily()
+																											   .getId()))
+													.orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
+			targetFamily.update(imageLink, familyName, familyMotto);
+
+			familyCommandHandler.saveFamily(familyRepository -> familyRepository.save(targetFamily));
+		});
 	}
 }

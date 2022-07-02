@@ -20,6 +20,7 @@ public class FamilyRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Modify {
+		private String imageLink;
 		private String familyName;
 		private String familyMotto;
 	}

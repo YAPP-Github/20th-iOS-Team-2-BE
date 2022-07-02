@@ -91,9 +91,9 @@ public class Family extends BaseEntity {
 
 	@Embeddable
 	@Getter
-	@NoArgsConstructor(access = PROTECTED)
+	@NoArgsConstructor
 	@AllArgsConstructor(access = PRIVATE)
-	class FamilyMembers {
+	public static class FamilyMembers {
 		@OneToMany(mappedBy = "family", fetch = LAZY)
 		private Set<User> members = new HashSet<>();
 
