@@ -8,6 +8,7 @@ import com.yapp.api.domain.album.element.comment.persistence.repository.CommentR
 import com.yapp.api.domain.album.element.folder.persistence.repository.AlbumRepository;
 import com.yapp.api.domain.family.persistence.repository.FamilyRepository;
 import com.yapp.api.domain.file.persistence.repository.FileRepository;
+import com.yapp.api.domain.user.persistence.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class Mocker {
@@ -29,4 +30,7 @@ public class Mocker {
 
 	@Mock
 	protected CommentRepository commentRepository;
+
+	@Mock
+	protected UserRepository userRepository;
 }

@@ -6,6 +6,7 @@ import static lombok.AccessLevel.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -66,6 +67,20 @@ public class User extends BaseEntity {
 
 	private void connectThisUser(OAuthInfo oAuthInfo) {
 		oAuthInfo.setUser(this);
+	}
+
+	public void update(String name, String nickname, String roleInFamily, LocalDate birthday) {
+		this.name = name;
+		this.birthday = birthday;
+		this.profileInfo = ProfileInfo.of(nickname, roleInFamily);
+	}
+
+	public void update(String nickname, String imageLink, LocalDate birthDay, String roleInFamily) {
+		if (Objects.nonNull(birthDay) && !this.birthday.isEqual(birthDay)) {
+			this.birthday = birthDay;
+			// 생일 바뀌었으니, 캘린더의 생일정보에도 수정이 필요하다.
+		}
+		profileInfo.update(nickname, imageLink, roleInFamily);
 	}
 
 	public static class ANONYMOUS extends User {
