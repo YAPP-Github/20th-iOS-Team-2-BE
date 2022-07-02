@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumCommandHandler;
 import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumQueryHandler;
+import com.yapp.api.domain.family.persistence.handler.FamilyQueryHandler;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandler;
@@ -38,6 +39,7 @@ public class AlbumService {
 	private final AlbumCommandHandler albumCommandHandler;
 	private final AlbumQueryHandler albumQueryHandler;
 	private final FileCommandHandler fileCommandHandler;
+	private final FamilyQueryHandler familyQueryHandler;
 
 	private final FileQueryHandler fileQueryHandler;
 

@@ -1,13 +1,24 @@
 package com.yapp.api.domain.album.controller.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.time.format.DateTimeFormatter.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
+import com.yapp.api.domain.file.persistence.entity.File;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class AlbumResponse {
+	private static final String FAVOURITE = "favourite";
+	private static final String PHOTO = "photo";
+	private static final String RECORDING = "recording";
 
 	@Getter
 	@NoArgsConstructor
@@ -61,22 +72,54 @@ public class AlbumResponse {
 
 		@Getter
 		@NoArgsConstructor
-		@AllArgsConstructor
+		@AllArgsConstructor(access = AccessLevel.PRIVATE)
 		public static class AlbumInfo {
 			private Long albumId;
 			private String title;
 			private String thumbnail;
 			private String date;
+
+			public static AlbumInfo of(Album album) {
+				return new AlbumInfo(album.getId(),
+									 album.getTitle(),
+									 album.getThumbnail(),
+									 album.getDate()
+										  .format(ISO_DATE));
+			}
 		}
 	}
 
 	@Getter
 	@NoArgsConstructor
-	@AllArgsConstructor
+	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class KindElements implements Elements {
 		private KindDetail favourite;
 		private KindDetail photo;
 		private KindDetail recording;
+
+		public static KindElements from(Map<String, List<File>> filesByKindName) {
+
+			return new KindElements(new KindDetail(FAVOURITE,
+												   filesByKindName.get(FAVOURITE)
+																  .size(),
+												   getFirstLink(filesByKindName, FAVOURITE)),
+									new KindDetail(PHOTO,
+												   filesByKindName.get(PHOTO)
+																  .size(),
+												   getFirstLink(filesByKindName, PHOTO)),
+									new KindDetail(RECORDING,
+												   filesByKindName.get(RECORDING)
+																  .size(),
+												   "default image"));
+		}
+
+		private static String getFirstLink(Map<String, List<File>> filesByKindName, String photo) {
+			return filesByKindName.get(photo)
+								  .stream()
+								  .max(Comparator.comparing(File::getCreatedAt))
+								  .map(File::getLink)
+								  .orElse("default image");
+		}
 
 		@Getter
 		@NoArgsConstructor
@@ -84,6 +127,7 @@ public class AlbumResponse {
 		public static class KindDetail {
 			private String kind;
 			private int count;
+			private String link;
 		}
 	}
 }

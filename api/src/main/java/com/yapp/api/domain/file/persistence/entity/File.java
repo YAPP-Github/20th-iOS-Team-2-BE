@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
+import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.family.persistence.entity.Family;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "FILE")
 @NoArgsConstructor(access = PROTECTED)
-public class File {
+public class File extends BaseEntity {
 	public static final File INVALID = new File.INVALID();
 	public static final String KIND_PHOTO = "photo";
 	public static final String KIND_RECORDING = "recording";
