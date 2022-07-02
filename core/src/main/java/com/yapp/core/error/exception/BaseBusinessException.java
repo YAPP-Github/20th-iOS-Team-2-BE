@@ -16,6 +16,11 @@ public class BaseBusinessException extends RuntimeException {
 		this.errorCode = errorCode;
 	}
 
+	@Override
+	public String getMessage() {
+		return errorCode.getDetail();
+	}
+
 	public final int getStatus() {
 		return errorCode.getStatus();
 	}

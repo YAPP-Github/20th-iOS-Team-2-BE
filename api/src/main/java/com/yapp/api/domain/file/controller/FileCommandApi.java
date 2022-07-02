@@ -24,6 +24,7 @@ public class FileCommandApi {
 
 	private final CloudService cloudService;
 
+	// sync
 	@PostMapping(value = _FILES, consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<FileResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
 		List<String> fileLinks = cloudService.upload(files);

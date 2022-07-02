@@ -1,9 +1,8 @@
 package com.yapp.api.domain.family.controller;
 
 import static com.yapp.core.constant.ApiConstant.*;
+import static java.util.concurrent.CompletableFuture.*;
 import static org.springframework.http.MediaType.*;
-
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +20,9 @@ import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class FamilyCommandApi {
@@ -38,10 +39,13 @@ public class FamilyCommandApi {
 	// Async
 	@PatchMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> modifyFamilyInfo(@MustAuthenticated User user, @RequestBody FamilyRequest.Modify request) {
-		CompletableFuture.runAsync(() -> familyService.modify(user,
-															  request.getImageLink(),
-															  request.getFamilyName(),
-															  request.getFamilyMotto()));
+		runAsync(() -> familyService.modify(user,
+											request.getImageLink(),
+											request.getFamilyName(),
+											request.getFamilyMotto())).exceptionally(throwable -> {
+			log.error("[ERROR] {}", throwable.getMessage());
+			return null;
+		});
 		return ResponseEntity.ok()
 							 .build();
 	}

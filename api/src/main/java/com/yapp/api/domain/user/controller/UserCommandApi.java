@@ -18,7 +18,9 @@ import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserCommandApi {
@@ -31,7 +33,10 @@ public class UserCommandApi {
 										  request.getName(),
 										  request.getNickname(),
 										  request.getRoleInFamily(),
-										  request.getBirthDay()));
+										  request.getBirthDay())).exceptionally(throwable -> {
+			log.error("[ERROR] {}", throwable.getMessage());
+			return null;
+		});
 
 		return ResponseEntity.ok()
 							 .build();
@@ -55,7 +60,11 @@ public class UserCommandApi {
 										  request.getNickname(),
 										  request.getImageLink(),
 										  request.getBirthDay(),
-										  request.getRoleInFamily()));
+										  request.getRoleInFamily())).exceptionally(throwable -> {
+			log.error("[ERROR] {}", throwable.getMessage());
+			return null;
+		});
+
 		return ResponseEntity.ok()
 							 .build();
 	}

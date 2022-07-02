@@ -2,9 +2,7 @@ package com.yapp.api.domain.user.service;
 
 import java.time.LocalDate;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.user.persistence.entity.User;
