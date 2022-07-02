@@ -3,6 +3,8 @@ package com.yapp.api.domain.album.controller;
 import static com.yapp.core.constant.ApiConstant.*;
 import static org.springframework.http.MediaType.*;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,15 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumRequest;
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
+import com.yapp.api.domain.album.element.folder.service.AlbumService;
+import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AlbumCommandApi {
+	private final AlbumService albumService;
+
+	// async
 	@PostMapping(value = _ALBUM_PHOTOS, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> uploadPhotos(@RequestBody AlbumRequest.Upload request) {
-		return null;
+	ResponseEntity<Void> uploadPhotos(@MustAuthenticated User user, @RequestBody AlbumRequest.Upload request) {
+		CompletableFuture.runAsync(() -> albumService.uploadPhotos(user, request.getDate(), request.getLinks()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}" + throwable.getMessage());
+							 return null;
+						 });
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping(value = _ALBUM_RECORDINGS, consumes = APPLICATION_JSON_VALUE)
