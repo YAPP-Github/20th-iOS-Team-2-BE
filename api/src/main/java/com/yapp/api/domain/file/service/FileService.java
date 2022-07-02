@@ -15,7 +15,6 @@ import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandler;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.core.error.exception.BaseBusinessException;
-import com.yapp.core.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,11 +51,11 @@ public class FileService {
 
 	// 비동기 처리 예정
 	@Transactional
-	public void makeFavourite(User user, Long fileId) {
-		fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
-						.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
-																	 new RuntimeException(
-																		 "FileNotFoundError : which ?fileId in POST /album/favourite?fileId")))
-						.doFavour();
+	public boolean makeFavourite(User user, Long fileId) {
+		return fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
+							   .orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
+																			new RuntimeException(
+																				"FileNotFoundError : which ?fileId in POST /album/favourite?fileId")))
+							   .doFavour();
 	}
 }

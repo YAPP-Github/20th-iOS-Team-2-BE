@@ -73,8 +73,9 @@ public class File {
 		return INVALID;
 	}
 
-	public void doFavour() {
+	public boolean doFavour() {
 		this.favourite = !this.favourite;
+		return favourite;
 	}
 
 	public boolean isPhoto() {

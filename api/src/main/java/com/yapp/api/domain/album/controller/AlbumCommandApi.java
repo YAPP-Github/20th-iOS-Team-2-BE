@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yapp.api.domain.album.controller.dto.AlbumRequest;
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
 import com.yapp.api.domain.album.element.folder.service.AlbumService;
+import com.yapp.api.domain.file.service.FileService;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AlbumCommandApi {
 	private final AlbumService albumService;
+	private final FileService fileService;
 
 	// async
 	@PostMapping(value = _ALBUM_PHOTOS, consumes = APPLICATION_JSON_VALUE)
@@ -57,9 +59,12 @@ public class AlbumCommandApi {
 							 .build();
 	}
 
+	// sync, cause display status for Client
 	@PostMapping(value = _ALBUM_FAVOURITE)
-	ResponseEntity<AlbumResponse.Whether> doFavourite(@RequestParam(value = FILE_ID) Long fileId) {
-		return null;
+	ResponseEntity<AlbumResponse.Whether> doFavourite(@MustAuthenticated User user,
+													  @RequestParam(value = FILE_ID) Long fileId) {
+		return ResponseEntity.ok(new AlbumResponse.Whether(fileService.makeFavourite(user, fileId)));
+
 	}
 
 	@PatchMapping(value = _ALBUM_RESOURCE, consumes = APPLICATION_JSON_VALUE)
