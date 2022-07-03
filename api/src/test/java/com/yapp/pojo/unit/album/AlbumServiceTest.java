@@ -19,6 +19,7 @@ import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumCommand
 import com.yapp.api.domain.album.element.folder.persistence.handler.AlbumQueryHandlerImpl;
 import com.yapp.api.domain.album.element.folder.service.AlbumService;
 import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.api.domain.family.persistence.handler.FamilyQueryHandlerImpl;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandlerImpl;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandlerImpl;
@@ -41,7 +42,8 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 		albumService = new AlbumService(new AlbumCommandHandlerImpl(albumRepository),
 										new AlbumQueryHandlerImpl(albumRepository),
 										new FileCommandHandlerImpl(fileRepository),
-										new FileQueryHandlerImpl(fileRepository));
+										new FileQueryHandlerImpl(fileRepository),
+										new FamilyQueryHandlerImpl(familyRepository));
 	}
 
 	@Test

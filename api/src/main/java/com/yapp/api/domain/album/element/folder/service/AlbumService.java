@@ -39,9 +39,8 @@ public class AlbumService {
 	private final AlbumCommandHandler albumCommandHandler;
 	private final AlbumQueryHandler albumQueryHandler;
 	private final FileCommandHandler fileCommandHandler;
-	private final FamilyQueryHandler familyQueryHandler;
-
 	private final FileQueryHandler fileQueryHandler;
+	private final FamilyQueryHandler familyQueryHandler;
 
 	public Album get(User user, Long albumId) {
 		return albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
@@ -103,7 +102,6 @@ public class AlbumService {
 											  .getLink()));
 	}
 
-	// 비동기처리 예정
 	@Transactional
 	public void uploadPhotos(User user, LocalDate date, List<String> photos) {
 		Album album = albumQueryHandler.findAlbumByDate(date)
@@ -124,7 +122,6 @@ public class AlbumService {
 		}
 	}
 
-	// 비동기 처리 예정
 	@Transactional
 	public void uploadRecordings(User user, LocalDate date, String title, String link) {
 		Album album = albumQueryHandler.findAlbumByDate(date)
@@ -143,11 +140,16 @@ public class AlbumService {
 		}
 	}
 
-	// 비동기 처리 예정
 	@Transactional
 	public void modifyTitle(User user, Long albumId, String toBe) {
 		Album album = getAlbumByUserAndId(user, albumId);
 		album.modifyTitle(toBe);
+	}
+
+	@Transactional
+	public void modifyDate(User user, Long albumId, String date) {
+		Album album = getAlbumByUserAndId(user, albumId);
+		album.modifyDate(date);
 	}
 
 	// 비동기 처리 예정
@@ -165,6 +167,7 @@ public class AlbumService {
 																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
 		return album;
 	}
+
 
 	@Getter
 	@NoArgsConstructor(access = PROTECTED)

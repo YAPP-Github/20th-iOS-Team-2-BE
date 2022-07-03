@@ -35,4 +35,12 @@ public class AlbumRequest {
 	public static class Comment {
 		private String content;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ModifyDate {
+		private String date;
+	}
 }

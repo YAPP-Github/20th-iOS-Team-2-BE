@@ -66,4 +66,12 @@ public class Album extends BaseEntity {
 			this.title = toBe;
 		}
 	}
+
+	public void modifyDate(String date) {
+		if (!isNull(date) && !date.isEmpty()) {
+			this.date = LocalDate.parse(date);
+			// occurred SELECT N+1
+			files.forEach(file -> file.modifyDate(date));
+		}
+	}
 }

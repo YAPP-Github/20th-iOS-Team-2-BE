@@ -87,6 +87,10 @@ public class File extends BaseEntity {
 		return this.kind == RECORDING;
 	}
 
+	public void modifyDate(String date) {
+		this.date = LocalDate.parse(date);
+	}
+
 	@Getter
 	@AllArgsConstructor
 	public enum Kind {
