@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumRequest;
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
+import com.yapp.api.domain.album.element.comment.service.CommentService;
 import com.yapp.api.domain.album.element.folder.service.AlbumService;
 import com.yapp.api.domain.file.service.FileService;
 import com.yapp.api.domain.user.persistence.entity.User;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AlbumCommandApi {
 	private final AlbumService albumService;
 	private final FileService fileService;
+	private final CommentService commentService;
 
 	// async
 	@PostMapping(value = _ALBUM_PHOTOS, consumes = APPLICATION_JSON_VALUE)
@@ -99,9 +101,16 @@ public class AlbumCommandApi {
 	}
 
 	@PostMapping(value = _ALBUM_COMMENTS, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> createComment(@PathVariable(value = FILE_ID) Long fileId,
+	ResponseEntity<Void> createComment(@MustAuthenticated User user,
+									   @PathVariable(value = FILE_ID) Long fileId,
 									   @RequestBody AlbumRequest.Comment request) {
-		return null;
+		CompletableFuture.runAsync(() -> commentService.create(user, fileId, request.getContent()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
+		return ResponseEntity.ok()
+							 .build();
 	}
 
 	@PatchMapping(value = _ALBUM_COMMENT_RESOURCE, consumes = APPLICATION_JSON_VALUE)
