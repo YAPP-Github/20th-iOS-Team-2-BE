@@ -68,9 +68,16 @@ public class AlbumCommandApi {
 	}
 
 	@PatchMapping(value = _ALBUM_RESOURCE, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> modifyAlbumName(@PathVariable(value = ALBUM_ID) Long albumId,
+	ResponseEntity<Void> modifyAlbumName(@MustAuthenticated User user,
+										 @PathVariable(value = ALBUM_ID) Long albumId,
 										 @RequestBody AlbumRequest.Modify request) {
-		return null;
+		CompletableFuture.runAsync(() -> albumService.modifyTitle(user, albumId, request.getAlbumName()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
+		return ResponseEntity.ok()
+							 .build();
 	}
 
 	@DeleteMapping(value = _ALBUM_RESOURCE)
