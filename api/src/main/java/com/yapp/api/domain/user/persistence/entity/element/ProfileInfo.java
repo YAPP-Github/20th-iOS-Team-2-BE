@@ -4,6 +4,7 @@ import static com.yapp.core.constant.ServiceConstant.*;
 import static lombok.AccessLevel.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Objects;
 
 import javax.persistence.Embeddable;
@@ -16,6 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class ProfileInfo {
 	private static final String ORIGINAL = "0:";
+	private static final String NICKNAME_SET_SPLITTER = "&";
+	private static final String ID_NAME_SPLITTER = ":";
 
 	// 0:name&targetId:name&targetId:name ...
 	private String nickname;
@@ -46,11 +49,11 @@ public class ProfileInfo {
 			newOriginal(originalNickname, nickname);
 		}
 
-		if(Objects.nonNull(imageLink) && !this.imageLink.equals(imageLink)) {
+		if (Objects.nonNull(imageLink) && !this.imageLink.equals(imageLink)) {
 			this.imageLink = imageLink;
 		}
 
-		if(Objects.nonNull(roleInFamily) && !this.roleInFamily.equals(roleInFamily)) {
+		if (Objects.nonNull(roleInFamily) && !this.roleInFamily.equals(roleInFamily)) {
 			this.roleInFamily = roleInFamily;
 		}
 	}
@@ -61,5 +64,12 @@ public class ProfileInfo {
 
 	private String originalNickname() {
 		return this.nickname.substring(2, nickname.length());
+	}
+
+	public String getNicknameFromOther(Long otherUserId) {
+		return Arrays.stream(this.nickname.split(NICKNAME_SET_SPLITTER))
+					 .filter(nicknameSet -> Long.parseLong(nicknameSet.split(ID_NAME_SPLITTER)[0]) == otherUserId)
+					 .findAny()
+					 .orElse(originalNickname());
 	}
 }

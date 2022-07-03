@@ -57,8 +57,23 @@ public class AlbumResponse {
 
 	@Getter
 	@NoArgsConstructor
-	@AllArgsConstructor
+	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class Comments {
+		private List<CommentElement> comments = new ArrayList<>();
+
+		public static Comments from(List<CommentElement> list) {
+			return new Comments(list);
+		}
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class CommentElement {
+		private String profileLink;
+		private String nickname;
+		private String roleInFamily;
+		private String createdDate;
 		private String content;
 	}
 

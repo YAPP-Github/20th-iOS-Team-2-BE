@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
+import com.yapp.api.domain.album.element.comment.service.CommentService;
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.album.element.folder.service.AlbumService;
 import com.yapp.api.domain.common.util.validator.ArgumentValidator;
@@ -29,6 +30,7 @@ public class AlbumQueryApi {
 	private static final String DETAILS_AS_KIND_DEFAULT = "favourite";
 	private final ArgumentValidator albumQueryArgumentValidator;
 	private final AlbumService albumService;
+	private final CommentService commentService;
 
 	@GetMapping(value = _ALBUM, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<AlbumResponse.Elements> retrieveAlbumList(@MustAuthenticated User user,
@@ -59,7 +61,8 @@ public class AlbumQueryApi {
 																				  .map(AlbumResponse.DateElements.AlbumInfo::of)
 																				  .collect(Collectors.toList())));
 		}
-		return null;
+		return ResponseEntity.badRequest()
+							 .build();
 	}
 
 	@GetMapping(value = _ALBUM_DETAILS_RESOURCE, produces = APPLICATION_JSON_VALUE)
@@ -74,7 +77,8 @@ public class AlbumQueryApi {
 	}
 
 	@GetMapping(value = _ALBUM_COMMENTS, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.Comments> retrieveComments(@PathVariable(value = FILE_ID) Long fileId) {
-		return null;
+	ResponseEntity<AlbumResponse.Comments> retrieveComments(@MustAuthenticated User user,
+															@PathVariable(value = FILE_ID) Long fileId) {
+		return ResponseEntity.ok(AlbumResponse.Comments.from(commentService.getList(user, fileId)));
 	}
 }
