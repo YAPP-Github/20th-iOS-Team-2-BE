@@ -1,12 +1,15 @@
 package com.yapp.api.domain.album.element.comment.service;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
+import static java.time.format.DateTimeFormatter.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yapp.api.domain.album.controller.dto.AlbumResponse;
 import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentCommandHandler;
 import com.yapp.api.domain.album.element.comment.persistence.handler.CommentQueryHandler;
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentService {
+
 	private final FileQueryHandler fileQueryHandler;
 	private final CommentCommandHandler commentCommandHandler;
 	private final CommentQueryHandler commentQueryHandler;
@@ -51,9 +55,29 @@ public class CommentService {
 		comment.modifyComment(content);
 	}
 
-	public List<Comment> getList(User user, Long fileId) {
+	public List<AlbumResponse.CommentElement> getList(User user, Long fileId) {
 		return commentQueryHandler.findAll(commentRepository -> commentRepository.findAllByFamilyAndFileId(user.getFamily(),
-																										   fileId));
+																										   fileId))
+								  .stream()
+								  .map(comment -> {
+									  // will occurred N+1, need Fetch Join
+									  User commentOwner = comment.getUser();
+
+									  String nicknameForUser = discernNicknameForUser(user, commentOwner);
+									  return new AlbumResponse.CommentElement(commentOwner.getProfileInfo()
+																						  .getImageLink(),
+																			  nicknameForUser,
+																			  commentOwner.getProfileInfo()
+																						  .getRoleInFamily(),
+																			  comment.getCreatedAt()
+																					 .format(ISO_DATE),
+																			  comment.getContent());
+								  })
+								  .collect(Collectors.toList());
+	}
+
+	private String discernNicknameForUser(User user, User commentOwner) {
+		return commentOwner.getNicknameForUser(user);
 	}
 
 	@Transactional

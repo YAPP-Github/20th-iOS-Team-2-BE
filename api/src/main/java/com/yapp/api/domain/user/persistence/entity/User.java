@@ -83,6 +83,10 @@ public class User extends BaseEntity {
 		profileInfo.update(nickname, imageLink, roleInFamily);
 	}
 
+	public String getNicknameForUser(User user) {
+		return this.profileInfo.getNicknameFromOther(user.id);
+	}
+
 	public static class ANONYMOUS extends User {
 		@Override
 		public Authority getAuthority() {
