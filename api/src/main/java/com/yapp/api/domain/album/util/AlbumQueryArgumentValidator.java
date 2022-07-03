@@ -8,6 +8,6 @@ import com.yapp.api.domain.common.util.validator.ArgumentValidator;
 public class AlbumQueryArgumentValidator implements ArgumentValidator {
 	@Override
 	public boolean equal(String original, String target) {
-		return false;
+		return original.equals(target);
 	}
 }

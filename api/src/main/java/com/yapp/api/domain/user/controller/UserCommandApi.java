@@ -1,8 +1,9 @@
 package com.yapp.api.domain.user.controller;
 
 import static com.yapp.core.constant.ApiConstant.*;
-import static java.util.concurrent.CompletableFuture.*;
 import static org.springframework.http.MediaType.*;
+
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,14 +30,15 @@ public class UserCommandApi {
 	@PostMapping(value = _USER, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createUser(@MustAuthenticated User user, @RequestBody UserRequest.Create request) {
 
-		runAsync(() -> userService.create(user,
-										  request.getName(),
-										  request.getNickname(),
-										  request.getRoleInFamily(),
-										  request.getBirthDay())).exceptionally(throwable -> {
-			log.error("[ERROR] {}", throwable.getMessage());
-			return null;
-		});
+		CompletableFuture.runAsync(() -> userService.create(user,
+															request.getName(),
+															request.getNickname(),
+															request.getRoleInFamily(),
+															request.getBirthDay()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
 
 		return ResponseEntity.ok()
 							 .build();
@@ -56,14 +58,15 @@ public class UserCommandApi {
 
 	@PatchMapping(_USER)
 	ResponseEntity<Void> modifyUser(@MustAuthenticated User user, @RequestBody UserRequest.Modify request) {
-		runAsync(() -> userService.modify(user,
-										  request.getNickname(),
-										  request.getImageLink(),
-										  request.getBirthDay(),
-										  request.getRoleInFamily())).exceptionally(throwable -> {
-			log.error("[ERROR] {}", throwable.getMessage());
-			return null;
-		});
+		CompletableFuture.runAsync(() -> userService.modify(user,
+															request.getNickname(),
+															request.getImageLink(),
+															request.getBirthDay(),
+															request.getRoleInFamily()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
 
 		return ResponseEntity.ok()
 							 .build();

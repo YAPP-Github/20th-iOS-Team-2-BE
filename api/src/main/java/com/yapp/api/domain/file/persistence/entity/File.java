@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
+import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.family.persistence.entity.Family;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "FILE")
 @NoArgsConstructor(access = PROTECTED)
-public class File {
+public class File extends BaseEntity {
 	public static final File INVALID = new File.INVALID();
 	public static final String KIND_PHOTO = "photo";
 	public static final String KIND_RECORDING = "recording";
@@ -73,8 +74,9 @@ public class File {
 		return INVALID;
 	}
 
-	public void doFavour() {
+	public boolean doFavour() {
 		this.favourite = !this.favourite;
+		return favourite;
 	}
 
 	public boolean isPhoto() {
@@ -83,6 +85,10 @@ public class File {
 
 	public boolean isRecording() {
 		return this.kind == RECORDING;
+	}
+
+	public void modifyDate(String date) {
+		this.date = LocalDate.parse(date);
 	}
 
 	@Getter

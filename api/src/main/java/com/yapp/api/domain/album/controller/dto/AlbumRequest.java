@@ -16,6 +16,7 @@ public class AlbumRequest {
 	@AllArgsConstructor
 	public static class Upload {
 		private LocalDate date;
+		private String title;
 		private List<String> links = new ArrayList<>();
 	}
 
@@ -33,5 +34,13 @@ public class AlbumRequest {
 	@AllArgsConstructor
 	public static class Comment {
 		private String content;
+	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ModifyDate {
+		private String date;
 	}
 }
