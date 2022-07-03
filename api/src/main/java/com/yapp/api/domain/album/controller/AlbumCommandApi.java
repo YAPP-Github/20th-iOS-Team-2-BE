@@ -122,13 +122,20 @@ public class AlbumCommandApi {
 							 log.error("[ERROR] {}", throwable.getMessage());
 							 return null;
 						 });
-		
+
 		return ResponseEntity.ok()
 							 .build();
 	}
 
 	@DeleteMapping(value = _ALBUM_COMMENT_RESOURCE)
-	ResponseEntity<Void> removeComment(@PathVariable(value = COMMENT_ID) Long commentId) {
-		return null;
+	ResponseEntity<Void> removeComment(@MustAuthenticated User user, @PathVariable(value = COMMENT_ID) Long commentId) {
+		CompletableFuture.runAsync(() -> commentService.remove(user, commentId))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
+
+		return ResponseEntity.ok()
+							 .build();
 	}
 }
