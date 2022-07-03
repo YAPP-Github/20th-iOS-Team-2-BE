@@ -46,9 +46,9 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void modify(User user, Long fileId, String content) {
+	public void modify(User user, Long commentId, String content) {
 		Comment comment = commentQueryHandler.findOne(commentRepository -> commentRepository.findByUserAndId(user,
-																											 fileId))
+																											 commentId))
 											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
 																						  new RuntimeException(
 																							  "CommentNotFoundError : which {commentId} in PATCH /album/comments/{commentId}")));

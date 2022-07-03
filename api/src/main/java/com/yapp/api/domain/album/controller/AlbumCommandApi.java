@@ -114,8 +114,17 @@ public class AlbumCommandApi {
 	}
 
 	@PatchMapping(value = _ALBUM_COMMENT_RESOURCE, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> modifyComment(@PathVariable(value = COMMENT_ID) Long commentId) {
-		return null;
+	ResponseEntity<Void> modifyComment(@MustAuthenticated User user,
+									   @PathVariable(value = COMMENT_ID) Long commentId,
+									   @RequestBody AlbumRequest.Comment request) {
+		CompletableFuture.runAsync(() -> commentService.modify(user, commentId, request.getContent()))
+						 .exceptionally(throwable -> {
+							 log.error("[ERROR] {}", throwable.getMessage());
+							 return null;
+						 });
+		
+		return ResponseEntity.ok()
+							 .build();
 	}
 
 	@DeleteMapping(value = _ALBUM_COMMENT_RESOURCE)
