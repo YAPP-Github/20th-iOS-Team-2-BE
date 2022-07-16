@@ -37,7 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request,
 									HttpServletResponse response,
 									FilterChain filterChain) throws ServletException, IOException {
-		Optional<String> a = bearerHandler.extractToken(request);
 		bearerHandler.extractToken(request)
 					 .ifPresentOrElse(token -> validate(token.substring(START_INDEX), filterChain, request, response),
 									  () -> {

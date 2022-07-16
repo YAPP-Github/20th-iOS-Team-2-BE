@@ -26,7 +26,7 @@ public class BearerHandler {
 						 @Value("${security.jwt.valid-time}") String VALID_TIME) {
 		this.TOKEN_KEY = TOKEN_KEY;
 		this.SECRET_KEY = SECRET_KEY;
-		this.VALID_TIME = Integer.parseInt("3600");
+		this.VALID_TIME = Integer.parseInt(VALID_TIME);
 	}
 
 	public Optional<String> extractToken(HttpServletRequest request) {
