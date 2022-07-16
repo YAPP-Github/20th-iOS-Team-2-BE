@@ -83,7 +83,7 @@ public class AlbumResponse {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class DateElements implements Elements {
+	public static class DateElements extends AlbumResponse implements Elements {
 		private List<AlbumInfo> albums = new ArrayList<>();
 
 		@Getter
@@ -108,7 +108,7 @@ public class AlbumResponse {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
-	public static class KindElements implements Elements {
+	public static class KindElements extends AlbumResponse implements Elements {
 		private KindDetail favourite;
 		private KindDetail photo;
 		private KindDetail recording;

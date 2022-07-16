@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
@@ -16,6 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AlbumQueryHandlerImpl implements AlbumQueryHandler {
 	private final AlbumRepository albumRepository;
+
+	@Override
+	public Page<Album> findAllAsPage(Function<AlbumRepository, Page<Album>> function) {
+		return function.apply(albumRepository);
+	}
 
 	@Override
 	public Optional<Album> findAlbumByDate(LocalDate date) {

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,10 +53,13 @@ public class AlbumService {
 	}
 
 	public List<Album> getList(User user) {
-		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamily(user.getFamily()))
-								.stream()
-								.sorted(comparing(Album::getDate).reversed())
-								.collect(Collectors.toList());
+		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateDesc(user.getFamily()));
+	}
+
+	public Page<Album> getList(User user, Pageable pageable) {
+		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateDesc(
+			pageable,
+			user.getFamily()));
 	}
 
 	public Map<String, KindInfo> getCountForEachCategory(User user) {
@@ -167,7 +172,6 @@ public class AlbumService {
 																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
 		return album;
 	}
-
 
 	@Getter
 	@NoArgsConstructor(access = PROTECTED)

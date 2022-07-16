@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import com.yapp.api.domain.album.controller.dto.AlbumResponse;
 import com.yapp.api.domain.album.element.comment.service.CommentService;
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.album.element.folder.service.AlbumService;
+import com.yapp.api.domain.common.response.PageResponse;
 import com.yapp.api.domain.common.util.validator.ArgumentValidator;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.user.persistence.entity.User;
@@ -33,8 +37,9 @@ public class AlbumQueryApi {
 	private final CommentService commentService;
 
 	@GetMapping(value = _ALBUM, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.Elements> retrieveAlbumList(@MustAuthenticated User user,
-															 @RequestParam(value = TYPE) String type) {
+	ResponseEntity<?> retrieveAlbumList(@MustAuthenticated User user,
+															 @RequestParam(value = TYPE) String type,
+															 @PageableDefault Pageable pageable) {
 
 		if (albumQueryArgumentValidator.equal(KIND, type)) {
 			List<Album> albums = albumService.getList(user);
@@ -55,14 +60,16 @@ public class AlbumQueryApi {
 		}
 
 		if (albumQueryArgumentValidator.equal(DATE, type)) {
+			Page<Album> page = albumService.getList(user, pageable);
+
 			return ResponseEntity.ok()
-								 .body(new AlbumResponse.DateElements(albumService.getList(user)
-																				  .stream()
-																				  .map(AlbumResponse.DateElements.AlbumInfo::of)
-																				  .collect(Collectors.toList())));
-		}
-		return ResponseEntity.badRequest()
-							 .build();
+								 .body(PageResponse.of(new AlbumResponse.DateElements(page.getContent()
+																						  .stream()
+																						  .map(AlbumResponse.DateElements.AlbumInfo::of)
+																						  .collect(Collectors.toList())),
+													   page));
+		} return ResponseEntity.badRequest()
+							   .build();
 	}
 
 	@GetMapping(value = _ALBUM_DETAILS_RESOURCE, produces = APPLICATION_JSON_VALUE)
