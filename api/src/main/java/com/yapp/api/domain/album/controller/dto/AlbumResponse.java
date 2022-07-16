@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.file.persistence.entity.File;
@@ -114,26 +115,18 @@ public class AlbumResponse {
 
 		public static KindElements from(Map<String, List<File>> filesByKindName) {
 
-			return new KindElements(new KindDetail(FAVOURITE,
-												   filesByKindName.get(FAVOURITE)
-																  .size(),
-												   getFirstLink(filesByKindName, FAVOURITE)),
-									new KindDetail(PHOTO,
-												   filesByKindName.get(PHOTO)
-																  .size(),
-												   getFirstLink(filesByKindName, PHOTO)),
-									new KindDetail(RECORDING,
-												   filesByKindName.get(RECORDING)
-																  .size(),
-												   "default image"));
+			return new KindElements(new KindDetail(FAVOURITE, getSize(filesByKindName, FAVOURITE)),
+									new KindDetail(PHOTO, getSize(filesByKindName, PHOTO)),
+									new KindDetail(RECORDING, getSize(filesByKindName, RECORDING))
+			);
 		}
 
-		private static String getFirstLink(Map<String, List<File>> filesByKindName, String photo) {
-			return filesByKindName.get(photo)
-								  .stream()
-								  .max(Comparator.comparing(File::getCreatedAt))
-								  .map(File::getLink)
-								  .orElse("default image");
+		private static int getSize(Map<String, List<File>> filesByKindName, String recording) {
+			if(Objects.isNull(filesByKindName.get(recording))) {
+				return 0;
+			}
+			return filesByKindName.get(recording)
+								  .size();
 		}
 
 		@Getter
@@ -142,7 +135,6 @@ public class AlbumResponse {
 		public static class KindDetail {
 			private String kind;
 			private int count;
-			private String link;
 		}
 	}
 }
