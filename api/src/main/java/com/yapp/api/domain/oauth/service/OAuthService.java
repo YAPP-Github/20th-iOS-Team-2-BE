@@ -41,10 +41,11 @@ public class OAuthService {
 	private final RestTemplate restTemplate;
 	private final BearerHandler bearerHandler;
 
-	public String auth(String kind, String oauthToken) {
+	public String auth(String kind, String accessToken, String refreshToken) {
+		// refreshToken not use yet
 
 		// 1. oauth
-		OAuthResponse restResult = restForAuth(kind, oauthToken);
+		OAuthResponse restResult = restForAuth(kind, accessToken);
 
 		// 2. restResult 를 바탕으로 디비에 회원조회 -> 토큰 생성
 		User foundUser = userQueryHandler.findOne(userRepository -> userRepository.findByProviderAndOauthId(restResult.getProvider(),

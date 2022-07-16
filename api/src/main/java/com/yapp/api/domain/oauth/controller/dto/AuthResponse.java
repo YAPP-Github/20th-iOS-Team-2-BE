@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
 	private static final String SPLITTER = ";";
 	private String type;
-	private String accessToken;
+	private String authToken;
 
 	// tokenInfo form : "type;accessToken"
 	public static AuthResponse from(String tokenInfo) {
