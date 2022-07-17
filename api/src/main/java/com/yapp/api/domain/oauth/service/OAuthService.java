@@ -30,23 +30,13 @@ public class OAuthService {
 		// refreshToken not use yet
 
 		// 1. oauth
-		OAuthResponse authResult = authClient.request(kind, authRequest);
+		OAuthResponse authResult = authClient.request(kind.toUpperCase(), authRequest);
 
 		// 2. restResult 를 바탕으로 디비에 회원조회 -> 토큰 생성
 		User foundUser = userQueryHandler.findOne(userRepository -> userRepository.findByProviderAndOauthId(authResult.getProvider(),
 																											authResult.getId()))
-										 .orElseGet(() -> {
-											 if (authResult.getProvider()
-														   .equals(KAKAO)) {
-												 User newUser = new User("",
-																		 null,
-																		 null,
-																		 OAuthInfo.of(KAKAO, authResult.getId()));
-												 userCommandHandler.save(userRepository -> userRepository.save(newUser));
-												 return newUser;
-											 }
-											 return new User.ANONYMOUS();
-										 });
+										 .orElse(freshUser(authResult));
+
 		// 없다면 ? type : join
 		if (foundUser.getName()
 					 .isBlank()) {
@@ -54,5 +44,22 @@ public class OAuthService {
 		}
 		// 있다면 ? type : login
 		return LOGIN + SPLITTER + bearerHandler.create(authResult.combinedInfo());
+	}
+
+	private User freshUser(OAuthResponse authResult) {
+		if (authResult.isKind(KAKAO)) {
+			return saveUser(authResult, KAKAO);
+		}
+
+		if (authResult.isKind(APPLE)) {
+			return saveUser(authResult, APPLE);
+		}
+		return new User.ANONYMOUS();
+	}
+
+	private User saveUser(OAuthResponse authResult, String apple) {
+		User newUser = new User("", null, null, OAuthInfo.of(apple, authResult.getId()));
+		userCommandHandler.save(userRepository -> userRepository.save(newUser));
+		return newUser;
 	}
 }

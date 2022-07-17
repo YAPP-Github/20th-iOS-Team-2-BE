@@ -23,6 +23,10 @@ public class OAuthResponse {
 	@Setter
 	private String provider;
 
+	public boolean isKind(String kind) {
+		return getProvider().equals(kind);
+	}
+
 	@Getter
 	@Setter
 	@NoArgsConstructor

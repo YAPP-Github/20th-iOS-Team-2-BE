@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class AuthClient {
-	private final String KAKAO = "kakao";
-	private final String APPLE = "apple";
+	private final String KAKAO = "KAKAO";
+	private final String APPLE = "APPLE";
 	private final URI KAKAO_AUTH_URI = URI.create("https://kapi.kakao.com/v2/user/me");
 	private final URI APPLE_VERIFICATION_URI = URI.create("https://appleid.apple.com/auth/keys");
 
