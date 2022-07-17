@@ -24,6 +24,7 @@ import com.yapp.api.domain.common.response.PageResponse;
 import com.yapp.api.domain.common.util.validator.ArgumentValidator;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,9 @@ public class AlbumQueryApi {
 	private final CommentService commentService;
 
 	@GetMapping(value = _ALBUM, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<?> retrieveAlbumList(@MustAuthenticated User user,
-															 @RequestParam(value = TYPE) String type,
-															 @PageableDefault Pageable pageable) {
+	ResponseEntity<?> retrieveAlbumList(@AuthenticationHasFamily User user,
+										@RequestParam(value = TYPE) String type,
+										@PageableDefault Pageable pageable) {
 
 		if (albumQueryArgumentValidator.equal(KIND, type)) {
 			List<Album> albums = albumService.getList(user);
@@ -68,8 +69,9 @@ public class AlbumQueryApi {
 																						  .map(AlbumResponse.DateElements.AlbumInfo::of)
 																						  .collect(Collectors.toList())),
 													   page));
-		} return ResponseEntity.badRequest()
-							   .build();
+		}
+		return ResponseEntity.badRequest()
+							 .build();
 	}
 
 	@GetMapping(value = _ALBUM_DETAILS_RESOURCE, produces = APPLICATION_JSON_VALUE)

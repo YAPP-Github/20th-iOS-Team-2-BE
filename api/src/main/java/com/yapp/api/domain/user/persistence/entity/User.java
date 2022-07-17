@@ -25,6 +25,7 @@ import com.yapp.api.domain.user.persistence.entity.element.Authority;
 import com.yapp.api.domain.user.persistence.entity.element.OAuthInfos;
 import com.yapp.api.domain.user.persistence.entity.element.ProfileInfo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +33,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "USERS")
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

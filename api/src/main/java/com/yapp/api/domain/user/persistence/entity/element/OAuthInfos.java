@@ -4,6 +4,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Embeddable;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = PUBLIC)
 public class OAuthInfos {
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL, orphanRemoval = true)
-	private Set<OAuthInfo> oAuthInfos;
+	private Set<OAuthInfo> oAuthInfos = new HashSet<>();
 
 	public boolean contains(OAuthInfo oAuthInfo) {
 		return oAuthInfos.contains(oAuthInfo);
