@@ -27,7 +27,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		String provider = username.split(SPLITTER)[0];
 		String oauthId = username.split(SPLITTER)[1];
 
-		return JwtUserDetails.from(userQueryHandler.findOne(repository -> repository.findUserByOAuthInfos(provider,
+		return JwtUserDetails.from(userQueryHandler.findOne(repository -> repository.findByProviderAndOauthId(provider,
 																											  oauthId))
 												   .orElseGet(User.ANONYMOUS::new));
 	}
