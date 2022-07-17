@@ -3,6 +3,7 @@ package com.yapp.core.error;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.response.ErrorResponse;
@@ -10,8 +11,8 @@ import com.yapp.core.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.yapp")
-public class GlobalExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BaseBusinessException.class)
 	public ResponseEntity<ErrorResponse> handlerBaseBusinessException(BaseBusinessException e) {
