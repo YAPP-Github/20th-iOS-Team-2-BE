@@ -104,7 +104,8 @@ public class OAuthService {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	private static class OAuthResponse {
-		private Long id;
+		@Setter
+		protected Long id;
 		@Setter
 		private String provider;
 
