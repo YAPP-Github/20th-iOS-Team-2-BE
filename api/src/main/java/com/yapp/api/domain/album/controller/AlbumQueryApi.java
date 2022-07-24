@@ -23,6 +23,7 @@ import com.yapp.api.domain.album.element.folder.service.AlbumService;
 import com.yapp.api.domain.common.response.PageResponse;
 import com.yapp.api.domain.common.util.validator.ArgumentValidator;
 import com.yapp.api.domain.file.persistence.entity.File;
+import com.yapp.api.domain.file.service.FileService;
 import com.yapp.api.domain.user.persistence.entity.User;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
@@ -36,6 +37,7 @@ public class AlbumQueryApi {
 	private final ArgumentValidator albumQueryArgumentValidator;
 	private final AlbumService albumService;
 	private final CommentService commentService;
+	private final FileService fileService;
 
 	@GetMapping(value = _ALBUM, produces = APPLICATION_JSON_VALUE)
 	ResponseEntity<?> retrieveAlbumList(@AuthenticationHasFamily User user,
@@ -75,14 +77,31 @@ public class AlbumQueryApi {
 	}
 
 	@GetMapping(value = _ALBUM_DETAILS_RESOURCE, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.DetailsAsDate> retrieveDetailsAsDate(@PathVariable(value = ALBUM_ID) Long albumId) {
-		return null;
+	PageResponse<AlbumResponse.DetailsAsDate> retrieveDetailsAsDate(@AuthenticationHasFamily User user,
+																	@PathVariable(value = ALBUM_ID) Long albumId,
+																	@PageableDefault Pageable pageable) {
+		Album album = albumService.get(user, albumId);
+		Page<File> files = fileService.getFiles(user, album, pageable);
+		return PageResponse.of(AlbumResponse.DetailsAsDate.of(album,
+															  files.getContent()
+																   .stream()
+																   .map(AlbumResponse.AlbumDetail::from)
+																   .collect(Collectors.toList())), files);
 	}
 
 	@GetMapping(value = _ALBUM_DETAILS, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<AlbumResponse.DetailsAsKind> retrieveDetailsAsKind(
-		@RequestParam(value = KIND, defaultValue = DETAILS_AS_KIND_DEFAULT) String kind) {
-		return null;
+	PageResponse<AlbumResponse.DetailsAsKind> retrieveDetailsAsKind(
+		@AuthenticationHasFamily User user,
+		@RequestParam(value = KIND, defaultValue = DETAILS_AS_KIND_DEFAULT) String kind,
+		@PageableDefault Pageable pageable) {
+
+		Page<File> files = fileService.getFiles(user, kind.toUpperCase(), pageable);
+
+		return PageResponse.of(AlbumResponse.DetailsAsKind.of(kind,
+															  files.getContent().stream()
+																   .map(AlbumResponse.AlbumDetail::from)
+																   .collect(Collectors.toList())),
+							   files);
 	}
 
 	@GetMapping(value = _ALBUM_COMMENTS, produces = APPLICATION_JSON_VALUE)

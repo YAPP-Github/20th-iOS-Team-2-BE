@@ -5,7 +5,7 @@ import static com.yapp.core.error.exception.ErrorCode.*;
 import static java.util.Comparator.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +53,11 @@ public class AlbumService {
 	}
 
 	public List<Album> getList(User user) {
-		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateDesc(user.getFamily()));
+		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateTimeDesc(user.getFamily()));
 	}
 
 	public Page<Album> getList(User user, Pageable pageable) {
-		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateDesc(
+		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateTimeDesc(
 			pageable,
 			user.getFamily()));
 	}
@@ -94,7 +94,7 @@ public class AlbumService {
 											  .size(),
 								   kindInfoMap.get(KIND_PHOTO)
 											  .stream()
-											  .max(comparing(File::getDate))
+											  .max(comparing(File::getDateTime))
 											  .orElse(INVALID)
 											  .getLink()),
 					  KIND_RECORDING,
@@ -102,22 +102,22 @@ public class AlbumService {
 											  .size(),
 								   kindInfoMap.get(KIND_RECORDING)
 											  .stream()
-											  .max(comparing(File::getDate))
+											  .max(comparing(File::getDateTime))
 											  .orElse(INVALID)
 											  .getLink()));
 	}
 
 	@Transactional
-	public void uploadPhotos(User user, LocalDate date, List<String> photos) {
-		Album album = albumQueryHandler.findAlbumByDate(date)
-									   .orElseGet(() -> new Album(user.getFamily(), date));
+	public void uploadPhotos(User user, LocalDateTime dateTime, List<String> photos) {
+		Album album = albumQueryHandler.findAlbumByDateTime(dateTime)
+									   .orElseGet(() -> new Album(user.getFamily(), dateTime));
 
 		fileCommandHandler.save(fileRepository -> fileRepository.saveAll(photos.stream()
 																			   .map(link -> File.of("-",
 																									link,
 																									KIND_PHOTO,
 																									album,
-																									date,
+																									dateTime,
 																									user.getFamily()))
 																			   .collect(Collectors.toList())));
 
@@ -128,15 +128,15 @@ public class AlbumService {
 	}
 
 	@Transactional
-	public void uploadRecordings(User user, LocalDate date, String title, String link) {
-		Album album = albumQueryHandler.findAlbumByDate(date)
-									   .orElseGet(() -> new Album(user.getFamily(), date));
+	public void uploadRecordings(User user, LocalDateTime dateTime, String title, String link) {
+		Album album = albumQueryHandler.findAlbumByDateTime(dateTime)
+									   .orElseGet(() -> new Album(user.getFamily(), dateTime));
 
 		fileCommandHandler.save(fileRepository -> fileRepository.save(File.of(title,
 																			  link,
 																			  KIND_RECORDING,
 																			  album,
-																			  date,
+																			  dateTime,
 																			  user.getFamily())));
 
 		if (album.noThumbnail()) {

@@ -6,7 +6,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -38,7 +38,7 @@ public class Album extends BaseEntity {
 	@Setter
 	private String thumbnail = "";
 	private String title;
-	private LocalDate date;
+	private LocalDateTime dateTime;
 
 	@ManyToOne(fetch = LAZY)
 	private Family family;
@@ -46,14 +46,14 @@ public class Album extends BaseEntity {
 	@OneToMany(mappedBy = "album", fetch = LAZY)
 	private List<File> files;
 
-	public Album(Family family, LocalDate date) {
+	public Album(Family family, LocalDateTime dateTime) {
 		this.family = family;
-		this.date = date;
-		this.title = defaultTitle(date);
+		this.dateTime = dateTime;
+		this.title = defaultTitle(dateTime);
 	}
 
-	private String defaultTitle(LocalDate date) {
-		String createdDate = date.format(ISO_LOCAL_DATE);
+	private String defaultTitle(LocalDateTime dateTime) {
+		String createdDate = dateTime.format(ISO_LOCAL_DATE_TIME);
 		return createdDate + DEFAULT_TITLE_POSTFIX;
 	}
 
@@ -69,7 +69,7 @@ public class Album extends BaseEntity {
 
 	public void modifyDate(String date) {
 		if (!isNull(date) && !date.isEmpty()) {
-			this.date = LocalDate.parse(date);
+			this.dateTime = LocalDateTime.parse(date);
 			// occurred SELECT N+1
 			files.forEach(file -> file.modifyDate(date));
 		}

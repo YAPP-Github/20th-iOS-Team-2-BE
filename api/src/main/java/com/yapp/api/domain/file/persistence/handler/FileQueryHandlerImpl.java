@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.yapp.api.domain.file.persistence.entity.File;
@@ -23,6 +24,11 @@ public class FileQueryHandlerImpl implements FileQueryHandler {
 
 	@Override
 	public Optional<File> findOne(Function<FileRepository, Optional<File>> function) {
+		return function.apply(fileRepository);
+	}
+
+	@Override
+	public Page<File> findPage(Function<FileRepository, Page<File>> function) {
 		return function.apply(fileRepository);
 	}
 }

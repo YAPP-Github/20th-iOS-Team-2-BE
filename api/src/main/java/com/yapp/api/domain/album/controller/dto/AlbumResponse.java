@@ -3,7 +3,6 @@ package com.yapp.api.domain.album.controller.dto;
 import static java.time.format.DateTimeFormatter.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +26,11 @@ public class AlbumResponse {
 	public static class DetailsAsDate {
 		private String title;
 		private List<AlbumDetail> elements = new ArrayList<>();
+
+		public static DetailsAsDate of(Album album, List<AlbumDetail> details) {
+
+			return new DetailsAsDate(album.getTitle(), details);
+		}
 	}
 
 	@Getter
@@ -35,6 +39,10 @@ public class AlbumResponse {
 	public static class DetailsAsKind {
 		private String type;
 		private List<AlbumDetail> elements = new ArrayList<>();
+
+		public static DetailsAsKind of(String kind, List<AlbumDetail> details) {
+			return new DetailsAsKind(kind, details);
+		}
 	}
 
 	@Getter
@@ -47,6 +55,17 @@ public class AlbumResponse {
 		private String link;
 		private boolean favourite;
 		private int commentCount;
+
+		public static AlbumDetail from(File file) {
+			return new AlbumDetail(file.getKind()
+									   .name(),
+								   file.getId(),
+								   file.getDateTime()
+									   .format(ISO_DATE_TIME),
+								   file.getLink(),
+								   file.isFavourite(),
+								   file.getCommentCount());
+		}
 	}
 
 	@Getter
@@ -99,8 +118,8 @@ public class AlbumResponse {
 				return new AlbumInfo(album.getId(),
 									 album.getTitle(),
 									 album.getThumbnail(),
-									 album.getDate()
-										  .format(ISO_DATE));
+									 album.getDateTime()
+										  .format(ISO_DATE_TIME));
 			}
 		}
 	}
@@ -117,12 +136,11 @@ public class AlbumResponse {
 
 			return new KindElements(new KindDetail(FAVOURITE, getSize(filesByKindName, FAVOURITE)),
 									new KindDetail(PHOTO, getSize(filesByKindName, PHOTO)),
-									new KindDetail(RECORDING, getSize(filesByKindName, RECORDING))
-			);
+									new KindDetail(RECORDING, getSize(filesByKindName, RECORDING)));
 		}
 
 		private static int getSize(Map<String, List<File>> filesByKindName, String recording) {
-			if(Objects.isNull(filesByKindName.get(recording))) {
+			if (Objects.isNull(filesByKindName.get(recording))) {
 				return 0;
 			}
 			return filesByKindName.get(recording)

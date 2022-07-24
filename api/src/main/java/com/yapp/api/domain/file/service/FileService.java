@@ -7,9 +7,12 @@ import static java.util.Comparator.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.file.persistence.entity.File;
 import com.yapp.api.domain.file.persistence.handler.FileCommandHandler;
 import com.yapp.api.domain.file.persistence.handler.FileQueryHandler;
@@ -34,8 +37,23 @@ public class FileService {
 		return fileQueryHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
 																								 kind))
 							   .stream()
-							   .sorted(comparing(File::getDate).reversed())
+							   .sorted(comparing(File::getDateTime).reversed())
 							   .collect(Collectors.toList());
+	}
+
+	public Page<File> getFiles(User user, Album album, Pageable pageable) {
+		return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndAlbum(user.getFamily(),
+																								  album,
+																								  pageable));
+	}
+
+	public Page<File> getFiles(User user, String kind, Pageable pageable) {
+		if(kind.equalsIgnoreCase("favourite")) {
+			return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(), true, pageable));
+		}
+		return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
+																								 Kind.valueOf(kind),
+																								 pageable));
 	}
 
 	// 비동기 처리 예정

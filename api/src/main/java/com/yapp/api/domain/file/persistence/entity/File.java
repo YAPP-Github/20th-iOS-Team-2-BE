@@ -6,15 +6,18 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.common.BaseEntity;
 import com.yapp.api.domain.family.persistence.entity.Family;
@@ -41,7 +44,7 @@ public class File extends BaseEntity {
 	private String title;
 	private String link;
 	private boolean favourite;
-	private LocalDate date;
+	private LocalDateTime dateTime;
 
 	@Enumerated(STRING)
 	private Kind kind;
@@ -52,23 +55,31 @@ public class File extends BaseEntity {
 	@ManyToOne(fetch = LAZY)
 	private Family family;
 
-	private File(String title, String link, Kind kind, Album album, LocalDate date, Family family) {
+	@OneToMany(mappedBy = "file", fetch = LAZY)
+	private List<Comment> commentList;
+
+	private File(String title, String link, Kind kind, Album album, LocalDateTime dateTime, Family family) {
 		this.title = title;
 		this.link = link;
 		this.kind = kind;
 		this.album = album;
-		this.date = date;
+		this.dateTime = dateTime;
 		this.favourite = false;
 		this.family = family;
 	}
 
-	public static File of(String title, String link, String kindName, Album album, LocalDate date, Family family) {
+	public static File of(String title,
+						  String link,
+						  String kindName,
+						  Album album,
+						  LocalDateTime dateTime,
+						  Family family) {
 		if (kindIsPhoto(kindName)) {
-			return new File(null, link, PHOTO, album, date, family);
+			return new File(null, link, PHOTO, album, dateTime, family);
 		}
 
 		if (kindIsRecording(kindName)) {
-			return new File(title, link, RECORDING, album, date, family);
+			return new File(title, link, RECORDING, album, dateTime, family);
 		}
 
 		return INVALID;
@@ -88,7 +99,11 @@ public class File extends BaseEntity {
 	}
 
 	public void modifyDate(String date) {
-		this.date = LocalDate.parse(date);
+		this.dateTime = LocalDateTime.parse(date);
+	}
+
+	public int getCommentCount() {
+		return commentList.size();
 	}
 
 	@Getter

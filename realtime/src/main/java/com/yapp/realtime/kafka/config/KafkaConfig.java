@@ -1,5 +1,6 @@
 package com.yapp.realtime.kafka.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 
@@ -11,6 +12,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 @Configuration
 @EnableKafka
 public class KafkaConfig {
-	private static final String BOOT_STRAP_SERVER = "localhost:9092";
+	@Value("${spring.kafka.bootstrap-servers}")
+	private String BOOT_STRAP_SERVER;
 
 }

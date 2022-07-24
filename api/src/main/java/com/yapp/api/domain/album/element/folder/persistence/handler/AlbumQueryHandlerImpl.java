@@ -1,6 +1,6 @@
 package com.yapp.api.domain.album.element.folder.persistence.handler;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -24,8 +24,8 @@ public class AlbumQueryHandlerImpl implements AlbumQueryHandler {
 	}
 
 	@Override
-	public Optional<Album> findAlbumByDate(LocalDate date) {
-		return albumRepository.findByDate(date);
+	public Optional<Album> findAlbumByDateTime(LocalDateTime dateTime) {
+		return albumRepository.findByDateTime(dateTime);
 	}
 
 	@Override

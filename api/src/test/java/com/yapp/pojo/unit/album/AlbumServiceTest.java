@@ -53,7 +53,7 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 
 		then(() -> {
-			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(albumRepository, times(ONE)).findByDateTime(any());
 			verify(fileRepository, times(ONE)).saveAll(any());
 			verify(albumRepository, times(ONE)).save(any());
 		});
@@ -66,12 +66,12 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 		기존앨범.setThumbnail("기존썸네일");
 		List<String> 사진리스트 = List.of("사진2");
 		willReturn(Optional.of(기존앨범)).given(albumRepository)
-									 .findByDate(any());
+									 .findByDateTime(any());
 
 		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 
 		then(() -> {
-			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(albumRepository, times(ONE)).findByDateTime(any());
 			verify(fileRepository, times(ONE)).saveAll(any());
 			verify(albumRepository, times(NEVER)).save(any());
 		});
@@ -96,11 +96,11 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 		기존앨범.setThumbnail("기존썸네일");
 		List<String> 사진리스트 = List.of("사진3", "사진4");
 		willReturn(Optional.of(기존앨범)).given(albumRepository)
-									 .findByDate(any());
+									 .findByDateTime(any());
 
 		whenCommand(albumService, service -> service.uploadPhotos(사용자, 날짜, 사진리스트));
 		then(() -> {
-			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(albumRepository, times(ONE)).findByDateTime(any());
 			verify(fileRepository, times(ONE)).saveAll(any());
 			verify(albumRepository, times(NEVER)).save(any());
 		});
@@ -113,7 +113,7 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 
 		whenCommand(albumService, service -> service.uploadRecordings(사용자, 날짜, 제목, 음성));
 		then(() -> {
-			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(albumRepository, times(ONE)).findByDateTime(any());
 			verify(fileRepository, times(ONE)).save(any());
 			verify(albumRepository, times(ONE)).save(any());
 		});
@@ -125,13 +125,13 @@ public class AlbumServiceTest extends Mocker implements BDDProcessor<AlbumServic
 		Album 기존앨범 = new Album(가족, 날짜);
 		기존앨범.setThumbnail("기존썸네일");
 		willReturn(Optional.of(기존앨범)).given(albumRepository)
-									 .findByDate(any());
+									 .findByDateTime(any());
 		String 제목 = "음성 제목";
 		String 음성 = "음성 파일";
 
 		whenCommand(albumService, service -> service.uploadRecordings(사용자, 날짜, 제목, 음성));
 		then(() -> {
-			verify(albumRepository, times(ONE)).findByDate(any());
+			verify(albumRepository, times(ONE)).findByDateTime(any());
 			verify(fileRepository, times(ONE)).save(any());
 			verify(albumRepository, times(NEVER)).save(any());
 		});

@@ -1,6 +1,6 @@
 package com.yapp.api.domain.album.controller.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class AlbumRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Upload {
-		private LocalDate date;
+		private LocalDateTime date;
 		private String title;
 		private List<String> links = new ArrayList<>();
 	}
