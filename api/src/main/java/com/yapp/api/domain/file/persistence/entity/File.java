@@ -98,8 +98,8 @@ public class File extends BaseEntity {
 		return this.kind == RECORDING;
 	}
 
-	public void modifyDate(String date) {
-		this.dateTime = LocalDateTime.parse(date);
+	public void modifyDate(LocalDateTime date) {
+		this.dateTime = date;
 	}
 
 	public int getCommentCount() {

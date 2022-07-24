@@ -152,7 +152,7 @@ public class AlbumService {
 	}
 
 	@Transactional
-	public void modifyDate(User user, Long albumId, String date) {
+	public void modifyDate(User user, Long albumId, LocalDateTime date) {
 		Album album = getAlbumByUserAndId(user, albumId);
 		album.modifyDate(date);
 	}

@@ -64,7 +64,8 @@ public class CommentService {
 									  User commentOwner = comment.getUser();
 
 									  String nicknameForUser = discernNicknameForUser(user, commentOwner);
-									  return new AlbumResponse.CommentElement(commentOwner.getProfileInfo()
+									  return new AlbumResponse.CommentElement(commentOwner.getId(),
+																			  commentOwner.getProfileInfo()
 																						  .getImageLink(),
 																			  nicknameForUser,
 																			  commentOwner.getProfileInfo()

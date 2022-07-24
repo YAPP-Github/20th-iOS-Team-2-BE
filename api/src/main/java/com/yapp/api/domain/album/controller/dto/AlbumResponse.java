@@ -49,6 +49,7 @@ public class AlbumResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class AlbumDetail {
+		private String title;
 		private String kind;
 		private Long fileId;
 		private String date;
@@ -57,7 +58,8 @@ public class AlbumResponse {
 		private int commentCount;
 
 		public static AlbumDetail from(File file) {
-			return new AlbumDetail(file.getKind()
+			return new AlbumDetail(file.getTitle(),
+								   file.getKind()
 									   .name(),
 								   file.getId(),
 								   file.getDateTime()
@@ -90,6 +92,7 @@ public class AlbumResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CommentElement {
+		private Long writerId;
 		private String profileLink;
 		private String nickname;
 		private String roleInFamily;

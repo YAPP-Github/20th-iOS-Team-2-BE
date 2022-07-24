@@ -53,7 +53,7 @@ public class Album extends BaseEntity {
 	}
 
 	private String defaultTitle(LocalDateTime dateTime) {
-		String createdDate = dateTime.format(ISO_LOCAL_DATE_TIME);
+		String createdDate = dateTime.format(ISO_LOCAL_DATE);
 		return createdDate + DEFAULT_TITLE_POSTFIX;
 	}
 
@@ -67,9 +67,9 @@ public class Album extends BaseEntity {
 		}
 	}
 
-	public void modifyDate(String date) {
-		if (!isNull(date) && !date.isEmpty()) {
-			this.dateTime = LocalDateTime.parse(date);
+	public void modifyDate(LocalDateTime date) {
+		if (!isNull(date)) {
+			this.dateTime = date;
 			// occurred SELECT N+1
 			files.forEach(file -> file.modifyDate(date));
 		}

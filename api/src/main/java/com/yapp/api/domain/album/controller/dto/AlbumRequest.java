@@ -41,6 +41,6 @@ public class AlbumRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModifyDate {
-		private String date;
+		private LocalDateTime date;
 	}
 }
