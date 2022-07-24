@@ -1,13 +1,13 @@
-package com.yapp.event;
+package com.yapp.realtime;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EventApplication {
+public class RealtimeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EventApplication.class, args);
+		SpringApplication.run(RealtimeApplication.class, args);
 	}
 
 }
