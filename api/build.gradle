@@ -44,7 +44,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
-    implementation 'org.flywaydb:flyway-core'
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
