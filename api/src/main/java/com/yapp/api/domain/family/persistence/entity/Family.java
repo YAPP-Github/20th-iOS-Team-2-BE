@@ -79,6 +79,7 @@ public class Family extends BaseEntity {
 		if (needChange(familyMotto)) {
 			this.motto = familyMotto;
 		}
+		
 	}
 
 	private boolean needChange(String target) {

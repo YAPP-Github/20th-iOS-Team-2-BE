@@ -92,6 +92,7 @@ public class AlbumResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CommentElement {
+		private Long commentId;
 		private Long writerId;
 		private String profileLink;
 		private String nickname;
@@ -121,8 +122,8 @@ public class AlbumResponse {
 				return new AlbumInfo(album.getId(),
 									 album.getTitle(),
 									 album.getThumbnail(),
-									 album.getDateTime()
-										  .format(ISO_DATE_TIME));
+									 album.getDate()
+										  .format(ISO_DATE));
 			}
 		}
 	}

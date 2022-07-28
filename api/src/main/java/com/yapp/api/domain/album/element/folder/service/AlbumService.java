@@ -53,11 +53,11 @@ public class AlbumService {
 	}
 
 	public List<Album> getList(User user) {
-		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateTimeDesc(user.getFamily()));
+		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateDesc(user.getFamily()));
 	}
 
 	public Page<Album> getList(User user, Pageable pageable) {
-		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateTimeDesc(
+		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateDesc(
 			pageable,
 			user.getFamily()));
 	}
@@ -109,8 +109,8 @@ public class AlbumService {
 
 	@Transactional
 	public void uploadPhotos(User user, LocalDateTime dateTime, List<String> photos) {
-		Album album = albumQueryHandler.findAlbumByDateTime(dateTime)
-									   .orElseGet(() -> new Album(user.getFamily(), dateTime));
+		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
+									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
 		fileCommandHandler.save(fileRepository -> fileRepository.saveAll(photos.stream()
 																			   .map(link -> File.of("-",
@@ -129,8 +129,8 @@ public class AlbumService {
 
 	@Transactional
 	public void uploadRecordings(User user, LocalDateTime dateTime, String title, String link) {
-		Album album = albumQueryHandler.findAlbumByDateTime(dateTime)
-									   .orElseGet(() -> new Album(user.getFamily(), dateTime));
+		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
+									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
 		fileCommandHandler.save(fileRepository -> fileRepository.save(File.of(title,
 																			  link,
@@ -171,6 +171,33 @@ public class AlbumService {
 																					new RuntimeException(
 																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
 		return album;
+	}
+
+	@Transactional
+	public void delegate(User user, Long albumId, Long fileId) {
+		Album album = albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+																									   albumId))
+									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND));
+		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
+									.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND));
+
+		if (album.contains(file) && file.isPhoto()) {
+			album.setThumbnail(file.getLink());
+		}
+
+		throw new BaseBusinessException(ALBUM_FILE_NOT_MATCH);
+	}
+
+	@Transactional
+	public void modifyFileDate(User user, Long fileId, LocalDateTime dateTime) {
+		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
+									.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND));
+		file.modifyDate(dateTime);
+
+		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
+									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
+
+		file.modifyAlbum(album);
 	}
 
 	@Getter

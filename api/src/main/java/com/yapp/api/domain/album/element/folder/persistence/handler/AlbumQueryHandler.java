@@ -1,5 +1,6 @@
 package com.yapp.api.domain.album.element.folder.persistence.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -11,8 +12,6 @@ import com.yapp.api.domain.album.element.folder.persistence.entity.Album;
 import com.yapp.api.domain.album.element.folder.persistence.repository.AlbumRepository;
 
 public interface AlbumQueryHandler {
-	Optional<Album> findAlbumByDateTime(LocalDateTime date);
-
 	List<Album> findAll(Function<AlbumRepository, List<Album>> function);
 
 	Page<Album> findAllAsPage(Function<AlbumRepository, Page<Album>> function);
@@ -20,4 +19,6 @@ public interface AlbumQueryHandler {
 	Integer countByKind(Function<AlbumRepository, Integer> function);
 
 	Optional<Album> findAlbum(Function<AlbumRepository, Optional<Album>> function);
+
+	Optional<Album> findAlbumByDate(LocalDate toLocalDate);
 }

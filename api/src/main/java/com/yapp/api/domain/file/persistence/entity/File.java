@@ -106,6 +106,12 @@ public class File extends BaseEntity {
 		return commentList.size();
 	}
 
+	public void modifyAlbum(Album album) {
+		this.album.removeFile(this);
+
+		this.album = album;
+	}
+
 	@Getter
 	@AllArgsConstructor
 	public enum Kind {

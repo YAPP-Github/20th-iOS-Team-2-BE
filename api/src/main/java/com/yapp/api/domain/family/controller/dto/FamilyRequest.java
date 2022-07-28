@@ -1,5 +1,8 @@
 package com.yapp.api.domain.family.controller.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +26,16 @@ public class FamilyRequest {
 		private String imageLink;
 		private String familyName;
 		private String familyMotto;
+		private List<Nickname> nicknames = new ArrayList<>();
+
+		@NoArgsConstructor
+		@AllArgsConstructor
+		@Getter
+		@Setter
+		public class Nickname {
+			private String pastNickname;
+			private String newNickname;
+		}
 	}
 
 	@Getter

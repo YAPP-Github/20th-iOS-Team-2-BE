@@ -1,9 +1,11 @@
 package com.yapp.api.domain.album.element.comment.persistence.handler;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
 
+import com.yapp.api.domain.album.element.comment.persistence.entity.Comment;
 import com.yapp.api.domain.album.element.comment.persistence.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,8 @@ public class CommentCommandHandlerImpl implements CommentCommandHandler {
 	private final CommentRepository commentRepository;
 
 	@Override
-	public void create(Consumer<CommentRepository> consumer) {
-		consumer.accept(commentRepository);
+	public Long create(Function<CommentRepository, Comment> consumer) {
+		return consumer.apply(commentRepository).getId();
 	}
 
 	@Override

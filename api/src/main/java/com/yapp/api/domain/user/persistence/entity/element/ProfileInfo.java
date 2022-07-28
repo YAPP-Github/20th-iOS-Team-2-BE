@@ -62,14 +62,33 @@ public class ProfileInfo {
 		nickname = nickname.replace(beforeNickname, modifiedNickname);
 	}
 
-	private String originalNickname() {
+	public String originalNickname() {
 		return this.nickname.substring(2, nickname.length());
 	}
 
 	public String getNicknameFromOther(Long otherUserId) {
 		return Arrays.stream(this.nickname.split(NICKNAME_SET_SPLITTER))
-					 .filter(nicknameSet -> Long.parseLong(nicknameSet.split(ID_NAME_SPLITTER)[0]) == otherUserId)
+					 .filter(nicknameSet -> getIdFromSet(nicknameSet) == otherUserId)
 					 .findAny()
 					 .orElse(originalNickname());
+	}
+
+	private long getIdFromSet(String nicknameSet) {
+		return Long.parseLong(nicknameSet.split(ID_NAME_SPLITTER)[0]);
+	}
+
+	public void putNewNickname(Long otherUserId, String newNickname) {
+		String prefix = otherUserId + ":";
+
+		if (this.nickname.contains(prefix)) {
+			for (String nameSet : nickname.split(NICKNAME_SET_SPLITTER)) {
+				if (nameSet.startsWith(prefix)) {
+					this.nickname = this.nickname.replace(nameSet, prefix + newNickname);
+				}
+			}
+			return;
+		}
+
+		nickname = nickname.concat(prefix + newNickname);
 	}
 }

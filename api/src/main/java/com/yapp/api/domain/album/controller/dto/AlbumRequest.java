@@ -43,4 +43,12 @@ public class AlbumRequest {
 	public static class ModifyDate {
 		private LocalDateTime date;
 	}
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Delegate {
+		private Long fileId;
+	}
 }

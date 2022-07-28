@@ -6,6 +6,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class Album extends BaseEntity {
 	@Setter
 	private String thumbnail = "";
 	private String title;
-	private LocalDateTime dateTime;
+	private LocalDate date;
 
 	@ManyToOne(fetch = LAZY)
 	private Family family;
@@ -46,13 +47,13 @@ public class Album extends BaseEntity {
 	@OneToMany(mappedBy = "album", fetch = LAZY)
 	private List<File> files;
 
-	public Album(Family family, LocalDateTime dateTime) {
+	public Album(Family family, LocalDate date) {
 		this.family = family;
-		this.dateTime = dateTime;
-		this.title = defaultTitle(dateTime);
+		this.date = date;
+		this.title = defaultTitle(date);
 	}
 
-	private String defaultTitle(LocalDateTime dateTime) {
+	private String defaultTitle(LocalDate dateTime) {
 		String createdDate = dateTime.format(ISO_LOCAL_DATE);
 		return createdDate + DEFAULT_TITLE_POSTFIX;
 	}
@@ -67,11 +68,19 @@ public class Album extends BaseEntity {
 		}
 	}
 
-	public void modifyDate(LocalDateTime date) {
-		if (!isNull(date)) {
-			this.dateTime = date;
+	public void modifyDate(LocalDateTime dateTime) {
+		if (!isNull(dateTime)) {
+			this.date = dateTime.toLocalDate();
 			// occurred SELECT N+1
-			files.forEach(file -> file.modifyDate(date));
+			files.forEach(file -> file.modifyDate(dateTime));
 		}
+	}
+
+	public boolean contains(File file) {
+		return files.contains(file);
+	}
+
+	public void removeFile(File file) {
+		files.remove(file);
 	}
 }

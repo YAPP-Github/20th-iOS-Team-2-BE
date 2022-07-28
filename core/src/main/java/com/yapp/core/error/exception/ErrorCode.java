@@ -8,6 +8,7 @@ public enum ErrorCode {
 	BEARER_TOKEN_EXPIRED(400, "토큰이 만료되었습니다."),
 	OAUTH_KIND_ERROR(400, "허가되지 않는 OAuth 인증 타입으로 인증을 시도했습니다."),
 	USER_NOT_FOUND_FAMILY(400, "회원이 가족에 소속되어있지 않습니다."),
+	ALBUM_FILE_NOT_MATCH(400, "앨범에 종속되지 않은 파일을 대표로 설정하려고 시도했습니다."),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 
 	FILE_NOT_FOUND(404, "없는 파일 리소스에 대한 접근입니다."),

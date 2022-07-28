@@ -43,7 +43,8 @@ public class FamilyCommandApi {
 		CompletableFuture.runAsync(() -> familyService.modify(user,
 															  request.getImageLink(),
 															  request.getFamilyName(),
-															  request.getFamilyMotto()))
+															  request.getFamilyMotto(),
+															  request.getNicknames()))
 						 .exceptionally(throwable -> {
 							 log.error("[ERROR] {}", throwable.getMessage());
 							 return null;

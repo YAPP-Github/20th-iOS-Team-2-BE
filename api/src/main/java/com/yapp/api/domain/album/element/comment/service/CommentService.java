@@ -31,7 +31,7 @@ public class CommentService {
 	private final CommentQueryHandler commentQueryHandler;
 
 	@Transactional
-	public void create(User user, Long fileId, String content) {
+	public Long create(User user, Long fileId, String content) {
 
 		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findByFamilyAndId(user.getFamily(),
 																								fileId))
@@ -39,10 +39,10 @@ public class CommentService {
 																				 new RuntimeException(
 																					 "FileNotFoundError : which {fileId} in PORT /album/{fileId}/comments")));
 
-		commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user,
-																							 user.getFamily(),
-																							 file,
-																							 content)));
+		return commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user,
+																									user.getFamily(),
+																									file,
+																									content)));
 	}
 
 	@Transactional
@@ -64,7 +64,8 @@ public class CommentService {
 									  User commentOwner = comment.getUser();
 
 									  String nicknameForUser = discernNicknameForUser(user, commentOwner);
-									  return new AlbumResponse.CommentElement(commentOwner.getId(),
+									  return new AlbumResponse.CommentElement(comment.getId(),
+																			  commentOwner.getId(),
 																			  commentOwner.getProfileInfo()
 																						  .getImageLink(),
 																			  nicknameForUser,

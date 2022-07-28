@@ -2,6 +2,10 @@ package com.yapp.api.domain.family.controller.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.api.domain.user.persistence.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,6 +50,40 @@ public class FamilyResponse {
 			private String content;
 			private Long targetId;
 			private String createdDate;
+		}
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Info {
+		private String familyName;
+		private String familyMotto;
+		private List<MemberInfo> members;
+
+		public static Info from(Family family, User user) {
+			List<MemberInfo> nicknames = family.getMembers()
+											   .stream()
+											   .map(member -> MemberInfo.from(user, member))
+											   .collect(Collectors.toList());
+			return new Info(family.getName(), family.getMotto(), nicknames);
+		}
+	}
+
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class MemberInfo {
+		private String name;
+		private String imageLink;
+		private String nickname;
+		private String roleInFamily;
+
+		public static MemberInfo from(User me, User target) {
+			return new MemberInfo(target.getName(),
+								  target.imageLink(),
+								  target.getNicknameForUser(me),
+								  target.getRoleInFamily());
 		}
 	}
 }

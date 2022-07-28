@@ -4,6 +4,7 @@ import static com.yapp.api.domain.file.persistence.entity.File.*;
 import static com.yapp.core.error.exception.ErrorCode.*;
 import static java.util.Comparator.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +49,10 @@ public class FileService {
 	}
 
 	public Page<File> getFiles(User user, String kind, Pageable pageable) {
-		if(kind.equalsIgnoreCase("favourite")) {
-			return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(), true, pageable));
+		if (kind.equalsIgnoreCase("favourite")) {
+			return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
+																										  true,
+																										  pageable));
 		}
 		return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
 																								 Kind.valueOf(kind),
