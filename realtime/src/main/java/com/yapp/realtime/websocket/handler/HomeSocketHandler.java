@@ -1,10 +1,10 @@
 package com.yapp.realtime.websocket.handler;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
+
+import com.yapp.realtime.websocket.dictionary.SessionDictionary;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,13 +16,27 @@ import reactor.core.publisher.Mono;
  **/
 public class HomeSocketHandler implements WebSocketHandler {
 
+	private final SessionDictionary sessionDictionary;
+	private final HomeConsumer homeConsumer;
+
+	public HomeSocketHandler(SessionDictionary sessionDictionary, HomeConsumer homeConsumer) {
+		this.sessionDictionary = sessionDictionary;
+		this.homeConsumer = homeConsumer;
+	}
+
+	/**
+	 * make connection
+	 * @param session
+	 * @return
+	 */
 	@Override
 	public Mono<Void> handle(WebSocketSession session) {
-		// kafka pipeline 으로 만들어야함
-		Flux<WebSocketMessage> map = session.receive()
-											.doOnNext(WebSocketMessage::getPayload)
-											.map(value -> session.textMessage("RECEIVED :: " + value));
 
-		return session.send(map);
+		Flux<WebSocketMessage> receive = session.receive()
+												.doOnNext(WebSocketMessage::getPayloadAsText)
+												.map(value -> session.textMessage(value.getPayloadAsText()));
+
+		return session.send(receive);
 	}
+
 }
