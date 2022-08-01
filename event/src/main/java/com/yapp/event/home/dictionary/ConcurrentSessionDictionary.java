@@ -20,4 +20,9 @@ public class ConcurrentSessionDictionary implements WebSocketSessionDictionary {
 	public void addSession(WebSocketSession session) {
 		this.sessionInMemory.put(session.getId(), session);
 	}
+
+	@Override
+	public WebSocketSession get(String ses) {
+		return sessionInMemory.get(ses);
+	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.yapp.api.domain.family.persistence.entity.Family;
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.persistance.family.persistence.entity.Family;
+import com.yapp.core.persistance.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

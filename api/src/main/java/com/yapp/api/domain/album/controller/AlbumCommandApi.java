@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumRequest;
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
-import com.yapp.api.domain.album.element.comment.service.CommentService;
-import com.yapp.api.domain.album.element.folder.service.AlbumService;
+import com.yapp.api.domain.album.service.CommentService;
+import com.yapp.api.domain.album.service.AlbumService;
 import com.yapp.api.domain.file.service.FileService;
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.persistance.user.entity.User;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 

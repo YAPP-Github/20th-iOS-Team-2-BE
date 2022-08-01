@@ -7,11 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.user.controller.dto.ProfileResponse;
-import com.yapp.api.domain.user.persistence.entity.User;
-import com.yapp.api.domain.user.persistence.handler.ProfileMessageCommandHandler;
-import com.yapp.api.domain.user.persistence.handler.ProfileMessageQueryHandler;
-import com.yapp.api.domain.user.persistence.handler.UserCommandHandler;
-import com.yapp.api.domain.user.persistence.handler.UserQueryHandler;
+import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistance.user.handler.UserCommandHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserCommandHandler userCommandHandler;
-	private final UserQueryHandler userQueryHandler;
-	private final ProfileMessageCommandHandler profileMessageCommandHandler;
-	private final ProfileMessageQueryHandler profileMessageQueryHandler;
 	private final TransactionTemplate transactionTemplate;
 
 	@Transactional

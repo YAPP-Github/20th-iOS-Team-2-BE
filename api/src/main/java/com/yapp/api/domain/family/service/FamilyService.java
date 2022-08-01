@@ -5,27 +5,32 @@ import static java.util.concurrent.CompletableFuture.*;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
-import com.yapp.api.domain.family.persistence.entity.Family;
-import com.yapp.api.domain.family.persistence.handler.FamilyCommandHandler;
-import com.yapp.api.domain.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.api.domain.user.persistence.entity.User;
-import com.yapp.api.domain.user.persistence.handler.UserCommandHandler;
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.persistance.family.persistence.entity.Family;
+import com.yapp.core.persistance.family.persistence.handler.FamilyCommandHandler;
+import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
+import com.yapp.core.persistance.family.persistence.repository.FamilyRepository;
+import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistance.user.handler.UserCommandHandler;
+import com.yapp.core.persistance.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FamilyService {
 	private final FamilyCommandHandler familyCommandHandler;
 	private final FamilyQueryHandler familyQueryHandler;
 	private final UserCommandHandler userCommandHandler;
 	private final TransactionTemplate transactionTemplate;
+	private final UserRepository userRepository;
 
 	// owner 가 가족을 이미 갖고있는지 검증하는 interceptor 추가해야함
 	public Family create(User user, String familyName, String familyMotto) {
@@ -73,5 +78,16 @@ public class FamilyService {
 
 	public FamilyResponse.Info get(User user) {
 		return FamilyResponse.Info.from(user.getFamily(), user);
+	}
+
+	public void join(User user, Long familyId) {
+		Family family = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(familyId))
+										  .orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
+
+		if(user.getFamily() != null) {
+			throw new BaseBusinessException(ErrorCode.ALREADY_JOINED);
+		}
+		family.addUser(user);
+		userRepository.save(user);
 	}
 }

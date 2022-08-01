@@ -10,7 +10,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.persistance.user.entity.User;
 import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService;
 import com.yapp.core.error.exception.BaseBusinessException;
 

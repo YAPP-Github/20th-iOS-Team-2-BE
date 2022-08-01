@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.calendar.controller.dto.CalendarResponse;
-import com.yapp.api.domain.calendar.element.appointment.service.AppointmentService;
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.api.domain.calendar.service.AppointmentService;
+import com.yapp.core.persistance.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 

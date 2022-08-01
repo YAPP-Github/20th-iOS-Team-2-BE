@@ -6,6 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.api.global.security.auth.bearer.token.JwtToken;
 
@@ -17,6 +18,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	private final UserDetailsService userDetailsService;
 
 	@Override
+	@Transactional
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
 		if (userDetails.isEnabled()) {

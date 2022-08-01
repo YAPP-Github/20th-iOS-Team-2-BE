@@ -46,7 +46,8 @@ public class AuthClient {
 
 	private OAuthResponse requestForKakao(AuthInfoProvider<AuthRequest.KakaoDetail> secureDetail) {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setBearerAuth(secureDetail.detail().getAccessToken());
+		httpHeaders.setBearerAuth(secureDetail.detail()
+											  .getAccessToken());
 		httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 		try {
@@ -68,13 +69,16 @@ public class AuthClient {
 	private OAuthResponse requestForApple(AuthInfoProvider<AuthRequest.AppleDetail> secureDetail) {
 		try {
 			OAuthResponse.FromApple result = restTemplate.getForObject(APPLE_VERIFICATION_URI,
-																		  OAuthResponse.FromApple.class);
-			if(result == null) {
+																	   OAuthResponse.FromApple.class);
+			if (result == null) {
 				throw new BaseBusinessException(OAUTH_ERROR,
-												new RuntimeException("OAuth Error : which occurred from request for APPLE"));
+												new RuntimeException(
+													"OAuth Error : which occurred from request for APPLE"));
 			}
-			result.setToken(secureDetail.detail().getIdentityToken());
-			result.setId(secureDetail.detail().getUserId());
+			result.setToken(secureDetail.detail()
+										.getIdentityToken());
+			result.setId(secureDetail.detail()
+									 .getUserId());
 			result.setProvider(APPLE);
 			return result;
 

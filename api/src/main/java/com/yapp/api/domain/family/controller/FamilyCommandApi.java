@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
-import com.yapp.api.domain.family.persistence.entity.Family;
+import com.yapp.core.persistance.family.persistence.entity.Family;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.persistance.user.entity.User;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 
 import lombok.RequiredArgsConstructor;
@@ -71,5 +71,12 @@ public class FamilyCommandApi {
 							 .build();
 	}
 
+	@PatchMapping(value = _FAMILY_RESOURCE)
+	ResponseEntity<Void> join(@MustAuthenticated User user,
+							  @PathVariable(value = "familyId") Long familyId) {
+		familyService.join(user, familyId);
+
+		return ResponseEntity.ok().build();
+	}
 }
 

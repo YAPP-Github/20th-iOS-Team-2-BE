@@ -8,28 +8,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.api.domain.user.persistence.entity.User;
-import com.yapp.api.domain.user.persistence.entity.element.Authority;
-import com.yapp.api.domain.user.persistence.handler.UserQueryHandler;
+import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.persistance.oauth.entity.OAuthInfo;
+import com.yapp.core.persistance.oauth.repo.OAuthInfoRepository;
+import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistance.user.entity.element.Authority;
+import com.yapp.core.persistance.user.handler.UserQueryHandler;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class JwtUserDetailsService implements UserDetailsService {
 	private static final String SPLITTER = ":";
 	private final UserQueryHandler userQueryHandler;
+	private final OAuthInfoRepository oAuthInfoRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		String provider = username.split(SPLITTER)[0];
 		String oauthId = username.split(SPLITTER)[1];
 
-		return JwtUserDetails.from(userQueryHandler.findOne(repository -> repository.findByProviderAndOauthId(provider,
-																											  oauthId))
-												   .orElseGet(User.ANONYMOUS::new));
+		OAuthInfo oAuthInfo = oAuthInfoRepository.findByProviderAndOauthId(OAuthInfo.OAuthProvider.valueOf(provider), oauthId)
+												 .orElseThrow(() -> new BaseBusinessException(ErrorCode.BEARER_TOKEN_INVALID));
+
+		return JwtUserDetails.from(oAuthInfo.getUser());
 	}
 
 	public static class JwtUserDetails implements UserDetails {

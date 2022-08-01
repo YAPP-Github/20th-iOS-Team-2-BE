@@ -7,22 +7,34 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.yapp.event.home.dictionary.SessionDictionary;
+import com.yapp.event.home.response.HomeResponse;
+import com.yapp.event.home.response.SocketResponse;
+import com.yapp.event.home.service.HomeService;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * Author : daehwan2yo
  * Date : 2022/07/30
  * Info : 
  **/
+@RequiredArgsConstructor
 public class HomeWebSocketHandler implements WebSocketHandler {
 	private final SessionDictionary sessionDictionary;
-
-	public HomeWebSocketHandler(SessionDictionary sessionDictionary) {
-		this.sessionDictionary = sessionDictionary;
-	}
+	private final HomeService homeService;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		session.sendMessage(new TextMessage("Welcome"));
+		Long userId = (Long) session.getAttributes()
+							 .get("userId");
+		Long familyId = (Long) session.getAttributes()
+									.get("familyId");
+
+		HomeResponse.HomeStatusInfo membersInfo = homeService.getRealTimeStatus(userId, familyId);
+
+		session.sendMessage(new TextMessage(SocketResponse.from(membersInfo)
+														  .getAsJson()));
+
 		sessionDictionary.addSession(session);
 	}
 

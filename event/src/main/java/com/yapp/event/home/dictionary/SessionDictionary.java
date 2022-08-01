@@ -9,4 +9,6 @@ import org.springframework.web.socket.WebSocketSession;
  **/
 public interface SessionDictionary {
 	void addSession(WebSocketSession session);
+
+	WebSocketSession get(String ses);
 }

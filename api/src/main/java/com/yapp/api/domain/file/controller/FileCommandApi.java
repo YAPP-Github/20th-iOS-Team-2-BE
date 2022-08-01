@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.yapp.api.domain.album.element.folder.service.AlbumService;
+import com.yapp.api.domain.album.service.AlbumService;
 import com.yapp.api.domain.file.controller.dto.FileResponse;
 import com.yapp.api.domain.file.service.CloudService;
-import com.yapp.api.domain.file.service.FileService;
-import com.yapp.api.domain.user.persistence.entity.User;
+import com.yapp.core.persistance.user.entity.User;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 
 import lombok.AllArgsConstructor;

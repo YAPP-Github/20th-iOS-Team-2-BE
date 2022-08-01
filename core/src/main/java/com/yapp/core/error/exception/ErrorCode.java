@@ -9,6 +9,9 @@ public enum ErrorCode {
 	OAUTH_KIND_ERROR(400, "허가되지 않는 OAuth 인증 타입으로 인증을 시도했습니다."),
 	USER_NOT_FOUND_FAMILY(400, "회원이 가족에 소속되어있지 않습니다."),
 	ALBUM_FILE_NOT_MATCH(400, "앨범에 종속되지 않은 파일을 대표로 설정하려고 시도했습니다."),
+	CONNECTION_PREFIX_ERROR(400, "ws 연결 시 정의되지 않은 prefix로 접근을 시도했습니다."),
+	CONNECTION_RESOURCE_ERROR(400, "ws 연결 시 올바르지 못한 familyId 로 접근을 시도했습니다."),
+	ALREADY_JOINED(400, "이미 가족에 속해있는 회원입니다."),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 
 	FILE_NOT_FOUND(404, "없는 파일 리소스에 대한 접근입니다."),
