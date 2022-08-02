@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.family.persistence.entity.Family;
 import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
 import com.yapp.core.persistance.user.entity.User;
 import com.yapp.core.persistance.user.handler.UserQueryHandler;
@@ -27,16 +26,14 @@ public class HomeService {
 	private final UserQueryHandler userQueryHandler;
 	private final FamilyQueryHandler familyQueryHandler;
 
-	public HomeResponse.HomeStatusInfo getRealTimeStatus(Long userId, Long familyId) {
+	public HomeResponse.HomeStatusInfo getRealTimeStatus(Long userId) {
 		User oriUser = userQueryHandler.findOne(userRepository -> userRepository.findById(userId))
 									   .orElseThrow(() -> new BaseBusinessException(ErrorCode.NO_AUTHENTICATION_ACCESS));
 
-		Family family = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(familyId))
-										  .orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
-
-		return new HomeResponse.HomeStatusInfo(family.getMembers()
-													 .stream()
-													 .map(member -> HomeResponse.HomeMemberInfo.of(member, oriUser))
-													 .collect(Collectors.toList()));
+		return new HomeResponse.HomeStatusInfo(oriUser.getFamily()
+													  .getMembers()
+													  .stream()
+													  .map(member -> HomeResponse.HomeMemberInfo.of(member, oriUser))
+													  .collect(Collectors.toList()));
 	}
 }

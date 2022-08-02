@@ -27,10 +27,8 @@ public class HomeWebSocketHandler implements WebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		Long userId = (Long) session.getAttributes()
 							 .get("userId");
-		Long familyId = (Long) session.getAttributes()
-									.get("familyId");
 
-		HomeResponse.HomeStatusInfo membersInfo = homeService.getRealTimeStatus(userId, familyId);
+		HomeResponse.HomeStatusInfo membersInfo = homeService.getRealTimeStatus(userId);
 
 		session.sendMessage(new TextMessage(SocketResponse.from(membersInfo)
 														  .getAsJson()));

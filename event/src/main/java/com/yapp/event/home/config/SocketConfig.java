@@ -32,7 +32,7 @@ public class SocketConfig implements WebSocketConfigurer {
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(webSocketHandler(), "/home/{familyId}/{userId}")
+		registry.addHandler(webSocketHandler(), "/home/{userId}")
 				.addInterceptors(handshakeInterceptor())
 				.setAllowedOrigins("*");
 	}

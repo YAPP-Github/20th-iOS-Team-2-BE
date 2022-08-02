@@ -40,8 +40,7 @@ public class HomeHandShakeInterceptor extends OriginHandshakeInterceptor {
 										   .getPath()
 										   .substring(PATH_PREFIX.length());
 
-					attributes.put("familyId", Long.parseLong(path.split("/")[0]));
-					attributes.put("userId", Long.parseLong(path.split("/")[1]));
+					attributes.put("userId", Long.parseLong(path.split("/")[0]));
 					attributes.put("authToken", authToken);
 					return true;
 				}
