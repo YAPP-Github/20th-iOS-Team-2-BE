@@ -1,9 +1,11 @@
 package com.yapp.api.domain.user.controller.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yapp.core.persistance.user.entity.ProfileMessage;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +30,11 @@ public class ProfileResponse {
 		public static class MessageDetail {
 			private Long messageId;
 			private String content;
-			private String createdDate;
+			private LocalDateTime createdDate;
+
+			public static MessageDetail from(ProfileMessage profileMessage) {
+				return new MessageDetail(profileMessage.getId(), profileMessage.getContent(), profileMessage.getDate());
+			}
 		}
 	}
 

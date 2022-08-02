@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
+import com.yapp.api.domain.home.HomeResponse;
+import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistance.user.entity.User;
 
@@ -20,11 +22,11 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class FamilyQueryApi {
 	private final FamilyService familyService;
+	private final HomeService homeService;
 
 	@GetMapping(value = _FAMILY_HOME, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<FamilyResponse.HomeInfo> retrieveHomeInfo() {
-		return ResponseEntity.ok()
-							 .build();
+	ResponseEntity<HomeResponse.Info> retrieveHomeInfo(@AuthenticationHasFamily User user) {
+		return ResponseEntity.ok(homeService.info(user));
 	}
 
 	@GetMapping(value = _FAMILY_NOTIFICATIONS, produces = APPLICATION_JSON_VALUE)

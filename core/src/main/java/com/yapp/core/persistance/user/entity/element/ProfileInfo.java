@@ -9,8 +9,11 @@ import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
+import org.springframework.data.annotation.LastModifiedBy;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Embeddable
@@ -25,6 +28,12 @@ public class ProfileInfo {
 	private String roleInFamily;
 	private String imageLink;
 	private LocalDateTime modifiedDate;
+
+	@LastModifiedBy
+	@Setter
+	private String content;
+	@LastModifiedBy
+	@Setter
 	private Integer emoji;
 
 	private ProfileInfo(String originalNickname, String roleInFamily) {

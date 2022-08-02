@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
+import com.yapp.api.domain.home.HomeRequest;
+import com.yapp.api.domain.home.HomeService;
+import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FamilyCommandApi {
 	private final FamilyService familyService;
+	private final HomeService homeService;
 
 	// Sync
 	@PostMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -64,14 +68,22 @@ public class FamilyCommandApi {
 							 .build();
 	}
 
+	// Kafka
 	@PostMapping(value = _FAMILY_GREETING_MESSAGE, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> createGreetingWithMessage(@RequestBody FamilyRequest.GreetWithMessage request) {
+	ResponseEntity<Void> createGreetingWithMessage(@AuthenticationHasFamily User user,
+												   @RequestBody HomeRequest.Greeting request) {
+		homeService.greet(user, request.getContent());
+
 		return ResponseEntity.ok()
 							 .build();
 	}
 
+	// Kafka
 	@PostMapping(value = _FAMILY_GREETING_EMOJI, consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> createGreetingWithEmoji(@RequestBody FamilyRequest.GreetWithEmoji request) {
+	ResponseEntity<Void> createGreetingWithEmoji(@AuthenticationHasFamily User user,
+												 @RequestBody HomeRequest.GreetWithEmoji request) {
+		homeService.emoji(user, request.getEmojiNumber());
+
 		return ResponseEntity.ok()
 							 .build();
 	}

@@ -4,6 +4,9 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,8 +32,15 @@ public class ProfileMessage extends BaseEntity {
 	@ManyToOne(fetch = LAZY)
 	private User owner;
 
-	public ProfileMessage(User user, String content) {
+	private LocalDateTime date;
+
+	public ProfileMessage(User user, String content, LocalDateTime date) {
 		this.owner = user;
 		this.content = content;
+		this.date = date;
+	}
+
+	public static ProfileMessage from(User user, String content, LocalDateTime date) {
+		return new ProfileMessage(user, content, date);
 	}
 }

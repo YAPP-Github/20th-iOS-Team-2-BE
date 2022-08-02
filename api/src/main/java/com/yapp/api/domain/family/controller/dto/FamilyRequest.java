@@ -46,14 +46,6 @@ public class FamilyRequest {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GreetWithEmoji {
-		private Integer emojiNumber;
-	}
-
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
 	public static class GreetWithMessage {
 		private String content;
 	}

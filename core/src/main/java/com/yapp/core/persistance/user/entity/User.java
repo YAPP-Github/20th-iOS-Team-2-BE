@@ -59,9 +59,6 @@ public class User extends BaseEntity {
 	@ManyToOne(fetch = EAGER)
 	private Family family;
 
-	@LastModifiedBy
-	private String content;
-
 	public User(String name, LocalDate birthday, ProfileInfo profileInfo, OAuthInfo... oAuthInfos) {
 		this.name = name;
 		this.birthday = birthday;
@@ -114,6 +111,14 @@ public class User extends BaseEntity {
 
 	public int getEmoji() {
 		return profileInfo.getEmoji();
+	}
+
+	public void setContent(String content) {
+		this.profileInfo.setContent(content);
+	}
+
+	public void setEmoji(int emoji) {
+		this.profileInfo.setEmoji(emoji);
 	}
 
 	public static class ANONYMOUS extends User {

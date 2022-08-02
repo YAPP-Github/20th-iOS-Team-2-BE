@@ -49,25 +49,4 @@ public class HomeResponse {
 									  user.getContent());
 		}
 	}
-
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class Info {
-		private String familyName;
-		private List<EventInfo> events = new ArrayList<>();
-
-		@Getter
-		@NoArgsConstructor
-		@AllArgsConstructor
-		public static class EventInfo {
-			private String title;
-			private LocalDate date;
-			private String color;
-
-			public static EventInfo from(Appointment appointment) {
-				return new EventInfo(appointment.getTitle(), appointment.getDate(), appointment.getColor());
-			}
-		}
-	}
 }
