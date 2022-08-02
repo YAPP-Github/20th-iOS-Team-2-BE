@@ -21,4 +21,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	Optional<Appointment> findByFamilyAndDate(Family family, LocalDate date);
 
 	List<Appointment> findAllByFamilyAndDate(Family family, LocalDate date);
+
+	List<Appointment> findAllByFamilyAndDateLessThanEqual(Family family, LocalDate plusMonths);
 }

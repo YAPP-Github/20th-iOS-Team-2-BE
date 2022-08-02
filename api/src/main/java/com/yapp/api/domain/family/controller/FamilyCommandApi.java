@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.core.util.resolver.MustAuthenticated;
+import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistance.family.persistence.entity.Family;

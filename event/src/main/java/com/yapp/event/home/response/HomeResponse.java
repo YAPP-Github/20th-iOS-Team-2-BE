@@ -1,9 +1,11 @@
 package com.yapp.event.home.response;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yapp.core.persistance.calander.appointment.persistence.entity.Appointment;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -45,6 +47,27 @@ public class HomeResponse {
 										  .format(DateTimeFormatter.ISO_DATE_TIME),
 									  user.getEmoji(),
 									  user.getContent());
+		}
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Info {
+		private String familyName;
+		private List<EventInfo> events = new ArrayList<>();
+
+		@Getter
+		@NoArgsConstructor
+		@AllArgsConstructor
+		public static class EventInfo {
+			private String title;
+			private LocalDate date;
+			private String color;
+
+			public static EventInfo from(Appointment appointment) {
+				return new EventInfo(appointment.getTitle(), appointment.getDate(), appointment.getColor());
+			}
 		}
 	}
 }

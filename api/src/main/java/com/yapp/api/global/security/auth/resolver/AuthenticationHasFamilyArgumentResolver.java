@@ -1,4 +1,4 @@
-package com.yapp.core.util.resolver;
+package com.yapp.api.global.security.auth.resolver;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
 
@@ -11,14 +11,20 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService.JwtUserDetails;
+import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService;
 import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.persistance.user.entity.User;
 
+/**
+ * Author : daehwan2yo
+ * Date : 2022/07/17
+ * Info : 
+ **/
 @Component
-public class MustAuthenticatedArgumentResolver implements HandlerMethodArgumentResolver {
+public class AuthenticationHasFamilyArgumentResolver implements HandlerMethodArgumentResolver {
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.hasParameterAnnotation(MustAuthenticated.class);
+		return parameter.hasParameterAnnotation(AuthenticationHasFamily.class);
 	}
 
 	@Override
@@ -29,7 +35,11 @@ public class MustAuthenticatedArgumentResolver implements HandlerMethodArgumentR
 		Authentication authentication = SecurityContextHolder.getContext()
 															 .getAuthentication();
 		if (authentication.isAuthenticated()) {
-			return ((JwtUserDetails)(authentication.getDetails())).getUser();
+			User user = ((JwtUserDetailsService.JwtUserDetails)(authentication.getDetails())).getUser();
+			if (user.getFamily() != null) {
+				return user;
+			}
+			throw new BaseBusinessException(USER_NOT_FOUND_FAMILY);
 		}
 
 		throw new BaseBusinessException(NO_AUTHENTICATION_ACCESS);

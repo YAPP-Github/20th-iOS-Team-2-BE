@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.core.util.resolver.AuthenticationHasFamily;
+import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
