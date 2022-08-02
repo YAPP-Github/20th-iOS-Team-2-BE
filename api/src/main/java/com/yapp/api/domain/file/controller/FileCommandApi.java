@@ -20,7 +20,7 @@ import com.yapp.api.domain.album.service.AlbumService;
 import com.yapp.api.domain.file.controller.dto.FileResponse;
 import com.yapp.api.domain.file.service.CloudService;
 import com.yapp.core.persistance.user.entity.User;
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
+import com.yapp.core.util.resolver.AuthenticationHasFamily;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

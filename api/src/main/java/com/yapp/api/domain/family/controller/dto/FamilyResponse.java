@@ -86,4 +86,15 @@ public class FamilyResponse {
 								  target.getRoleInFamily());
 		}
 	}
+
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class Code {
+		private String code;
+
+		public static Code from(String code) {
+			return new Code(code);
+		}
+	}
 }

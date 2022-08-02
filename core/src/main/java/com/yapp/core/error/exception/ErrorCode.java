@@ -12,8 +12,11 @@ public enum ErrorCode {
 	CONNECTION_PREFIX_ERROR(400, "ws 연결 시 정의되지 않은 prefix로 접근을 시도했습니다."),
 	CONNECTION_RESOURCE_ERROR(400, "ws 연결 시 올바르지 못한 familyId 로 접근을 시도했습니다."),
 	ALREADY_JOINED(400, "이미 가족에 속해있는 회원입니다."),
+	FULL_MEMBER(400, "가족의 회원수가 가득 찼습니다. (10명)"),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 	USER_NOT_FOUND(400, "없는 회원에 대한 접근입니다."),
+
+	NOT_VALID_CODE(403, "유효하지 않는 코드의 접근입니다."),
 
 	FILE_NOT_FOUND(404, "없는 파일 리소스에 대한 접근입니다."),
 	ALBUM_NOT_FOUND(404, "없는 앨범 리소스에 대한 접근입니다."),

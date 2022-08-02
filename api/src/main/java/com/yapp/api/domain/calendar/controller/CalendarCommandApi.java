@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.calendar.controller.dto.CalendarRequest;
 import com.yapp.api.domain.calendar.service.AppointmentService;
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
+import com.yapp.core.util.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.RequiredArgsConstructor;

@@ -9,9 +9,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamilyArgumentResolver;
-import com.yapp.api.global.security.auth.resolver.MustAuthenticatedArgumentResolver;
+import com.yapp.core.util.resolver.AuthenticationHasFamilyArgumentResolver;
+import com.yapp.core.util.resolver.MustAuthenticatedArgumentResolver;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.yapp.api.global.security.auth.resolver;
+package com.yapp.core.util.resolver;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
 

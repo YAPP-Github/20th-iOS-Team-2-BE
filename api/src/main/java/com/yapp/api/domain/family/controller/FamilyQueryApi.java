@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
+import com.yapp.core.util.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistance.user.entity.User;
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,5 +36,11 @@ public class FamilyQueryApi {
 	@GetMapping(value = "/family")
 	ResponseEntity<FamilyResponse.Info> retrieveInfo(@AuthenticationHasFamily User user) {
 		return ResponseEntity.ok(familyService.get(user));
+	}
+
+	@GetMapping("/family/code")
+	ResponseEntity<FamilyResponse.Code> code(@AuthenticationHasFamily User user) {
+		return ResponseEntity.ok(FamilyResponse.Code.from(user.getFamily()
+															  .getCode()));
 	}
 }

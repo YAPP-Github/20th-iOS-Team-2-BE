@@ -3,6 +3,8 @@ package com.yapp.api.domain.family.controller.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,9 @@ public class FamilyRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Create {
+		@NotBlank
 		private String familyName;
+		@NotBlank
 		private String familyMotto;
 	}
 

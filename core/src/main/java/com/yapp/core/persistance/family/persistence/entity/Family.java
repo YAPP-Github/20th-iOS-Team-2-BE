@@ -7,6 +7,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 
 import com.yapp.core.persistance.BaseEntity;
 import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.util.CodeGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,19 +40,20 @@ public class Family extends BaseEntity {
 	private String name;
 	private String motto;
 	private String imageLink;
+	private String code;
 
 	@OneToOne(fetch = LAZY)
 	private User owner;
 
 	@Embedded
 	@Getter(PRIVATE)
-	private FamilyMembers familyMembers = new FamilyMembers();
+	private final FamilyMembers familyMembers = new FamilyMembers();
 
-	@Builder
 	public Family(User user, String name, String motto) {
 		userAsFamily(user);
 		this.name = name;
 		this.motto = motto;
+		this.code = CodeGenerator.code();
 	}
 
 	private void userAsFamily(User user) {

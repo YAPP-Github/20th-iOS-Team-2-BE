@@ -15,7 +15,6 @@ import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistance.family.persistence.entity.Family;
 import com.yapp.core.persistance.family.persistence.handler.FamilyCommandHandler;
 import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.persistance.family.persistence.repository.FamilyRepository;
 import com.yapp.core.persistance.user.entity.User;
 import com.yapp.core.persistance.user.handler.UserCommandHandler;
 import com.yapp.core.persistance.user.repository.UserRepository;
@@ -80,13 +79,14 @@ public class FamilyService {
 		return FamilyResponse.Info.from(user.getFamily(), user);
 	}
 
-	public void join(User user, Long familyId) {
-		Family family = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(familyId))
-										  .orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
+	public void join(User user, String code) {
+		Family family = familyQueryHandler.findOne(familyRepository -> familyRepository.findByCode(code))
+										  .orElseThrow(() -> new BaseBusinessException(ErrorCode.NOT_VALID_CODE));
 
-		if(user.getFamily() != null) {
-			throw new BaseBusinessException(ErrorCode.ALREADY_JOINED);
+		if (family.getMemberCount() > 11) {
+			throw new BaseBusinessException(ErrorCode.FULL_MEMBER);
 		}
+
 		family.addUser(user);
 		userRepository.save(user);
 	}
