@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.calendar.controller.dto.CalendarRequest;
 import com.yapp.api.domain.calendar.service.AppointmentService;
+import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class CalendarCommandApi {
 	private final AppointmentService appointmentService;
 
 	@PostMapping(value = "/calendar", consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> createCalendar(User user, @RequestBody CalendarRequest.Create request) {
+	ResponseEntity<Void> createCalendar(@AuthenticationHasFamily User user, @RequestBody CalendarRequest.Create request) {
 		appointmentService.create(user,
 								  request.getTitle(),
 								  request.getContent(),
@@ -35,7 +36,7 @@ public class CalendarCommandApi {
 	}
 
 	@PatchMapping(value = "/calendar/{planId}", consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> modifyAppointment(User user,
+	ResponseEntity<Void> modifyAppointment(@AuthenticationHasFamily User user,
 										   @RequestBody CalendarRequest.Modify request,
 										   @PathVariable(value = "planId") Long appointmentId) {
 		appointmentService.modify(user,

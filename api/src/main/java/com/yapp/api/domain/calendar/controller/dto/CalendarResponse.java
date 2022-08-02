@@ -1,7 +1,11 @@
 package com.yapp.api.domain.calendar.controller.dto;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.yapp.core.persistance.calander.appointment.persistence.entity.Appointment;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,6 +19,12 @@ public class CalendarResponse {
 	@AllArgsConstructor
 	public static class AsMonth {
 		List<DayInfo> dates = new ArrayList<>();
+
+		public static AsMonth of(List<Appointment> retrieveAsMonth) {
+			return new AsMonth(retrieveAsMonth.stream()
+											  .map(DayInfo::of)
+											  .collect(Collectors.toList()));
+		}
 	}
 
 	@Getter
@@ -23,8 +33,9 @@ public class CalendarResponse {
 		private String date;
 		private String color;
 
-		public static DayInfo of(String date, String color) {
-			return new DayInfo(date, color);
+		public static DayInfo of(Appointment appointment) {
+			return new DayInfo(appointment.getDate()
+										  .format(DateTimeFormatter.ISO_DATE), appointment.getColor());
 		}
 	}
 
@@ -33,6 +44,12 @@ public class CalendarResponse {
 	@AllArgsConstructor
 	public static class AsDay {
 		List<DayDetail> events = new ArrayList<>();
+
+		public static AsDay from(List<Appointment> appointments) {
+			return new AsDay(appointments.stream()
+										 .map(DayDetail::of)
+										 .collect(Collectors.toList()));
+		}
 	}
 
 	@Getter
@@ -43,8 +60,12 @@ public class CalendarResponse {
 		private String time;
 		private String color;
 
-		public static DayDetail of(Long planId, String title, String time, String color) {
-			return new DayDetail(planId, title, time, color);
+		public static DayDetail of(Appointment appointment) {
+			return new DayDetail(appointment.getId(),
+								 appointment.getTitle(),
+								 appointment.getTime()
+											.format(DateTimeFormatter.ISO_TIME),
+								 appointment.getColor());
 		}
 	}
 }

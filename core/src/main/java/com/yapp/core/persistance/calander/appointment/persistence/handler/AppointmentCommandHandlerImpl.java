@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class AppointmentCommandHandlerImpl implements AppointmentCommandHandler {
-	private AppointmentRepository appointmentRepository;
+	private final AppointmentRepository appointmentRepository;
 
 	@Override
 	public void save(Consumer<AppointmentRepository> consumer) {

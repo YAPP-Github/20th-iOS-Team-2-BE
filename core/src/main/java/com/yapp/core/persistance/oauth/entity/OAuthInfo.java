@@ -34,7 +34,7 @@ public class OAuthInfo {
 	private String oauthId;
 
 	@Setter
-	@ManyToOne(fetch = LAZY)
+	@ManyToOne
 	private User user;
 
 	private OAuthInfo(OAuthProvider provider, String oauthId) {

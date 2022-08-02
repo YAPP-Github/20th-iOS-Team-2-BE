@@ -12,19 +12,19 @@ public class AuthResponse {
 	private static final String SPLITTER = ";";
 	private String type;
 	private String authToken;
+	private Long userId;
 
 	// tokenInfo form : "type;accessToken"
-	public static AuthResponse from(String tokenInfo) {
-		return new AuthResponse(extractType(tokenInfo), extractAccessToken(tokenInfo));
-
-	}
-
 	private static String extractAccessToken(String tokenInfo) {
 		return tokenInfo.split(SPLITTER)[1];
 	}
 
 	private static String extractType(String tokenInfo) {
 		return tokenInfo.split(SPLITTER)[0];
+	}
+
+	public static AuthResponse of(String tokenInfo, Long userId) {
+		return new AuthResponse(extractType(tokenInfo), extractAccessToken(tokenInfo), userId);
 	}
 
 	public static class FromKakao {

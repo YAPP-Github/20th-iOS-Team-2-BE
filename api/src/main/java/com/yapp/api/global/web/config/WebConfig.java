@@ -9,11 +9,18 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamilyArgumentResolver;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticatedArgumentResolver;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+	private final MustAuthenticatedArgumentResolver mustAuthenticatedArgumentResolver;
+	private final AuthenticationHasFamilyArgumentResolver authenticationHasFamilyArgumentResolver;
+
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
@@ -21,8 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-		resolvers.add(new MustAuthenticatedArgumentResolver());
-		resolvers.add(new AuthenticationHasFamilyArgumentResolver());
+		resolvers.add(mustAuthenticatedArgumentResolver);
+		resolvers.add(authenticationHasFamilyArgumentResolver);
 	}
 
 	@Override

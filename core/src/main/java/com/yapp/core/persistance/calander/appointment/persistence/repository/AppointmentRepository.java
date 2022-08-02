@@ -1,5 +1,6 @@
 package com.yapp.core.persistance.calander.appointment.persistence.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +14,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	Optional<Appointment> findByIdAndTitle(Long appointmentId, String title);
 
 	@Query(nativeQuery = true,
-		   value = "SELECT appointment FROM Appointment appointment " + "WHERE appointment.family=:family "
-			   + "AND DATE_FORMAT(appointment.date, '%Y-%M')=:dateUtilMonth")
-	List<Appointment> findByFamilyAndDateUntilMonth(Family family, String dateUtilMonth);
+		   value = "SELECT * FROM appointment " + "WHERE family_id=:family "
+			   + "AND DATE_FORMAT(date, '%Y-%m')=:dateUtilMonth")
+	List<Appointment> findByFamilyAndDateUntilMonth(Long family, String dateUtilMonth);
 
-	Optional<Appointment> findByFamilyAndDate(Family family, String date);
+	Optional<Appointment> findByFamilyAndDate(Family family, LocalDate date);
+
+	List<Appointment> findAllByFamilyAndDate(Family family, LocalDate date);
 }

@@ -34,7 +34,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 		String provider = username.split(SPLITTER)[0];
 		String oauthId = username.split(SPLITTER)[1];
 
-		OAuthInfo oAuthInfo = oAuthInfoRepository.findByProviderAndOauthId(OAuthInfo.OAuthProvider.valueOf(provider), oauthId)
+		OAuthInfo oAuthInfo = oAuthInfoRepository.findByProviderAndOauthId(OAuthInfo.OAuthProvider.valueOf(provider),
+																		   oauthId)
 												 .orElseThrow(() -> new BaseBusinessException(ErrorCode.BEARER_TOKEN_INVALID));
 
 		return JwtUserDetails.from(oAuthInfo.getUser());

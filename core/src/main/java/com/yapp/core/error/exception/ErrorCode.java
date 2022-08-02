@@ -13,6 +13,7 @@ public enum ErrorCode {
 	CONNECTION_RESOURCE_ERROR(400, "ws 연결 시 올바르지 못한 familyId 로 접근을 시도했습니다."),
 	ALREADY_JOINED(400, "이미 가족에 속해있는 회원입니다."),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
+	USER_NOT_FOUND(400, "없는 회원에 대한 접근입니다."),
 
 	FILE_NOT_FOUND(404, "없는 파일 리소스에 대한 접근입니다."),
 	ALBUM_NOT_FOUND(404, "없는 앨범 리소스에 대한 접근입니다."),

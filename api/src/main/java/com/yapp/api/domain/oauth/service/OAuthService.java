@@ -3,6 +3,7 @@ package com.yapp.api.domain.oauth.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yapp.api.domain.oauth.controller.dto.AuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
@@ -30,7 +31,7 @@ public class OAuthService {
 	private final OAuthInfoRepository oAuthInfoRepository;
 
 	@Transactional
-	public String auth(String kind, AuthRequest authRequest) {
+	public AuthResponse auth(String kind, AuthRequest authRequest) {
 		// refreshToken not use yet
 
 		// 1. oauth
@@ -46,10 +47,11 @@ public class OAuthService {
 		// 없다면 ? type : join
 		if (foundUser.getName()
 					 .isBlank()) {
-			return JOIN + SPLITTER + bearerHandler.create(authResult.combinedInfo());
+			return AuthResponse.of(JOIN + SPLITTER + bearerHandler.create(authResult.combinedInfo()),
+								   foundUser.getId());
 		}
 		// 있다면 ? type : login
-		return LOGIN + SPLITTER + bearerHandler.create(authResult.combinedInfo());
+		return AuthResponse.of(LOGIN + SPLITTER + bearerHandler.create(authResult.combinedInfo()), foundUser.getId());
 	}
 
 	private OAuthInfo freshUser(OAuthResponse authResult) {
