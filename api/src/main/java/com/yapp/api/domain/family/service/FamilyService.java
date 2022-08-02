@@ -33,6 +33,10 @@ public class FamilyService {
 
 	// owner 가 가족을 이미 갖고있는지 검증하는 interceptor 추가해야함
 	public Family create(User user, String familyName, String familyMotto) {
+		if(user.getFamily() != null) {
+			throw new BaseBusinessException(ErrorCode.ALREADY_JOINED);
+		}
+		
 		// block
 		return transactionTemplate.execute(process -> {
 			Family family = familyCommandHandler.saveFamily(repository -> repository.save(new Family(user,
