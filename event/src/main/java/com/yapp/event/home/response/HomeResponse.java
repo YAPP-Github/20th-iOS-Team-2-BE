@@ -1,11 +1,9 @@
 package com.yapp.event.home.response;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yapp.core.persistance.calander.appointment.persistence.entity.Appointment;
 import com.yapp.core.persistance.user.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -46,7 +44,8 @@ public class HomeResponse {
 									  user.getContentLastModified()
 										  .format(DateTimeFormatter.ISO_DATE_TIME),
 									  user.getEmoji(),
-									  user.getContent());
+									  user.getProfileInfo()
+										  .getContent());
 		}
 	}
 }
