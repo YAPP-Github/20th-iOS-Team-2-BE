@@ -35,7 +35,7 @@ public class ConsumerController {
 	private final UserRepository userRepository;
 	private final FamilyRepository familyRepository;
 
-	@KafkaListener(topics = "yapp-topic")
+	@KafkaListener(topics = "sofa-home")
 	void get(@Payload String message) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		KafkaMessageTemplate.KafkaMessage kafkaMessage = objectMapper.readValue(message,
