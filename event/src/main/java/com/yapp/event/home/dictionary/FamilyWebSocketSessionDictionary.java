@@ -1,13 +1,13 @@
 package com.yapp.event.home.dictionary;
 
-import java.util.List;
+import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Author : daehwan2yo
  * Date : 2022/07/31
  * Info : 
  **/
-public interface FamilyWebSocketSessionDictionary extends SessionDictionary {
+public interface FamilyWebSocketSessionDictionary extends SessionDictionary<Long, WebSocketSession> {
 
-	List<String> get(Long familyId);
+	WebSocketSession get(Long familyId);
 }

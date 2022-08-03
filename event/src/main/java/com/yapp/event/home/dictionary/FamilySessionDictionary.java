@@ -13,26 +13,23 @@ import org.springframework.web.socket.WebSocketSession;
  * Info : 
  **/
 public class FamilySessionDictionary implements FamilyWebSocketSessionDictionary{
-	private final ConcurrentMap<Long, List<String>> sessionsForFamily = new ConcurrentHashMap<>();
+	private final ConcurrentMap<Long, WebSocketSession> sessionForUser = new ConcurrentHashMap<>();
 
 	@Override
 	public void addSession(WebSocketSession session) {
-		;
+		Long userId = (Long) session.getAttributes()
+							   .get("userId");
+
+		sessionForUser.put(userId, session);
 	}
 
 	@Override
-	public WebSocketSession get(String ses) {
-		return null;
+	public WebSocketSession get(Long userId) {
+		return sessionForUser.get(userId);
 	}
 
 	@Override
-	public List<String> get(Long familyId) {
-		if(!sessionsForFamily.containsKey(familyId)) {
-			List<String> list = new ArrayList<>();
-			sessionsForFamily.put(familyId, list);
-			return list;
-		}
-
-		return sessionsForFamily.get(familyId);
+	public boolean isEmpty() {
+		return sessionForUser.isEmpty();
 	}
 }

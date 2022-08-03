@@ -25,6 +25,8 @@ public enum ErrorCode {
 	FAMILY_NOT_FOUND(404, "없는 가족 리소스에 대한 접근입니다."),
 	TOKEN_IS_BLANK(404, "헤더는 존재하나, 토큰이 들어있지 않습니다."),
 
+	ALREADY_JOINED_USER(409, "이미 등록이 완료된 회원입니다."),
+	CONSUMED_MESSAGE_EMPTY(500, "실시간 consume 한 데이터에 문제가 발생했습니다."),
 	BEARER_INTERNAL_ERROR(500, "토큰 검증과정에서 에러가 발생했습니다."),
 	FILE_IO_ERROR(500, "파일 업로드에 문제가 발생했습니다."),
 	OAUTH_ERROR(500, "OAuth 인증과정에서 문제가 발생했습니다. (유효하지 않는 accessToken)"),;

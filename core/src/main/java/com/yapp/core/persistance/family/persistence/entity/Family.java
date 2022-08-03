@@ -99,7 +99,7 @@ public class Family extends BaseEntity {
 	@NoArgsConstructor
 	@AllArgsConstructor(access = PRIVATE)
 	public static class FamilyMembers {
-		@OneToMany(mappedBy = "family")
+		@OneToMany(mappedBy = "family", fetch = EAGER)
 		private Set<User> members = new HashSet<>();
 
 		void add(User user) {

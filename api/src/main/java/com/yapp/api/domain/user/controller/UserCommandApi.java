@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.user.controller.dto.UserRequest;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
+import com.yapp.core.error.exception.BaseBusinessException;
+import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistance.user.entity.User;
 import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
@@ -31,18 +33,22 @@ public class UserCommandApi {
 	@PostMapping(value = _USER, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createUser(@MustAuthenticated User user, @RequestBody UserRequest.Create request) {
 
-		CompletableFuture.runAsync(() -> userService.create(user,
-															request.getName(),
-															request.getNickname(),
-															request.getRoleInFamily(),
-															request.getBirthDay()))
-						 .exceptionally(throwable -> {
-							 log.error("[ERROR] {}", throwable.getMessage());
-							 return null;
-						 });
+		if(user.isEmpty()) {
+			CompletableFuture.runAsync(() -> userService.create(user,
+																request.getName(),
+																request.getNickname(),
+																request.getRoleInFamily(),
+																request.getBirthDay()))
+							 .exceptionally(throwable -> {
+								 log.error("[ERROR] {}", throwable.getMessage());
+								 return null;
+							 });
 
-		return ResponseEntity.ok()
-							 .build();
+			return ResponseEntity.ok()
+								 .build();
+		}
+
+		throw new BaseBusinessException(ErrorCode.ALREADY_JOINED_USER);
 	}
 
 	@DeleteMapping(_USER_HISTORY_RESOURCE)

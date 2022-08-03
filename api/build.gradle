@@ -47,6 +47,9 @@ dependencies {
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
+    implementation 'org.apache.kafka:kafka-clients:3.0.1'
+    implementation 'org.springframework.kafka:spring-kafka'
+
     // security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'

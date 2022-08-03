@@ -7,7 +7,13 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.validation.Valid;
 
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
@@ -27,6 +35,7 @@ import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistance.family.persistence.entity.Family;
 import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.util.KafkaMessageTemplate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +44,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class FamilyCommandApi {
+	@Value("${kafka.topic-name}")
+	private String TOPIC;
+
 	private final FamilyService familyService;
 	private final HomeService homeService;
+	private final KafkaTemplate<String, String> kafkaTemplate;
 
 	// Sync
 	@PostMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -71,8 +84,30 @@ public class FamilyCommandApi {
 	// Kafka
 	@PostMapping(value = _FAMILY_GREETING_MESSAGE, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createGreetingWithMessage(@AuthenticationHasFamily User user,
-												   @RequestBody HomeRequest.Greeting request) {
+												   @RequestBody HomeRequest.Greeting request) throws
+																							  JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
 		homeService.greet(user, request.getContent());
+
+		String body = objectMapper.writeValueAsString(KafkaMessageTemplate.greetingProducing(user,
+																							 request.getContent()));
+		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(new ProducerRecord<String, String>(
+			TOPIC,
+			body));
+
+		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+
+			@Override
+			public void onSuccess(SendResult<String, String> result) {
+				System.out.println("Sent message=[" + body + "] with offset=[" + result.getRecordMetadata()
+																					   .offset() + "]");
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				System.out.println("Unable to send message=[" + body + "] due to : " + ex.getMessage());
+			}
+		});
 
 		return ResponseEntity.ok()
 							 .build();

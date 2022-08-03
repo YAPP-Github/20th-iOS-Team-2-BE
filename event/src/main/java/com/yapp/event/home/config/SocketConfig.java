@@ -5,12 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import com.yapp.event.home.dictionary.ConcurrentSessionDictionary;
 import com.yapp.event.home.dictionary.FamilySessionDictionary;
 import com.yapp.event.home.dictionary.SessionDictionary;
 import com.yapp.event.home.handler.HomeWebSocketHandler;
@@ -48,8 +48,8 @@ public class SocketConfig implements WebSocketConfigurer {
 	}
 
 	@Bean
-	public SessionDictionary sessionDictionary() {
-		return new ConcurrentSessionDictionary(new ConcurrentHashMap<>());
+	public SessionDictionary<Long, WebSocketSession> sessionDictionary() {
+		return new FamilySessionDictionary();
 	}
 
 	@Bean

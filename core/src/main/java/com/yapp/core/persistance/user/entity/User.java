@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -19,8 +18,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.LastModifiedBy;
 
 import com.yapp.core.persistance.BaseEntity;
 import com.yapp.core.persistance.family.persistence.entity.Family;
@@ -106,7 +103,7 @@ public class User extends BaseEntity {
 	}
 
 	public LocalDateTime getContentLastModified() {
-		return getUpdatedAt() ;
+		return getUpdatedAt();
 	}
 
 	public int getEmoji() {
@@ -119,6 +116,10 @@ public class User extends BaseEntity {
 
 	public void setEmoji(int emoji) {
 		this.profileInfo.setEmoji(emoji);
+	}
+
+	public boolean isEmpty() {
+		return "".equals(getName());
 	}
 
 	public static class ANONYMOUS extends User {
