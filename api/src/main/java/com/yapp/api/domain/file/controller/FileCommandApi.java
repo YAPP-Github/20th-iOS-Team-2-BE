@@ -6,6 +6,7 @@ import static org.springframework.http.MediaType.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -59,12 +60,13 @@ public class FileCommandApi {
 							 .build();
 	}
 
-	public class Request {
+	public static class Request {
 		@Getter
 		@Setter
 		@NoArgsConstructor
 		@AllArgsConstructor
-		public class Date {
+		public static class Date {
+			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 			private LocalDateTime date;
 		}
 	}

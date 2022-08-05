@@ -64,7 +64,8 @@ public class AppointmentService {
 	}
 
 	public List<Appointment> retrieveAsMonth(User user, String year, String month) {
-		return appointmentQueryHandler.findAll(repository -> repository.findByFamilyAndDateUntilMonth(user.getFamily().getId(),
+		return appointmentQueryHandler.findAll(repository -> repository.findByFamilyAndDateUntilMonth(user.getFamily()
+																										  .getId(),
 																									  dateUtilMonth(year,
 																													month)));
 	}
@@ -80,5 +81,11 @@ public class AppointmentService {
 		return appointmentQueryHandler.findAll(repository -> repository.findAllByFamilyAndDate(user.getFamily(),
 																							   LocalDate.parse(date,
 																											   DateTimeFormatter.ISO_DATE)));
+	}
+
+	@Transactional
+	public void remove(User user, Long eventId) {
+		appointmentCommandHandler.removeOne(appointRepository -> appointRepository.deleteByIdAndFamily(eventId,
+																									   user.getFamily()));
 	}
 }

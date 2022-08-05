@@ -50,6 +50,7 @@ public class FamilyCommandApi {
 	private final FamilyService familyService;
 	private final HomeService homeService;
 	private final KafkaTemplate<String, String> kafkaTemplate;
+	private final ObjectMapper objectMapper;
 
 	// Sync
 	@PostMapping(value = _FAMILY, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -86,28 +87,9 @@ public class FamilyCommandApi {
 	ResponseEntity<Void> createGreetingWithMessage(@AuthenticationHasFamily User user,
 												   @RequestBody HomeRequest.Greeting request) throws
 																							  JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
 		homeService.greet(user, request.getContent());
 
-		String body = objectMapper.writeValueAsString(KafkaMessageTemplate.greetingProducing(user,
-																							 request.getContent()));
-		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(new ProducerRecord<String, String>(
-			TOPIC,
-			body));
-
-		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-
-			@Override
-			public void onSuccess(SendResult<String, String> result) {
-				System.out.println("Sent message=[" + body + "] with offset=[" + result.getRecordMetadata()
-																					   .offset() + "]");
-			}
-
-			@Override
-			public void onFailure(Throwable ex) {
-				System.out.println("Unable to send message=[" + body + "] due to : " + ex.getMessage());
-			}
-		});
+		kafkaSending(user, request.getContent());
 
 		return ResponseEntity.ok()
 							 .build();
@@ -116,8 +98,11 @@ public class FamilyCommandApi {
 	// Kafka
 	@PostMapping(value = _FAMILY_GREETING_EMOJI, consumes = APPLICATION_JSON_VALUE)
 	ResponseEntity<Void> createGreetingWithEmoji(@AuthenticationHasFamily User user,
-												 @RequestBody HomeRequest.GreetWithEmoji request) {
+												 @RequestBody HomeRequest.GreetWithEmoji request) throws
+																								  JsonProcessingException {
 		homeService.emoji(user, request.getEmojiNumber());
+
+		kafkaSending(user, request.getEmojiNumber());
 
 		return ResponseEntity.ok()
 							 .build();
@@ -133,6 +118,27 @@ public class FamilyCommandApi {
 
 		return ResponseEntity.ok()
 							 .build();
+	}
+
+	private <T> void kafkaSending(User user, T body) throws JsonProcessingException {
+		String message = objectMapper.writeValueAsString(KafkaMessageTemplate.message(user, body));
+		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(new ProducerRecord<String, String>(
+			TOPIC,
+			message));
+
+		future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+
+			@Override
+			public void onSuccess(SendResult<String, String> result) {
+				System.out.println("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata()
+																						  .offset() + "]");
+			}
+
+			@Override
+			public void onFailure(Throwable ex) {
+				System.out.println("Unable to send message=[" + message + "] due to : " + ex.getMessage());
+			}
+		});
 	}
 }
 

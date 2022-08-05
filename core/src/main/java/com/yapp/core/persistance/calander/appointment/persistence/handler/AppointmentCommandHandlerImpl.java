@@ -17,4 +17,9 @@ public class AppointmentCommandHandlerImpl implements AppointmentCommandHandler 
 	public void save(Consumer<AppointmentRepository> consumer) {
 		consumer.accept(appointmentRepository);
 	}
+
+	@Override
+	public void removeOne(Consumer<AppointmentRepository> consumer) {
+		consumer.accept(appointmentRepository);
+	}
 }

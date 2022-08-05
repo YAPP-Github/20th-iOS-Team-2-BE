@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,7 @@ public class AlbumRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class Upload {
+		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 		private LocalDateTime date;
 		private String title;
 		private List<String> links = new ArrayList<>();
@@ -41,6 +44,7 @@ public class AlbumRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class ModifyDate {
+		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 		private LocalDateTime date;
 	}
 

@@ -3,6 +3,7 @@ package com.yapp.api.domain.calendar.controller;
 import static org.springframework.http.MediaType.*;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,8 @@ public class CalendarCommandApi {
 	private final AppointmentService appointmentService;
 
 	@PostMapping(value = "/calendar", consumes = APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> createCalendar(@AuthenticationHasFamily User user, @RequestBody CalendarRequest.Create request) {
+	ResponseEntity<Void> createCalendar(@AuthenticationHasFamily User user,
+										@RequestBody CalendarRequest.Create request) {
 		appointmentService.create(user,
 								  request.getTitle(),
 								  request.getContent(),
@@ -47,6 +49,14 @@ public class CalendarCommandApi {
 								  request.getTime(),
 								  request.getTitle(),
 								  request.isAllDay());
+		return ResponseEntity.ok()
+							 .build();
+	}
+
+	@DeleteMapping(value = "/calendar/{eventId}")
+	ResponseEntity<Void> remove(@AuthenticationHasFamily User user, @PathVariable("eventId") Long eventId) {
+		appointmentService.remove(user, eventId);
+
 		return ResponseEntity.ok()
 							 .build();
 	}

@@ -6,4 +6,6 @@ import com.yapp.core.persistance.calander.appointment.persistence.repository.App
 
 public interface AppointmentCommandHandler {
 	void save(Consumer<AppointmentRepository> consumer);
+
+	void removeOne(Consumer<AppointmentRepository> consumer);
 }

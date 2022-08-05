@@ -28,12 +28,13 @@ public class HomeResponse {
 		@NoArgsConstructor
 		@AllArgsConstructor
 		public static class EventInfo {
+			private Long eventId;
 			private String title;
 			private LocalDate date;
 			private String color;
 
 			public static EventInfo from(Appointment appointment) {
-				return new EventInfo(appointment.getTitle(), appointment.getDate(), appointment.getColor());
+				return new EventInfo(appointment.getId(), appointment.getTitle(), appointment.getDate(), appointment.getColor());
 			}
 		}
 	}

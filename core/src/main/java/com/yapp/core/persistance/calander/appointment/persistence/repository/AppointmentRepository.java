@@ -23,4 +23,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	List<Appointment> findAllByFamilyAndDate(Family family, LocalDate date);
 
 	List<Appointment> findAllByFamilyAndDateBetween(Family family, LocalDate now,LocalDate plusMonths);
+
+	void deleteByIdAndFamily(Long eventId, Family family);
 }

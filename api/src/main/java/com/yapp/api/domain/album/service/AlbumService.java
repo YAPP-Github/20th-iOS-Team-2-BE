@@ -182,6 +182,7 @@ public class AlbumService {
 
 		if (album.contains(file) && file.isPhoto()) {
 			album.setThumbnail(file.getLink());
+			return ;
 		}
 
 		throw new BaseBusinessException(ALBUM_FILE_NOT_MATCH);
@@ -197,6 +198,8 @@ public class AlbumService {
 									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
 		file.modifyAlbum(album);
+		fileCommandHandler.save(fileRepository -> fileRepository.save(file));
+		albumCommandHandler.saveAlbum(albumRepository -> albumRepository.save(album));
 	}
 
 	@Getter
