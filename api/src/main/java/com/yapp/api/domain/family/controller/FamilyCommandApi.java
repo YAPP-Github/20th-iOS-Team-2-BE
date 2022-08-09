@@ -31,10 +31,9 @@ import com.yapp.api.domain.home.HomeRequest;
 import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.family.persistence.entity.Family;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.family.persistence.entity.Family;
+import com.yapp.core.persistence.user.entity.User;
 import com.yapp.core.util.KafkaMessageTemplate;
 
 import lombok.RequiredArgsConstructor;

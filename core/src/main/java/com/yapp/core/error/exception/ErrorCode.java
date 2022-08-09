@@ -29,7 +29,10 @@ public enum ErrorCode {
 	CONSUMED_MESSAGE_EMPTY(500, "실시간 consume 한 데이터에 문제가 발생했습니다."),
 	BEARER_INTERNAL_ERROR(500, "토큰 검증과정에서 에러가 발생했습니다."),
 	FILE_IO_ERROR(500, "파일 업로드에 문제가 발생했습니다."),
-	OAUTH_ERROR(500, "OAuth 인증과정에서 문제가 발생했습니다. (유효하지 않는 accessToken)"),;
+	OAUTH_ERROR(500, "OAuth 인증과정에서 문제가 발생했습니다. (유효하지 않는 accessToken)"),
+
+	ENTITY_PARAMETER_NOT_ACCEPT(500, "엔티티생성 과정에서 값이 누락되었습니다.");
+
 
 	private final int status;
 	private final String detail;

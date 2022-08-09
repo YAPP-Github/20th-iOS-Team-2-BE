@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.yapp.core.persistance.album.element.folder.persistence.entity.Album;
-import com.yapp.core.persistance.file.persistence.entity.File;
+import com.yapp.core.persistence.folder.album.persistence.entity.Album;
+import com.yapp.core.persistence.file.persistence.entity.File;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

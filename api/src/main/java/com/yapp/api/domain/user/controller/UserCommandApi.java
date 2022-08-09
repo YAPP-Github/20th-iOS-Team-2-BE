@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.user.controller.dto.UserRequest;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.user.entity.User;
 import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 

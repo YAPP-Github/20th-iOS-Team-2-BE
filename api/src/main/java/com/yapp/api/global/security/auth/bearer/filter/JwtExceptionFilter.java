@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.yapp.core.error.exception.BaseBusinessException;
-
 @Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
 	@Override

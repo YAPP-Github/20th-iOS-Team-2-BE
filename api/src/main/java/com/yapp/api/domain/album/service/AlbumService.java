@@ -11,20 +11,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.yapp.core.constant.FileKind;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.error.exception.BaseBusinessException;
-import com.yapp.core.persistance.album.element.folder.persistence.entity.Album;
-import com.yapp.core.persistance.album.element.folder.persistence.handler.AlbumCommandHandler;
-import com.yapp.core.persistance.album.element.folder.persistence.handler.AlbumQueryHandler;
-import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.persistance.file.persistence.entity.File;
-import com.yapp.core.persistance.file.persistence.handler.FileCommandHandler;
-import com.yapp.core.persistance.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.folder.album.persistence.entity.Album;
+import com.yapp.core.persistence.folder.album.persistence.handler.AlbumCommandHandler;
+import com.yapp.core.persistence.folder.album.persistence.handler.AlbumQueryHandler;
+import com.yapp.core.persistence.family.persistence.handler.FamilyQueryHandler;
+import com.yapp.core.persistence.file.persistence.entity.File;
+import com.yapp.core.persistence.file.persistence.handler.FileCommandHandler;
+import com.yapp.core.persistence.file.persistence.handler.FileQueryHandler;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,7 +44,7 @@ public class AlbumService {
 	private final FamilyQueryHandler familyQueryHandler;
 
 	public Album get(User user, Long albumId) {
-		return albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+		return albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
 																								albumId))
 								.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
 																			 new RuntimeException(
@@ -62,19 +62,19 @@ public class AlbumService {
 	}
 
 	public Map<String, KindInfo> getCountForEachCategory(User user) {
-		HashMap<String, List<File>> kindInfoMap = new HashMap<>();
-		kindInfoMap.put(File.KIND_PHOTO, new ArrayList<>());
-		kindInfoMap.put(File.KIND_RECORDING, new ArrayList<>());
+		HashMap<FileKind, List<File>> kindInfoMap = new HashMap<>();
+		kindInfoMap.put(FileKind.PHOTO, new ArrayList<>());
+		kindInfoMap.put(FileKind.RECORDING, new ArrayList<>());
 
-		List<File> files = fileQueryHandler.findList(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
+		List<File> files = fileQueryHandler.findAll(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
 
 		files.forEach(file -> {
 			if (file.isPhoto()) {
-				kindInfoMap.get(File.KIND_PHOTO)
+				kindInfoMap.get(FileKind.PHOTO)
 						   .add(file);
 			}
 			if (file.isRecording()) {
-				kindInfoMap.get(File.KIND_RECORDING)
+				kindInfoMap.get(FileKind.RECORDING)
 						   .add(file);
 			}
 		});
@@ -111,7 +111,7 @@ public class AlbumService {
 		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
 									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
-		fileCommandHandler.save(fileRepository -> fileRepository.saveAll(photos.stream()
+		fileCommandHandler.create(fileRepository -> fileRepository.saveAll(photos.stream()
 																			   .map(link -> File.of("-",
 																									link,
 																									File.KIND_PHOTO,
@@ -122,7 +122,7 @@ public class AlbumService {
 
 		if (album.noThumbnail()) {
 			album.setThumbnail(photos.get(FIRST_INDEX));
-			albumCommandHandler.saveAlbum(repository -> repository.save(album));
+			albumCommandHandler.create(repository -> repository.save(album));
 		}
 	}
 
@@ -131,7 +131,7 @@ public class AlbumService {
 		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
 									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
-		fileCommandHandler.save(fileRepository -> fileRepository.save(File.of(title,
+		fileCommandHandler.create(fileRepository -> fileRepository.save(File.of(title,
 																			  link,
 																			  File.KIND_RECORDING,
 																			  album,
@@ -140,7 +140,7 @@ public class AlbumService {
 
 		if (album.noThumbnail()) {
 			// album.setThumbnail("default image");
-			albumCommandHandler.saveAlbum(repository -> repository.save(album));
+			albumCommandHandler.create(repository -> repository.save(album));
 		}
 	}
 
@@ -160,11 +160,11 @@ public class AlbumService {
 	@Transactional
 	public void remove(User user, Long albumId) {
 		Album album = getAlbumByUserAndId(user, albumId);
-		albumCommandHandler.removeOne(albumRepository -> albumRepository.delete(album));
+		albumCommandHandler.remove(albumRepository -> albumRepository.delete(album));
 	}
 
 	private Album getAlbumByUserAndId(User user, Long albumId) {
-		Album album = albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+		Album album = albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
 																									   albumId))
 									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND,
 																					new RuntimeException(
@@ -174,7 +174,7 @@ public class AlbumService {
 
 	@Transactional
 	public void delegate(User user, Long albumId, Long fileId) {
-		Album album = albumQueryHandler.findAlbum(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
+		Album album = albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
 																									   albumId))
 									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND));
 		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
@@ -198,8 +198,8 @@ public class AlbumService {
 									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
 
 		file.modifyAlbum(album);
-		fileCommandHandler.save(fileRepository -> fileRepository.save(file));
-		albumCommandHandler.saveAlbum(albumRepository -> albumRepository.save(album));
+		fileCommandHandler.create(fileRepository -> fileRepository.save(file));
+		albumCommandHandler.create(albumRepository -> albumRepository.save(album));
 	}
 
 	@Getter

@@ -10,14 +10,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.family.controller.dto.FamilyRequest;
 import com.yapp.api.domain.family.controller.dto.FamilyResponse;
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.family.persistence.entity.Family;
-import com.yapp.core.persistance.family.persistence.handler.FamilyCommandHandler;
-import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.persistance.user.entity.User;
-import com.yapp.core.persistance.user.handler.UserCommandHandler;
-import com.yapp.core.persistance.user.repository.UserRepository;
+import com.yapp.core.persistence.family.persistence.entity.Family;
+import com.yapp.core.persistence.family.persistence.handler.FamilyCommandHandler;
+import com.yapp.core.persistence.family.persistence.handler.FamilyQueryHandler;
+import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
+import com.yapp.core.persistence.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,11 +38,11 @@ public class FamilyService {
 
 		// block
 		return transactionTemplate.execute(process -> {
-			Family family = familyCommandHandler.saveFamily(repository -> repository.save(new Family(user,
+			Family family = familyCommandHandler.create(repository -> repository.save(new Family(user,
 																									 familyName,
 																									 familyMotto)));
 			family.addUser(user);
-			runAsync(() -> userCommandHandler.save(userRepository -> userRepository.save(user)));
+			runAsync(() -> userCommandHandler.create(userRepository -> userRepository.save(user)));
 
 			return family;
 		});
@@ -60,8 +59,7 @@ public class FamilyService {
 			Family targetFamily = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(user.getFamily()
 																											   .getId()))
 													.orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
-
-			targetFamily.update(imageLink, familyName, familyMotto);
+			targetFamily.patch(imageLink, familyName, familyMotto);
 
 			nicknameList.forEach(nameSet -> {
 				String pastNickname = nameSet.getPastNickname();
@@ -75,7 +73,7 @@ public class FamilyService {
 															 .putNewNickname(user.getId(), newNickname), () -> {});
 			});
 
-			familyCommandHandler.saveFamily(familyRepository -> familyRepository.save(targetFamily));
+			familyCommandHandler.create(familyRepository -> familyRepository.save(targetFamily));
 		});
 	}
 

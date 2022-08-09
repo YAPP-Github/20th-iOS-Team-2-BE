@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
 import com.yapp.api.domain.album.service.CommentService;
-import com.yapp.core.persistance.album.element.folder.persistence.entity.Album;
+import com.yapp.core.persistence.folder.album.persistence.entity.Album;
 import com.yapp.api.domain.album.service.AlbumService;
 import com.yapp.api.domain.common.response.PageResponse;
-import com.yapp.core.persistance.util.validator.ArgumentValidator;
-import com.yapp.core.persistance.file.persistence.entity.File;
+import com.yapp.core.util.validator.ArgumentValidator;
+import com.yapp.core.persistence.file.persistence.entity.File;
 import com.yapp.api.domain.file.service.FileService;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.user.entity.User;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 

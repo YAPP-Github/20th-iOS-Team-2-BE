@@ -10,13 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.oauth.entity.OAuthInfo;
-import com.yapp.core.persistance.oauth.repo.OAuthInfoRepository;
-import com.yapp.core.persistance.user.entity.User;
-import com.yapp.core.persistance.user.entity.element.Authority;
-import com.yapp.core.persistance.user.handler.UserQueryHandler;
+import com.yapp.core.persistence.oauth.entity.OAuthInfo;
+import com.yapp.core.persistence.oauth.repo.OAuthInfoRepository;
+import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.persistence.user.entity.element.Authority;
+import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

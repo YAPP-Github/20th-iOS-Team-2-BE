@@ -1,7 +1,6 @@
 package com.yapp.api.domain.file.service;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
-import static com.yapp.core.persistance.file.persistence.entity.File.*;
 import static java.util.Comparator.*;
 
 import java.util.List;
@@ -12,12 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.error.exception.BaseBusinessException;
-import com.yapp.core.persistance.album.element.folder.persistence.entity.Album;
-import com.yapp.core.persistance.file.persistence.entity.File;
-import com.yapp.core.persistance.file.persistence.handler.FileCommandHandler;
-import com.yapp.core.persistance.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.folder.album.persistence.entity.Album;
+import com.yapp.core.persistence.file.persistence.entity.File;
+import com.yapp.core.persistence.file.persistence.handler.FileCommandHandler;
+import com.yapp.core.persistence.file.persistence.handler.FileQueryHandler;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,10 +29,10 @@ public class FileService {
 
 	public List<File> getFiles(User user, String kind) {
 		if (kind.equals(FAVOURITE)) {
-			return fileQueryHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
+			return fileQueryHandler.findAll(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
 																										  true));
 		}
-		return fileQueryHandler.findList(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
+		return fileQueryHandler.findAll(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
 																								 kind))
 							   .stream()
 							   .sorted(comparing(File::getDateTime).reversed())
@@ -42,18 +40,18 @@ public class FileService {
 	}
 
 	public Page<File> getFiles(User user, Album album, Pageable pageable) {
-		return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndAlbum(user.getFamily(),
+		return fileQueryHandler.findAllAsPage(fileRepository -> fileRepository.findAllByFamilyAndAlbum(user.getFamily(),
 																								  album,
 																								  pageable));
 	}
 
 	public Page<File> getFiles(User user, String kind, Pageable pageable) {
 		if (kind.equalsIgnoreCase("favourite")) {
-			return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
+			return fileQueryHandler.findAllAsPage(fileRepository -> fileRepository.findAllByFamilyAndFavourite(user.getFamily(),
 																										  true,
 																										  pageable));
 		}
-		return fileQueryHandler.findPage(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
+		return fileQueryHandler.findAllAsPage(fileRepository -> fileRepository.findAllByFamilyAndKind(user.getFamily(),
 																								 Kind.valueOf(kind),
 																								 pageable));
 	}
@@ -66,7 +64,7 @@ public class FileService {
 									.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
 																				 new RuntimeException(
 																					 "FileNotFoundError : which {fileId} in DELETE /album/{fileId}")));
-		fileCommandHandler.removeOne(fileRepository -> fileRepository.delete(file));
+		fileCommandHandler.remove(fileRepository -> fileRepository.delete(file));
 	}
 
 	// 비동기 처리 예정

@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 
-import com.yapp.core.error.exception.BaseBusinessException;
-
 import lombok.Getter;
 
 @Getter

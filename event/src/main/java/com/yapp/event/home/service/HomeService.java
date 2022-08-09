@@ -5,11 +5,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.persistance.user.entity.User;
-import com.yapp.core.persistance.user.handler.UserQueryHandler;
+import com.yapp.core.persistence.family.persistence.handler.FamilyQueryHandler;
+import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
 import com.yapp.event.home.response.HomeResponse;
 
 import lombok.RequiredArgsConstructor;

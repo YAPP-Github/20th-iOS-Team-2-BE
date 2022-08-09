@@ -1,8 +1,51 @@
-subprojects {
-	group = 'com.yapp'
-	version = '1.0'
+buildscript {
+    ext {
+        springBootVersion = "2.7.0"
+        lombokVersion = "1.18.24"
+        guavaVersion = "31.1-jre"
+        queryDslVersion = "5.0.0"
+    }
 
-	ext {
-		springBootVersion = '2.7.0'
-	}
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+subprojects {
+    project.group("com.yapp")
+
+    apply plugin: "java"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    sourceCompatibility = JavaVersion.VERSION_11;
+    targetCompatibility = JavaVersion.VERSION_11;
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency("org.projectlombok:lombok:${lombokVersion}")
+            dependency("com.google.guava:guava:${guavaVersion}")
+        }
+    }
+
+    dependencies {
+        implementation "org.springframework.kafka:spring-kafka"
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+        // utils
+        implementation("com.google.guava:guava")
+        compileOnly("org.projectlombok:lombok")
+        annotationProcessor("org.projectlombok:lombok")
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testAnnotationProcessor("org.projectlombok:lombok")
+    }
 }

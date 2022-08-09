@@ -10,14 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.api.domain.album.controller.dto.AlbumResponse;
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.album.element.comment.persistence.entity.Comment;
-import com.yapp.core.persistance.album.element.comment.persistence.handler.CommentCommandHandler;
-import com.yapp.core.persistance.album.element.comment.persistence.handler.CommentQueryHandler;
-import com.yapp.core.persistance.file.persistence.entity.File;
-import com.yapp.core.persistance.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.folder.comment.entity.Comment;
+import com.yapp.core.persistence.folder.comment.handler.CommentCommandHandler;
+import com.yapp.core.persistence.folder.comment.handler.CommentQueryHandler;
+import com.yapp.core.persistence.file.persistence.entity.File;
+import com.yapp.core.persistence.file.persistence.handler.FileQueryHandler;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,7 +51,7 @@ public class CommentService {
 											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
 																						  new RuntimeException(
 																							  "CommentNotFoundError : which {commentId} in PATCH /album/comments/{commentId}")));
-		comment.modifyComment(content);
+		comment.modify(content);
 	}
 
 	public List<AlbumResponse.CommentElement> getList(User user, Long fileId) {

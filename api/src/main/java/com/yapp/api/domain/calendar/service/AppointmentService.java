@@ -9,12 +9,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.error.exception.BaseBusinessException;
-import com.yapp.core.persistance.calander.appointment.persistence.entity.Appointment;
-import com.yapp.core.persistance.calander.appointment.persistence.handler.AppointmentCommandHandler;
-import com.yapp.core.persistance.calander.appointment.persistence.handler.AppointmentQueryHandler;
-import com.yapp.core.persistance.family.persistence.repository.FamilyRepository;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.calander.appointment.persistence.entity.Appointment;
+import com.yapp.core.persistence.calander.appointment.persistence.handler.AppointmentCommandHandler;
+import com.yapp.core.persistence.calander.appointment.persistence.handler.AppointmentQueryHandler;
+import com.yapp.core.persistence.family.persistence.repository.FamilyRepository;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +37,7 @@ public class AppointmentService {
 
 		// allDay 관련 작업
 		// visibility 관련 작업
-		appointmentCommandHandler.save(repository -> repository.save(Appointment.of(title,
+		appointmentCommandHandler.create(repository -> repository.save(Appointment.of(title,
 																					content,
 																					date,
 																					time,
@@ -85,7 +84,7 @@ public class AppointmentService {
 
 	@Transactional
 	public void remove(User user, Long eventId) {
-		appointmentCommandHandler.removeOne(appointRepository -> appointRepository.deleteByIdAndFamily(eventId,
+		appointmentCommandHandler.remove(appointRepository -> appointRepository.deleteByIdAndFamily(eventId,
 																									   user.getFamily()));
 	}
 }

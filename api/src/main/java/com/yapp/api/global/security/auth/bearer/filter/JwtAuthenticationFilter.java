@@ -4,7 +4,6 @@ import static com.google.common.base.Strings.*;
 import static com.yapp.core.error.exception.ErrorCode.*;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,8 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.yapp.api.global.security.auth.bearer.token.JwtToken;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
-import com.yapp.core.error.exception.BaseBusinessException;
-import com.yapp.core.error.exception.ErrorCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

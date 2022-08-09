@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.user.controller.dto.ProfileResponse;
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.user.entity.ProfileMessage;
-import com.yapp.core.persistance.user.entity.User;
-import com.yapp.core.persistance.user.handler.UserCommandHandler;
-import com.yapp.core.persistance.user.repository.ProfileMessageRepository;
-import com.yapp.core.persistance.user.repository.UserRepository;
+import com.yapp.core.persistence.user.entity.ProfileMessage;
+import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
+import com.yapp.core.persistence.user.repository.ProfileMessageRepository;
+import com.yapp.core.persistence.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,19 +27,17 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final ProfileMessageRepository profileMessageRepository;
 
-	@Transactional
 	public void create(User user, String name, String nickname, String roleInFamily, LocalDate birthday) {
 		transactionTemplate.executeWithoutResult(process -> {
-			user.update(name, nickname, roleInFamily, birthday);
-			userCommandHandler.save(userRepository -> userRepository.save(user));
+			user.setUp(name, nickname, roleInFamily, birthday);
+			userCommandHandler.create(userRepository -> userRepository.save(user));
 		});
 	}
 
-	@Transactional
 	public void modify(User user, String nickname, String imageLink, LocalDate birthDay, String roleInFamily) {
 		transactionTemplate.executeWithoutResult(process -> {
-			user.update(nickname, imageLink, birthDay, roleInFamily);
-			userCommandHandler.save(userRepository -> userRepository.save(user));
+			user.modify(nickname, imageLink, birthDay, roleInFamily);
+			userCommandHandler.create(userRepository -> userRepository.save(user));
 		});
 	}
 

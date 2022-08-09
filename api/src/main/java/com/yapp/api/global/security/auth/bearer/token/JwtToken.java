@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.yapp.core.persistance.user.entity.element.Authority;
+import com.yapp.core.persistence.user.entity.element.Authority;
 
 public class JwtToken implements Authentication {
 	public static final Authentication ANONYMOUS = anonymous();

@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yapp.core.persistance.user.entity.ProfileMessage;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.user.entity.ProfileMessage;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

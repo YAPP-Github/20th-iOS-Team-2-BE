@@ -7,11 +7,11 @@ import com.yapp.api.domain.oauth.controller.dto.AuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
-import com.yapp.core.persistance.oauth.entity.OAuthInfo;
-import com.yapp.core.persistance.oauth.repo.OAuthInfoRepository;
-import com.yapp.core.persistance.user.entity.User;
-import com.yapp.core.persistance.user.handler.UserCommandHandler;
-import com.yapp.core.persistance.user.handler.UserQueryHandler;
+import com.yapp.core.persistence.oauth.entity.OAuthInfo;
+import com.yapp.core.persistence.oauth.repo.OAuthInfoRepository;
+import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
+import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -69,7 +69,7 @@ public class OAuthService {
 
 	private User saveUser(OAuthResponse authResult, String apple) {
 		User newUser = new User("", null, null, OAuthInfo.of(apple, authResult.getId()));
-		userCommandHandler.save(userRepository -> userRepository.save(newUser));
+		userCommandHandler.create(userRepository -> userRepository.save(newUser));
 		return newUser;
 	}
 }

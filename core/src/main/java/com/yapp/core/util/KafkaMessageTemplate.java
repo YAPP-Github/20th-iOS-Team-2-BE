@@ -1,8 +1,7 @@
 package com.yapp.core.util;
 
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

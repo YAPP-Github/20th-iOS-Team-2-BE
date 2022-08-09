@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yapp.api.domain.album.service.AlbumService;
 import com.yapp.api.domain.file.controller.dto.FileResponse;
 import com.yapp.api.domain.file.service.CloudService;
-import com.yapp.core.persistance.user.entity.User;
+import com.yapp.core.persistence.user.entity.User;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 
 import lombok.AllArgsConstructor;

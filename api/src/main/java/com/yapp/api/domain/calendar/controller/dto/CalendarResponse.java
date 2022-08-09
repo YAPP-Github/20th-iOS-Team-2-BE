@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.yapp.core.persistance.calander.appointment.persistence.entity.Appointment;
+import com.yapp.core.persistence.calander.appointment.persistence.entity.Appointment;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

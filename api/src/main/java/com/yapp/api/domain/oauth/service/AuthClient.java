@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import com.yapp.api.domain.oauth.controller.dto.AuthInfoProvider;
 import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
-import com.yapp.core.error.exception.BaseBusinessException;
 
 import lombok.RequiredArgsConstructor;
 
