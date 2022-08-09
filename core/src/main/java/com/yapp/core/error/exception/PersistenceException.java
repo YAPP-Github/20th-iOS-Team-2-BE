@@ -12,4 +12,8 @@ public class PersistenceException extends RuntimeException {
         super(errorCode.getDetail());
         this.errorCode = errorCode;
     }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
 }

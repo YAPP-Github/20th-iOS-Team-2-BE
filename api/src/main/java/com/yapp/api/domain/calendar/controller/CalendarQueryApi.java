@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yapp.api.domain.calendar.controller.dto.CalendarResponse;
+import com.yapp.api.domain.calendar.controller.model.CalendarResponse;
 import com.yapp.api.domain.calendar.service.AppointmentService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.core.persistence.user.entity.User;

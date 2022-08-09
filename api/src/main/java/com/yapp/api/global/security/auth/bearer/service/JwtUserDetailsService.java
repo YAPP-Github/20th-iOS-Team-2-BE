@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistence.oauth.entity.OAuthInfo;
-import com.yapp.core.persistence.oauth.repo.OAuthInfoRepository;
+import com.yapp.core.persistence.oauth.repo.OAuthInfoCommand;
 import com.yapp.core.persistence.user.entity.User;
 import com.yapp.core.persistence.user.entity.element.Authority;
 import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtUserDetailsService implements UserDetailsService {
 	private static final String SPLITTER = ":";
 	private final UserQueryHandler userQueryHandler;
-	private final OAuthInfoRepository oAuthInfoRepository;
+	private final OAuthInfoCommand oAuthInfoRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

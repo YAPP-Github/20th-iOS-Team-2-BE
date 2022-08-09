@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yapp.core.persistence.calander.appointment.persistence.entity.Appointment;
+import com.yapp.core.persistence.calander.appointment.entity.Appointment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

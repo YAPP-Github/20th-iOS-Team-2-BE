@@ -14,9 +14,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistence.family.persistence.entity.Family;
-import com.yapp.core.persistence.family.persistence.repository.FamilyRepository;
+import com.yapp.core.persistence.family.persistence.repository.FamilyCommand;
 import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.repository.UserRepository;
+import com.yapp.core.persistence.user.repository.UserCommand;
 import com.yapp.core.util.KafkaMessageTemplate;
 import com.yapp.event.home.dictionary.SessionDictionary;
 
@@ -31,8 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ConsumerController {
 	private final SessionDictionary<Long, WebSocketSession> sessionDictionary;
-	private final UserRepository userRepository;
-	private final FamilyRepository familyRepository;
+	private final UserCommand userCommand;
+	private final FamilyCommand familyCommand;
 
 	@KafkaListener(topics = "sofa-home")
 	void get(@Payload String message) throws JsonProcessingException {
@@ -43,10 +43,10 @@ public class ConsumerController {
 		CompletableFuture.runAsync(() -> {
 
 			Long userId = kafkaMessage.getUserId();
-			User sender = userRepository.findById(userId)
+			User sender = userCommand.findById(userId)
 										.orElseThrow(() -> new BaseBusinessException(ErrorCode.USER_NOT_FOUND));
 
-			Family family = familyRepository.findById(sender.getFamily()
+			Family family = familyCommand.findById(sender.getFamily()
 															.getId())
 											.orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
 

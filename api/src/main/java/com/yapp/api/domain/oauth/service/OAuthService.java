@@ -8,7 +8,7 @@ import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
 import com.yapp.core.persistence.oauth.entity.OAuthInfo;
-import com.yapp.core.persistence.oauth.repo.OAuthInfoRepository;
+import com.yapp.core.persistence.oauth.repo.OAuthInfoCommand;
 import com.yapp.core.persistence.user.entity.User;
 import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
 import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
@@ -28,7 +28,7 @@ public class OAuthService {
 	private final UserCommandHandler userCommandHandler;
 	private final BearerHandler bearerHandler;
 	private final AuthClient authClient;
-	private final OAuthInfoRepository oAuthInfoRepository;
+	private final OAuthInfoCommand oAuthInfoRepository;
 
 	@Transactional
 	public AuthResponse auth(String kind, AuthRequest authRequest) {

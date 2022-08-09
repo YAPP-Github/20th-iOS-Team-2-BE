@@ -9,10 +9,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.persistence.calander.appointment.persistence.entity.Appointment;
-import com.yapp.core.persistence.calander.appointment.persistence.handler.AppointmentCommandHandler;
-import com.yapp.core.persistence.calander.appointment.persistence.handler.AppointmentQueryHandler;
-import com.yapp.core.persistence.family.persistence.repository.FamilyRepository;
+import com.yapp.core.persistence.calander.appointment.entity.Appointment;
+import com.yapp.core.persistence.calander.appointment.handler.AppointmentCommandHandler;
+import com.yapp.core.persistence.calander.appointment.handler.AppointmentQueryHandler;
+import com.yapp.core.persistence.family.persistence.repository.FamilyCommand;
 import com.yapp.core.persistence.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentService {
 	private final AppointmentCommandHandler appointmentCommandHandler;
 	private final AppointmentQueryHandler appointmentQueryHandler;
-	private final FamilyRepository familyRepository;
+	private final FamilyCommand familyCommand;
 
 	@Transactional
 	public void create(User user,

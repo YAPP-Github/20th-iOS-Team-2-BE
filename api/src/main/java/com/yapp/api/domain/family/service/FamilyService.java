@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.yapp.api.domain.family.controller.dto.FamilyRequest;
-import com.yapp.api.domain.family.controller.dto.FamilyResponse;
+import com.yapp.api.domain.family.controller.model.FamilyRequest;
+import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.persistence.family.persistence.entity.Family;
 import com.yapp.core.persistence.family.persistence.handler.FamilyCommandHandler;
 import com.yapp.core.persistence.family.persistence.handler.FamilyQueryHandler;
 import com.yapp.core.persistence.user.entity.User;
 import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
-import com.yapp.core.persistence.user.repository.UserRepository;
+import com.yapp.core.persistence.user.repository.UserCommand;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +28,7 @@ public class FamilyService {
 	private final FamilyQueryHandler familyQueryHandler;
 	private final UserCommandHandler userCommandHandler;
 	private final TransactionTemplate transactionTemplate;
-	private final UserRepository userRepository;
+	private final UserCommand userCommand;
 
 	// owner 가 가족을 이미 갖고있는지 검증하는 interceptor 추가해야함
 	public Family create(User user, String familyName, String familyMotto) {
@@ -90,6 +90,6 @@ public class FamilyService {
 		}
 
 		family.addUser(user);
-		userRepository.save(user);
+		userCommand.save(user);
 	}
 }

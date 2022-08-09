@@ -8,12 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.persistence.calander.appointment.persistence.entity.Appointment;
-import com.yapp.core.persistence.calander.appointment.persistence.repository.AppointmentRepository;
+import com.yapp.core.persistence.calander.appointment.entity.Appointment;
 import com.yapp.core.persistence.user.entity.ProfileMessage;
 import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.repository.ProfileMessageRepository;
-import com.yapp.core.persistence.user.repository.UserRepository;
+import com.yapp.core.persistence.user.repository.ProfileMessageCommand;
+import com.yapp.core.persistence.user.repository.UserCommand;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class HomeService {
 	private final AppointmentRepository appointmentRepository;
-	private final ProfileMessageRepository profileMessageRepository;
-	private final UserRepository userRepository;
+	private final ProfileMessageCommand profileMessageCommand;
+	private final UserCommand userCommand;
 
 	public HomeResponse.Info info(User user) {
 
@@ -48,14 +47,14 @@ public class HomeService {
 	@Transactional
 	public void greet(User user, String content) {
 		user.setContent(content);
-		profileMessageRepository.save(ProfileMessage.from(user, content, LocalDateTime.now()));
-		userRepository.save(user);
+		profileMessageCommand.save(ProfileMessage.from(user, content, LocalDateTime.now()));
+		userCommand.save(user);
 	}
 
 	@Transactional
 	public void emoji(User user, Integer emojiNumber) {
 		user.setEmoji(emojiNumber);
 
-		userRepository.save(user);
+		userCommand.save(user);
 	}
 }

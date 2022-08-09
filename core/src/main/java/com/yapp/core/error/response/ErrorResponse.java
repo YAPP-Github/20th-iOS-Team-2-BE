@@ -2,6 +2,9 @@ package com.yapp.core.error.response;
 
 import java.time.LocalDateTime;
 
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.error.exception.PersistenceException;
+import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
@@ -12,15 +15,24 @@ public class ErrorResponse {
 	private final int status;
 	private final String detail;
 
-	public ErrorResponse(BaseBusinessException e) {
+	@Builder
+	private ErrorResponse(int status, String detail) {
 		this.timestamp = LocalDateTime.now();
-		this.status = e.getStatus();
-		this.detail = e.getDetail();
+		this.status = status;
+		this.detail = detail;
 	}
 
-	public ErrorResponse(Exception e) {
-		this.timestamp = LocalDateTime.now();
-		this.status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-		this.detail = e.toString();
+	public static ErrorResponse from(ErrorCode e) {
+		return ErrorResponse.builder()
+				.status(e.getStatus())
+				.detail(e.getDetail())
+				.build();
+	}
+
+	public static ErrorResponse internal(String message) {
+		return ErrorResponse.builder()
+				.status(500)
+				.detail(message)
+				.build();
 	}
 }
