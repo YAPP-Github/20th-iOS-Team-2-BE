@@ -11,12 +11,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.yapp.api.domain.family.controller.model.FamilyRequest;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistence.family.persistence.entity.Family;
-import com.yapp.core.persistence.family.persistence.handler.FamilyCommandHandler;
-import com.yapp.core.persistence.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
-import com.yapp.core.persistence.user.repository.UserCommand;
+import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.family.persistence.handler.FamilyCommandHandler;
+import com.yapp.core.entity.family.persistence.handler.FamilyQueryHandler;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.entity.user.handler.user.UserCommandHandler;
+import com.yapp.core.entity.user.repository.UserCommand;
 
 import lombok.RequiredArgsConstructor;
 

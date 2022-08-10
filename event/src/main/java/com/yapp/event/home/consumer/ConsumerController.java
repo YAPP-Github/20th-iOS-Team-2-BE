@@ -13,10 +13,10 @@ import org.springframework.web.socket.WebSocketSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistence.family.persistence.entity.Family;
-import com.yapp.core.persistence.family.persistence.repository.FamilyCommand;
-import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.repository.UserCommand;
+import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.family.persistence.repository.FamilyCommand;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.entity.user.repository.UserCommand;
 import com.yapp.core.util.KafkaMessageTemplate;
 import com.yapp.event.home.dictionary.SessionDictionary;
 

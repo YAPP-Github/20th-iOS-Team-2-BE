@@ -6,7 +6,7 @@ import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

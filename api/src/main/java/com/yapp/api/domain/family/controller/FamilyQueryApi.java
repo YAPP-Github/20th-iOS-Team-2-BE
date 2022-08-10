@@ -5,14 +5,12 @@ import com.yapp.api.domain.family.service.FamilyService;
 import com.yapp.api.domain.home.HomeResponse;
 import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.yapp.core.constant.ApiConstant._FAMILY_HOME;
-import static com.yapp.core.constant.ApiConstant._FAMILY_NOTIFICATIONS;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController

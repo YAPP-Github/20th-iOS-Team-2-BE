@@ -10,11 +10,11 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.yapp.api.domain.user.controller.model.ProfileResponse;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistence.user.entity.ProfileMessage;
-import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
-import com.yapp.core.persistence.user.repository.ProfileMessageCommand;
-import com.yapp.core.persistence.user.repository.UserCommand;
+import com.yapp.core.entity.user.entity.ProfileMessage;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.entity.user.handler.user.UserCommandHandler;
+import com.yapp.core.entity.user.repository.ProfileMessageCommand;
+import com.yapp.core.entity.user.repository.UserCommand;
 
 import lombok.RequiredArgsConstructor;
 

@@ -7,7 +7,7 @@ import com.yapp.api.domain.folder.service.AlbumService;
 import com.yapp.api.domain.folder.service.CommentService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.user.entity.User;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

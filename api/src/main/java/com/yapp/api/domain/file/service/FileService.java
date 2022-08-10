@@ -11,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.persistence.folder.album.persistence.entity.Album;
-import com.yapp.core.persistence.file.persistence.entity.File;
-import com.yapp.core.persistence.file.persistence.handler.FileCommandHandler;
-import com.yapp.core.persistence.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.folder.album.persistence.entity.Album;
+import com.yapp.core.entity.file.persistence.entity.File;
+import com.yapp.core.entity.file.persistence.handler.FileCommandHandler;
+import com.yapp.core.entity.file.persistence.handler.FileQueryHandler;
+import com.yapp.core.entity.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 

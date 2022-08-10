@@ -4,7 +4,7 @@ import com.yapp.api.domain.user.controller.model.ProfileResponse;
 import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

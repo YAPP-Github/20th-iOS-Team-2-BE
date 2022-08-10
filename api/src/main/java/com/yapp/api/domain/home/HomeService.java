@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.persistence.calander.appointment.entity.Appointment;
-import com.yapp.core.persistence.user.entity.ProfileMessage;
-import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.repository.ProfileMessageCommand;
-import com.yapp.core.persistence.user.repository.UserCommand;
+import com.yapp.core.entity.calander.appointment.entity.Appointment;
+import com.yapp.core.entity.user.entity.ProfileMessage;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.entity.user.repository.ProfileMessageCommand;
+import com.yapp.core.entity.user.repository.UserCommand;
 
 import lombok.RequiredArgsConstructor;
 

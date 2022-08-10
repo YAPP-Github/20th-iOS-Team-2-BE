@@ -12,7 +12,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.user.entity.User;
 
 /**
  * Author : daehwan2yo

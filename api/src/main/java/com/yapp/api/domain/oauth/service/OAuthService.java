@@ -7,11 +7,11 @@ import com.yapp.api.domain.oauth.controller.dto.AuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
 import com.yapp.api.global.security.auth.bearer.util.BearerHandler;
-import com.yapp.core.persistence.oauth.entity.OAuthInfo;
-import com.yapp.core.persistence.oauth.repo.OAuthInfoCommand;
-import com.yapp.core.persistence.user.entity.User;
-import com.yapp.core.persistence.user.handler.user.UserCommandHandler;
-import com.yapp.core.persistence.user.handler.user.UserQueryHandler;
+import com.yapp.core.entity.oauth.entity.OAuthInfo;
+import com.yapp.core.entity.oauth.repo.OAuthInfoCommand;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.entity.user.handler.user.UserCommandHandler;
+import com.yapp.core.entity.user.handler.user.UserQueryHandler;
 
 import lombok.RequiredArgsConstructor;
 

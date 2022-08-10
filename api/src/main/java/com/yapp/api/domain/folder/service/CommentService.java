@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yapp.api.domain.folder.controller.model.AlbumResponse;
 import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.persistence.folder.comment.entity.Comment;
-import com.yapp.core.persistence.folder.comment.handler.CommentCommandHandler;
-import com.yapp.core.persistence.folder.comment.handler.CommentQueryHandler;
-import com.yapp.core.persistence.file.persistence.entity.File;
-import com.yapp.core.persistence.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.persistence.user.entity.User;
+import com.yapp.core.entity.folder.comment.entity.Comment;
+import com.yapp.core.entity.folder.comment.handler.CommentCommandHandler;
+import com.yapp.core.entity.folder.comment.handler.CommentQueryHandler;
+import com.yapp.core.entity.file.persistence.entity.File;
+import com.yapp.core.entity.file.persistence.handler.FileQueryHandler;
+import com.yapp.core.entity.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 

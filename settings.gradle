@@ -1,4 +1,4 @@
 rootProject.name = 'sofa'
-include 'core'
+include 'supporter'
 include 'api'
 include 'event'
