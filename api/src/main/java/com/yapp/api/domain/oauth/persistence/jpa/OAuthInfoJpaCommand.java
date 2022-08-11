@@ -1,6 +1,5 @@
 package com.yapp.api.domain.oauth.persistence.jpa;
 
-import com.yapp.api.domain.oauth.persistence.OAuthInfoCommand;
 import com.yapp.core.entity.oauth.entity.OAuthInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Date : 2022/08/10
  * Info :
  **/
-public interface OAuthInfoJpaCommand extends JpaRepository<OAuthInfo, Long>, OAuthInfoCommand {
+public interface OAuthInfoJpaCommand extends JpaRepository<OAuthInfo, Long> {
 }

@@ -1,8 +1,6 @@
 package com.yapp.api.domain.calendar.service;
 
 import com.yapp.core.entity.calander.appointment.entity.Appointment;
-import com.yapp.core.entity.calander.appointment.repository.AppointmentCommand;
-import com.yapp.core.entity.calander.appointment.repository.AppointmentQuery;
 import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
