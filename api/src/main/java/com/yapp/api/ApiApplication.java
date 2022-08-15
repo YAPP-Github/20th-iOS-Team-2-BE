@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EntityScan("com.yapp.core")
-@EnableJpaRepositories("com.yapp.core")
+@EnableJpaRepositories("com.yapp.**")
 @EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = "com.yapp.**")
 public class ApiApplication {

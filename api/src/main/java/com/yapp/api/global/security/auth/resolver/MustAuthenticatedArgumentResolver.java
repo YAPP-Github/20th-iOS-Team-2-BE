@@ -2,6 +2,7 @@ package com.yapp.api.global.security.auth.resolver;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
 
+import com.yapp.api.global.error.exception.ApiException;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService.JwtUserDetails;
-import com.yapp.core.error.exception.BaseBusinessException;
 
 @Component
 public class MustAuthenticatedArgumentResolver implements HandlerMethodArgumentResolver {
@@ -32,6 +32,6 @@ public class MustAuthenticatedArgumentResolver implements HandlerMethodArgumentR
 			return ((JwtUserDetails)(authentication.getDetails())).getUser();
 		}
 
-		throw new BaseBusinessException(NO_AUTHENTICATION_ACCESS);
+		throw new ApiException(NO_AUTHENTICATION_ACCESS);
 	}
 }

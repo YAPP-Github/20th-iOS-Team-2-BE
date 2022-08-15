@@ -7,7 +7,6 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.OriginHandshakeInterceptor;
 
-import com.yapp.core.error.exception.BaseBusinessException;
 import com.yapp.core.error.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -32,24 +31,25 @@ public class HomeHandShakeInterceptor extends OriginHandshakeInterceptor {
 
 			try {
 				String authToken = request.getHeaders()
-										  .get(AUTHORIZATION)
-										  .get(0);
+						.get(AUTHORIZATION)
+						.get(0);
 
 				if (authToken.startsWith(BEARER)) {
 					String path = request.getURI()
-										   .getPath()
-										   .substring(PATH_PREFIX.length());
+							.getPath()
+							.substring(PATH_PREFIX.length());
 
 					attributes.put("userId", Long.parseLong(path.split("/")[0]));
 					attributes.put("authToken", authToken);
 					return true;
 				}
 
-				throw new BaseBusinessException(ErrorCode.NO_AUTHENTICATION_ACCESS);
+				//throw new BaseBusinessException(ErrorCode.NO_AUTHENTICATION_ACCESS);
 			} catch (NullPointerException n) {
-				throw new BaseBusinessException(ErrorCode.TOKEN_IS_BLANK);
+				//throw new BaseBusinessException(ErrorCode.TOKEN_IS_BLANK);
 			}
 		}
-		throw new BaseBusinessException(ErrorCode.CONNECTION_PREFIX_ERROR);
+		//throw new BaseBusinessException(ErrorCode.CONNECTION_PREFIX_ERROR);
+		return false;
 	}
 }
