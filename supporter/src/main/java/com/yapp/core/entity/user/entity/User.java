@@ -132,6 +132,10 @@ public class User extends BaseEntity {
         return "".equals(getName());
     }
 
+    public void patchNickname(Long orderedId, String newNickname) {
+        this.profileInfo.patch(orderedId, newNickname);
+    }
+
     public static class ANONYMOUS extends User {
         @Override
         public Authority getAuthority() {

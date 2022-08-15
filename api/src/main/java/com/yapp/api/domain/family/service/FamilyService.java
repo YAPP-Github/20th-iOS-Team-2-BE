@@ -1,95 +1,79 @@
 package com.yapp.api.domain.family.service;
 
-import static java.util.concurrent.CompletableFuture.*;
+import com.yapp.api.domain.family.controller.model.FamilyRequest;
+import com.yapp.api.domain.family.controller.model.FamilyResponse;
+import com.yapp.api.domain.family.persitence.command.handler.FamilyCommandHandler;
+import com.yapp.api.domain.family.persitence.query.handler.FamilyQueryHandler;
+import com.yapp.api.domain.user.persistence.command.handler.UserCommandHandler;
+import com.yapp.api.domain.user.persistence.query.handler.UserQueryHandler;
+import com.yapp.api.global.error.exception.ApiException;
+import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import com.yapp.api.domain.family.controller.model.FamilyRequest;
-import com.yapp.api.domain.family.controller.model.FamilyResponse;
-import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.family.persistence.handler.FamilyCommandHandler;
-import com.yapp.core.entity.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.entity.user.handler.user.UserCommandHandler;
-import com.yapp.core.entity.user.repository.UserCommand;
-
-import lombok.RequiredArgsConstructor;
-
 @Service
 @RequiredArgsConstructor
-@Transactional
-public class FamilyService {
-	private final FamilyCommandHandler familyCommandHandler;
-	private final FamilyQueryHandler familyQueryHandler;
-	private final UserCommandHandler userCommandHandler;
-	private final TransactionTemplate transactionTemplate;
-	private final UserCommand userCommand;
+@Transactional(readOnly = true)
+public class FamilyService implements ExceptionThrowableLayer {
+    private final FamilyCommandHandler familyCommandHandler;
+    private final FamilyQueryHandler familyQueryHandler;
+    private final UserCommandHandler userCommandHandler;
+    private final UserQueryHandler userQueryHandler;
 
-	// owner 가 가족을 이미 갖고있는지 검증하는 interceptor 추가해야함
-	public Family create(User user, String familyName, String familyMotto) {
-		if(user.getFamily() != null) {
-			throw new BaseBusinessException(ErrorCode.ALREADY_JOINED);
-		}
+    public FamilyResponse.Info get(User user) {
+        return FamilyResponse.Info.from(user.getFamily(), user);
+    }
 
-		// block
-		return transactionTemplate.execute(process -> {
-			Family family = familyCommandHandler.create(repository -> repository.save(new Family(user,
-																									 familyName,
-																									 familyMotto)));
-			family.addUser(user);
-			runAsync(() -> userCommandHandler.create(userRepository -> userRepository.save(user)));
+    @Transactional
+    public synchronized Family create(User user, String familyName, String familyMotto) {
+        // user family 중복 검증
+        if (user.getFamily() != null) {
+            throw new ApiException(ErrorCode.ALREADY_JOINED, packageName(this.getClass()));
+        }
 
-			return family;
-		});
-	}
+        // family 검증
 
-	public void modify(User user,
-					   String imageLink,
-					   String familyName,
-					   String familyMotto,
-					   List<FamilyRequest.Modify.Nickname> nicknameList) {
-		// non-block
-		transactionTemplate.executeWithoutResult(process -> {
-			// block
-			Family targetFamily = familyQueryHandler.findOne(familyRepository -> familyRepository.findById(user.getFamily()
-																											   .getId()))
-													.orElseThrow(() -> new BaseBusinessException(ErrorCode.FAMILY_NOT_FOUND));
-			targetFamily.patch(imageLink, familyName, familyMotto);
+        Family createdFamily = familyCommandHandler.save(Family.of(user, familyName, familyMotto));
+        userCommandHandler.update(user);
 
-			nicknameList.forEach(nameSet -> {
-				String pastNickname = nameSet.getPastNickname();
-				String newNickname = nameSet.getNewNickname();
-				targetFamily.getMembers()
-							.stream()
-							.filter(member -> member.getNicknameForUser(user)
-													.equals(pastNickname))
-							.findFirst()
-							.ifPresentOrElse(member -> member.getProfileInfo()
-															 .putNewNickname(user.getId(), newNickname), () -> {});
-			});
+        return createdFamily;
+    }
 
-			familyCommandHandler.create(familyRepository -> familyRepository.save(targetFamily));
-		});
-	}
+    @Transactional
+    public void modify(
+            User user, String familyName, String familyMotto, List<FamilyRequest.Modify.Nickname> nicknameList) {
+        Family foundFamily = user.getFamily();
 
-	public FamilyResponse.Info get(User user) {
-		return FamilyResponse.Info.from(user.getFamily(), user);
-	}
+        foundFamily.patch(familyName, familyMotto);
 
-	public void join(User user, String code) {
-		Family family = familyQueryHandler.findOne(familyRepository -> familyRepository.findByCode(code))
-										  .orElseThrow(() -> new BaseBusinessException(ErrorCode.NOT_VALID_CODE));
+        nicknameList.forEach(nameSet -> {
+            String newNickname = nameSet.getNewNickname();
+            User targetUser = userQueryHandler.findOne(nameSet.getUserId())
+                    .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND, packageName(this.getClass())));
 
-		if (family.getMemberCount() > 11) {
-			throw new BaseBusinessException(ErrorCode.FULL_MEMBER);
-		}
+            targetUser.patchNickname(user.getId(), newNickname);
+            userCommandHandler.update(targetUser);
+        });
 
-		family.addUser(user);
-		userCommand.save(user);
-	}
+        familyCommandHandler.save(foundFamily);
+    }
+
+    @Transactional
+    public void join(User user, String code) {
+        Family foundFamily = familyQueryHandler.findOne(code)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_VALID_CODE, packageName(this.getClass())));
+
+        if (foundFamily.getMemberCount() > 11) {
+            throw new ApiException(ErrorCode.FULL_MEMBER, packageName(this.getClass()));
+        }
+
+        foundFamily.addUser(user);
+        userCommandHandler.update(user);
+    }
 }

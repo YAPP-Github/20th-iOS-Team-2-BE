@@ -1,7 +1,8 @@
 package com.yapp.api.domain.folder.persistence.command.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.command.handler.CommentCommandHandler;
-import com.yapp.api.domain.folder.persistence.command.repository.CommentCommand;
+import com.yapp.api.domain.folder.persistence.repository.CommentJpaRepository;
+import com.yapp.core.entity.folder.comment.entity.Comment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,10 +12,19 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class CommentCommandJpaHandler implements CommentCommandHandler {
-    private final CommentCommand commentCommand;
+    private final CommentJpaRepository commentJpaRepository;
 
-    public CommentCommandJpaHandler(CommentCommand commentCommand) {
-        this.commentCommand = commentCommand;
+    public CommentCommandJpaHandler(CommentJpaRepository commentJpaRepository) {
+        this.commentJpaRepository = commentJpaRepository;
     }
 
+    @Override
+    public Comment save(Comment comment) {
+        return commentJpaRepository.save(comment);
+    }
+
+    @Override
+    public void remove(Comment comment) {
+        commentJpaRepository.delete(comment);
+    }
 }

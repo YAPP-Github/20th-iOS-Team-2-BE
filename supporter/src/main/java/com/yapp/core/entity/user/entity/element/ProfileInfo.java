@@ -48,6 +48,22 @@ public class ProfileInfo {
         return ORIGINAL + firstNickname;
     }
 
+    public void patch(Long orderedId, String newNickname) {
+        String prefix = orderedId + ":";
+
+        if (this.nickname.contains(prefix)) {
+            for (String nameSet : nickname.split(NICKNAME_SET_SPLITTER)) {
+                if (nameSet.startsWith(prefix)) {
+                    this.nickname = this.nickname.replace(nameSet, prefix + newNickname);
+                    break;
+                }
+            }
+            return;
+        }
+
+        nickname = nickname.concat(prefix + newNickname);
+    }
+
     public void patch(String nickname, String imageLink, String roleInFamily) {
         String originalNickname = originalNickname();
         if (EntityParameterUtils.assertPatch(originalNickname, nickname)) {
@@ -86,21 +102,6 @@ public class ProfileInfo {
 
     private long getIdFromSet(String nicknameSet) {
         return Long.parseLong(nicknameSet.split(ID_NAME_SPLITTER)[ID_KEY]);
-    }
-
-    public void putNewNickname(Long otherUserId, String newNickname) {
-        String prefix = otherUserId + ":";
-
-        if (this.nickname.contains(prefix)) {
-            for (String nameSet : nickname.split(NICKNAME_SET_SPLITTER)) {
-                if (nameSet.startsWith(prefix)) {
-                    this.nickname = this.nickname.replace(nameSet, prefix + newNickname);
-                }
-            }
-            return;
-        }
-
-        nickname = nickname.concat(prefix + newNickname);
     }
 
     public void updateContent(String content) {

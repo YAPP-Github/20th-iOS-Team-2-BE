@@ -15,6 +15,11 @@ public class ApiException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    public ApiException(ErrorCode errorCode, String location) {
+        super(location + ", " + errorCode.getDetail());
+        this.errorCode = errorCode;
+    }
+
     public ErrorCode getErrorCode() {
         return errorCode;
     }

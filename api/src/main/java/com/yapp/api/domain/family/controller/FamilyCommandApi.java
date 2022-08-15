@@ -10,9 +10,10 @@ import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.error.exception.ExceptionThrowableLayer;
 import com.yapp.core.util.KafkaMessageTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class FamilyCommandApi {
+public class FamilyCommandApi implements ExceptionThrowableLayer {
     @Value("${kafka.topic-name}")
     private String TOPIC;
 
@@ -44,15 +45,20 @@ public class FamilyCommandApi {
 
     @PostMapping(value = "/family", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<FamilyResponse.Create> createFamily(
-            @MustAuthenticated User user, @Valid @RequestBody FamilyRequest.Create request) {
+            @MustAuthenticated User user,
+            @Valid @RequestBody FamilyRequest.Create request) {
+
         Family createdFamily = familyService.create(user, request.getFamilyName(), request.getFamilyMotto());
 
-        return ResponseEntity.ok(new FamilyResponse.Create(createdFamily.getId()));
+        return ResponseEntity.ok(new FamilyResponse.Create(createdFamily.getId(), createdFamily.getCode()));
     }
 
     @PatchMapping(value = "/family", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> modifyFamilyInfo(@MustAuthenticated User user, @RequestBody FamilyRequest.Modify request) {
-        familyService.modify(user, request.getImageLink(), request.getFamilyName(), request.getFamilyMotto(), request.getNicknames());
+    ResponseEntity<Void> modifyFamilyInfo(
+            @MustAuthenticated User user,
+            @Valid @RequestBody FamilyRequest.Modify request) {
+
+        familyService.modify(user, request.getFamilyName(), request.getFamilyMotto(), request.getNicknames());
 
         return ResponseEntity.ok()
                 .build();
@@ -92,13 +98,15 @@ public class FamilyCommandApi {
     }
 
     @PostMapping(value = "/family/join")
-    ResponseEntity<Void> join(@MustAuthenticated User user, @RequestParam(value = "code") String code) {
+    ResponseEntity<Void> join(@MustAuthenticated User user, @RequestParam(name = "code") String code) {
         if (user.getFamily() != null) {
-            throw new ApiException(ErrorCode.ALREADY_JOINED);
+            throw new ApiException(ErrorCode.ALREADY_JOINED, packageName(this.getClass()));
+        }
+        if(code.length() > 10) {
+            throw new ApiException(ErrorCode.NOT_VALID_CODE_LENGTH, packageName(this.getClass()));
         }
 
         familyService.join(user, code);
-
         return ResponseEntity.ok()
                 .build();
     }

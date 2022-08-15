@@ -13,11 +13,11 @@ import java.util.Optional;
  * Info :
  **/
 public interface AppointmentQueryHandler {
-    Optional<Appointment> findOne(Long appointmentId, String title);
+    Optional<Appointment> findOne(Long appointmentId);
 
     Optional<Appointment> findOne(Family family, LocalDate date);
 
-    List<Appointment> findAll(Long family, String dateUtilMonth);
+    List<Appointment> findAll(Long familyId, String dateUtilMonth);
 
     List<Appointment> findAll(Family family, LocalDate date);
 

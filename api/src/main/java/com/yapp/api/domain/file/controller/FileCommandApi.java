@@ -1,71 +1,57 @@
 package com.yapp.api.domain.file.controller;
 
-import static com.yapp.core.constant.ApiConstant.*;
-import static org.springframework.http.MediaType.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.yapp.api.domain.folder.service.AlbumService;
+import com.yapp.api.domain.file.controller.model.FileRequest;
 import com.yapp.api.domain.file.controller.model.FileResponse;
 import com.yapp.api.domain.file.service.CloudService;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.api.domain.file.service.FileService;
+import com.yapp.api.domain.folder.service.AlbumService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+import static com.yapp.core.constant.ApiConstant.FILE_ID;
+import static com.yapp.core.constant.ApiConstant._FILES_RESOURCE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequiredArgsConstructor
 public class FileCommandApi {
-	private final CloudService cloudService;
-	private final AlbumService albumService;
+    private final CloudService cloudService;
+    private final AlbumService albumService;
+    private final FileService fileService;
 
-	@PostMapping(value = "/files", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
-	ResponseEntity<FileResponse.UploadFiles> uploadFiles(@RequestPart List<MultipartFile> files) {
-		List<String> fileLinks = cloudService.upload(files);
+    @PostMapping(value = "/files", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
+    ResponseEntity<FileResponse.UploadFiles> uploadFiles(
+            @AuthenticationHasFamily User user,
+            @RequestPart List<MultipartFile> files) {
+        List<String> fileLinks = cloudService.upload(files);
 
-		return ResponseEntity.ok((new FileResponse.UploadFiles(fileLinks)));
-	}
+        return ResponseEntity.ok((new FileResponse.UploadFiles(fileLinks)));
+    }
 
-	@Deprecated
-	@DeleteMapping(value = _FILES_RESOURCE)
-	ResponseEntity<Void> removeFile(@PathVariable(value = FILE_ID) Long fileId) {
-		return null;
-	}
+    @DeleteMapping(value = "/files/{fileId}")
+    ResponseEntity<Void> removeFile(
+            @AuthenticationHasFamily User user,
+            @PathVariable(value = FILE_ID) Long fileId) {
+        fileService.remove(user.getFamily(), fileId);
 
-	@PatchMapping("/files/{fileId}/date")
-	ResponseEntity<Void> modifyDate(@AuthenticationHasFamily User user,
-									@PathVariable(value = "fileId") Long fileId,
-									@RequestBody Request.Date request) {
-		albumService.modifyFileDate(user, fileId, request.getDate());
+        return ResponseEntity.ok().build();
+    }
 
-		return ResponseEntity.ok()
-							 .build();
-	}
+    @PatchMapping("/files/{fileId}/date")
+    ResponseEntity<Void> modifyDate(
+            @AuthenticationHasFamily User user,
+            @PathVariable(value = "fileId") Long fileId,
+            @RequestBody FileRequest.Date request) {
+        albumService.modifyFileDate(user.getFamily(), fileId, request.getDate());
 
-	public static class Request {
-		@Getter
-		@Setter
-		@NoArgsConstructor
-		@AllArgsConstructor
-		public static class Date {
-			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-			private LocalDateTime date;
-		}
-	}
+        return ResponseEntity.ok()
+                .build();
+    }
 }

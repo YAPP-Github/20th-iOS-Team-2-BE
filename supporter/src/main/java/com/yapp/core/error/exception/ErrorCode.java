@@ -13,6 +13,9 @@ public enum ErrorCode {
 	CONNECTION_RESOURCE_ERROR(400, "ws 연결 시 올바르지 못한 familyId 로 접근을 시도했습니다."),
 	ALREADY_JOINED(400, "이미 가족에 속해있는 회원입니다."),
 	FULL_MEMBER(400, "가족의 회원수가 가득 찼습니다. (10명)"),
+	NOT_VALID_CODE_LENGTH(400, "입장 코드의 길이가 잘못되었습니다. 10자가 입력되어야 합니다."),
+	RECORDING_CAN_NOT_BE_DELEGATOR(400, "음성파일은 대표파일이 될 수 없습니다."),
+	ALBUM_RETRIEVE_TYPE_NOT_VALID(400, "앨범 리스트 조회시 타입이 잘못 입력되었습니다."),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 	USER_NOT_FOUND(400, "없는 회원에 대한 접근입니다."),
 

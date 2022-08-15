@@ -28,10 +28,10 @@ public class HomeWebSocketHandler implements WebSocketHandler {
 		Long userId = (Long) session.getAttributes()
 							 .get("userId");
 
-		HomeResponse.HomeStatusInfo membersInfo = homeService.getRealTimeStatus(userId);
+		// HomeResponse.HomeStatusInfo membersInfo = homeService.getRealTimeStatus(userId);
 
-		session.sendMessage(new TextMessage(SocketResponse.from(membersInfo)
-														  .getAsJson()));
+		//session.sendMessage(new TextMessage(SocketResponse.from(membersInfo)
+		//												  .getAsJson()));
 
 		sessionDictionary.addSession(session);
 	}

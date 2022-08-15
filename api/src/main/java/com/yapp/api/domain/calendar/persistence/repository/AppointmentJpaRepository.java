@@ -1,4 +1,4 @@
-package com.yapp.api.domain.calendar.persistence.query.repository;
+package com.yapp.api.domain.calendar.persistence.repository;
 
 import com.yapp.core.entity.calander.appointment.entity.Appointment;
 import com.yapp.core.entity.family.persistence.entity.Family;
@@ -11,14 +11,14 @@ import java.util.Optional;
 
 /**
  * Author : daehwan2yo
- * Date : 2022/08/11
+ * Date : 2022/08/14
  * Info :
  **/
-public interface AppointmentQuery extends JpaRepository<Appointment, Long> {
-    @Query(nativeQuery = true, value = "SELECT * FROM appointment " + "WHERE family_id=:family " + "AND DATE_FORMAT(date, '%Y-%m')=:dateUtilMonth")
-    List<Appointment> findByFamilyAndDateUntilMonth(Long family, String dateUtilMonth);
+public interface AppointmentJpaRepository extends JpaRepository<Appointment, Long> {
+    void deleteByIdAndFamily(Long appointmentId, Family family);
 
-    Optional<Appointment> findByIdAndTitle(Long appointmentId, String title);
+    @Query(nativeQuery = true, value = "SELECT * FROM appointment WHERE family_id=:familyId AND DATE_FORMAT(date, '%Y-%m')=:yearMonth")
+    List<Appointment> findAllByFamilyAndYearMonth(Long familyId, String yearMonth);
 
     Optional<Appointment> findByFamilyAndDate(Family family, LocalDate date);
 

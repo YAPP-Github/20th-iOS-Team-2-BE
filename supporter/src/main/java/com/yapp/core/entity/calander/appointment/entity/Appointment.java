@@ -38,16 +38,16 @@ public class Appointment extends BaseEntity {
     private Appointment(
             String title,
             String content,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             boolean allDay,
             String color,
             Family family,
             User owner) {
         this.title = title;
         this.content = content;
-        this.date = LocalDate.parse(date);
-        this.time = LocalTime.parse(time);
+        this.date = date;
+        this.time = time;
         this.allDay = allDay;
         this.color = color;
         this.family = family;
@@ -55,10 +55,10 @@ public class Appointment extends BaseEntity {
     }
 
     private Appointment(
-            String title, String content, String date, boolean allDay, String color, Family family, User owner) {
+            String title, String content, LocalDate date, boolean allDay, String color, Family family, User owner) {
         this.title = title;
         this.content = content;
-        this.date = LocalDate.parse(date);
+        this.date = date;
         this.allDay = allDay;
         this.color = color;
         this.family = family;
@@ -68,8 +68,8 @@ public class Appointment extends BaseEntity {
     public static Appointment of(
             String title,
             String content,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             boolean allDay,
             String color,
             Family family,
@@ -78,5 +78,27 @@ public class Appointment extends BaseEntity {
             return new Appointment(title, content, date, allDay, color, family, owner);
         }
         return new Appointment(title, content, date, time, allDay, color, family, owner);
+    }
+
+    public void patch(String title, String color, String content, LocalDate date, LocalTime time) {
+        if (patchAble(this.title, title)) {
+            this.title = title;
+        }
+        if (patchAble(this.color, color)) {
+            this.color = color;
+        }
+        if (patchAble(this.content, content)) {
+            this.content = content;
+        }
+        if (patchAble(this.date, date)) {
+            this.date = date;
+        }
+        if (patchAble(this.time, time)) {
+            this.time = time;
+        }
+    }
+
+    private boolean patchAble(Object asIs, Object toBe) {
+        return (toBe != null && !asIs.equals(toBe));
     }
 }

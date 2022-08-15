@@ -11,4 +11,6 @@ import java.util.Optional;
  **/
 public interface FamilyQueryHandler {
     Optional<Family> findOne(String code);
+
+    Optional<Family> findOne(Long familyId);
 }

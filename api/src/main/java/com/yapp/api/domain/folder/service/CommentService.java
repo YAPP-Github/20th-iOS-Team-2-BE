@@ -1,94 +1,78 @@
 package com.yapp.api.domain.folder.service;
 
-import static com.yapp.core.error.exception.ErrorCode.*;
-import static java.time.format.DateTimeFormatter.*;
+import com.yapp.api.domain.file.persistence.query.handler.FileQueryHandler;
+import com.yapp.api.domain.folder.controller.model.AlbumResponse;
+import com.yapp.api.domain.folder.persistence.command.handler.CommentCommandHandler;
+import com.yapp.api.domain.folder.persistence.query.handler.CommentQueryHandler;
+import com.yapp.api.global.error.exception.ApiException;
+import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.file.persistence.entity.File;
+import com.yapp.core.entity.folder.comment.entity.Comment;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.yapp.api.domain.folder.controller.model.AlbumResponse;
-import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.entity.folder.comment.entity.Comment;
-import com.yapp.core.entity.folder.comment.handler.CommentCommandHandler;
-import com.yapp.core.entity.folder.comment.handler.CommentQueryHandler;
-import com.yapp.core.entity.file.persistence.entity.File;
-import com.yapp.core.entity.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.entity.user.entity.User;
-
-import lombok.RequiredArgsConstructor;
+import static com.yapp.core.error.exception.ErrorCode.COMMENT_NOT_FOUND;
+import static com.yapp.core.error.exception.ErrorCode.FILE_NOT_FOUND;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentService implements ExceptionThrowableLayer {
 
-	private final FileQueryHandler fileQueryHandler;
-	private final CommentCommandHandler commentCommandHandler;
-	private final CommentQueryHandler commentQueryHandler;
+    private final FileQueryHandler fileQueryHandler;
+    private final CommentCommandHandler commentCommandHandler;
+    private final CommentQueryHandler commentQueryHandler;
 
-	@Transactional
-	public Long create(User user, Long fileId, String content) {
+    public List<AlbumResponse.CommentElement> getList(User user, Family family, Long fileId) {
+        File file = fileQueryHandler.findOne(family, fileId)
+                .orElseThrow(() -> new ApiException(FILE_NOT_FOUND, packageName(this.getClass())));
 
-		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findByFamilyAndId(user.getFamily(),
-																								fileId))
-									.orElseThrow(() -> new BaseBusinessException(ErrorCode.FILE_NOT_FOUND,
-																				 new RuntimeException(
-																					 "FileNotFoundError : which {fileId} in PORT /album/{fileId}/comments")));
+        return commentQueryHandler.findAll(family, file)
+                .stream()
+                .map(comment -> {
+                    User commentOwner = comment.getUser();
+                    String nickname = commentOwner.getNicknameForUser(user);
 
-		return commentCommandHandler.create(commentRepository -> commentRepository.save(new Comment(user,
-																									user.getFamily(),
-																									file,
-																									content)));
-	}
+                    return new AlbumResponse.CommentElement(comment.getId(), commentOwner.getId(), commentOwner.getProfileInfo()
+                            .getImageLink(), nickname, commentOwner.getRoleInFamily(), comment.getCreatedAt()
+                            .format(ISO_DATE_TIME), comment.getContent());
+                })
+                .collect(Collectors.toList());
+    }
 
-	@Transactional
-	public void modify(User user, Long commentId, String content) {
-		Comment comment = commentQueryHandler.findOne(commentRepository -> commentRepository.findByUserAndId(user,
-																											 commentId))
-											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
-																						  new RuntimeException(
-																							  "CommentNotFoundError : which {commentId} in PATCH /album/comments/{commentId}")));
-		comment.modify(content);
-	}
+    @Transactional
+    public Comment create(User user, Family family, Long fileId, String content) {
+        File file = fileQueryHandler.findOne(family, fileId)
+                .orElseThrow(() -> new ApiException(ErrorCode.FILE_NOT_FOUND, packageName(this.getClass())));
 
-	public List<AlbumResponse.CommentElement> getList(User user, Long fileId) {
-		return commentQueryHandler.findAll(commentRepository -> commentRepository.findAllByFamilyAndFileId(user.getFamily(),
-																										   fileId))
-								  .stream()
-								  .map(comment -> {
-									  // will occurred N+1, need Fetch Join
-									  User commentOwner = comment.getUser();
+        return commentCommandHandler.save(Comment.builder()
+                .user(user)
+                .family(family)
+                .file(file)
+                .content(content)
+                .build());
+    }
 
-									  String nicknameForUser = discernNicknameForUser(user, commentOwner);
-									  return new AlbumResponse.CommentElement(comment.getId(),
-																			  commentOwner.getId(),
-																			  commentOwner.getProfileInfo()
-																						  .getImageLink(),
-																			  nicknameForUser,
-																			  commentOwner.getProfileInfo()
-																						  .getRoleInFamily(),
-																			  comment.getCreatedAt()
-																					 .format(ISO_DATE),
-																			  comment.getContent());
-								  })
-								  .collect(Collectors.toList());
-	}
+    @Transactional
+    public void modify(Long commentId, String content) {
+        Comment comment = commentQueryHandler.findOne(commentId)
+                .orElseThrow(() -> new ApiException(COMMENT_NOT_FOUND, packageName(this.getClass())));
+        comment.modify(content);
+    }
 
-	private String discernNicknameForUser(User user, User commentOwner) {
-		return commentOwner.getNicknameForUser(user);
-	}
+    @Transactional
+    public void remove(Long commentId) {
+        Comment comment = commentQueryHandler.findOne(commentId)
+                .orElseThrow(() -> new ApiException(COMMENT_NOT_FOUND, packageName(this.getClass())));
 
-	@Transactional
-	public void remove(User user, Long fileId) {
-		Comment comment = commentQueryHandler.findOne(commentRepository -> commentRepository.findByUserAndId(user,
-																											 fileId))
-											 .orElseThrow(() -> new BaseBusinessException(COMMENT_NOT_FOUND,
-																						  new RuntimeException(
-																							  "CommentNotFound : which {commentId} in DELETE /album/comments/{commentId}")));
-
-		commentCommandHandler.remove(commentRepository -> commentRepository.delete(comment));
-	}
+        commentCommandHandler.remove(comment);
+    }
 }

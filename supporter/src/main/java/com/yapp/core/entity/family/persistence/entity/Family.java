@@ -39,9 +39,22 @@ public class Family extends BaseEntity {
     @Getter(PRIVATE)
     private final FamilyMembers familyMembers = new FamilyMembers();
 
+    public static Family of(User user, String name, String motto) {
+        Family createdFamily = Family.builder()
+                .user(user)
+                .name(name)
+                .motto(motto)
+                .build();
+
+        createdFamily.addUser(user);
+        createdFamily.code = CodeGenerateUtils.code();
+
+        return createdFamily;
+    }
+
     // need test
-    @Builder
-    public Family(User user, String name, String motto) {
+    @Builder(access = PRIVATE)
+    private Family(User user, String name, String motto) {
         this.owner = user;
         this.name = name;
         this.motto = motto;
@@ -61,11 +74,7 @@ public class Family extends BaseEntity {
         return familyMembers.getCount();
     }
 
-    public void patch(String imageLink, String familyName, String familyMotto) {
-        if (EntityParameterUtils.assertPatch(this.imageLink, imageLink)) {
-            this.imageLink = imageLink;
-        }
-
+    public void patch(String familyName, String familyMotto) {
         if (EntityParameterUtils.assertPatch(this.name, familyName)) {
             this.name = familyName;
         }

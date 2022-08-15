@@ -1,7 +1,7 @@
 package com.yapp.api.domain.folder.persistence.query.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.query.handler.AlbumQueryHandler;
-import com.yapp.api.domain.folder.persistence.query.repository.AlbumQuery;
+import com.yapp.api.domain.folder.persistence.repository.AlbumJpaRepository;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import com.yapp.core.entity.folder.album.persistence.entity.Album;
 import org.springframework.data.domain.Page;
@@ -19,31 +19,29 @@ import java.util.Optional;
  **/
 @Component
 public class AlbumQueryJpaHandler implements AlbumQueryHandler {
-    private final AlbumQuery albumQuery;
+    private final AlbumJpaRepository albumJpaRepository;
 
-    public AlbumQueryJpaHandler(AlbumQuery albumQuery) {
-        this.albumQuery = albumQuery;
+    public AlbumQueryJpaHandler(AlbumJpaRepository albumJpaRepository) {
+        this.albumJpaRepository = albumJpaRepository;
     }
 
     @Override
     public Optional<Album> findOne(LocalDate date) {
-        return Optional.empty();
+        return albumJpaRepository.findByDate(date);
     }
 
     @Override
-    public Optional<Album> findOne(
-            Family family, Long albumId) {
-        return Optional.empty();
+    public Optional<Album> findOne(Family family, Long albumId) {
+        return albumJpaRepository.findByFamilyAndId(family, albumId);
     }
 
     @Override
     public List<Album> findAll(Family family) {
-        return null;
+        return albumJpaRepository.findAllByFamily(family);
     }
 
     @Override
-    public Page<Album> findAll(
-            Family family, Pageable pageable) {
-        return null;
+    public Page<Album> findAll(Family family, Pageable pageable) {
+        return albumJpaRepository.findAllByFamily(family, pageable);
     }
 }

@@ -20,14 +20,9 @@ public interface FileQueryHandler {
 
     List<File> findAll(Family family);
 
-    List<File> findAll(Family family, String kind);
-
     Page<File> findAll(Family family, FileKind kind, Pageable pageable);
 
-    List<File> findAll(Family family, Boolean value);
-
     Page<File> findAll(Family family, Boolean value, Pageable pageable);
-
 
     Page<File> findAll(Family family, Album album, Pageable pageable);
 }

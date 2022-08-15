@@ -34,17 +34,12 @@ public class Album extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Family family;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<File> files;
 
-    /**
-     * Service Layer 에서 검증 필요
-     * family not null
-     * date not null
-     */
     // need test
     @Builder
-    public Album(Family family, LocalDate date) {
+    private Album(Family family, LocalDate date) {
         this.family = family;
         this.date = date;
         this.title = defaultTitle(date);
@@ -66,12 +61,9 @@ public class Album extends BaseEntity {
     }
 
     // need test
-    // occurred SELECT N+1 -> bulk 쿼리 생성 필요
     public void modifyDate(LocalDateTime dateTime) {
         EntityParameterUtils.assertNull(dateTime);
-
         this.date = dateTime.toLocalDate();
-        files.forEach(file -> file.modifyDate(dateTime));
     }
 
     public void updateThumbnail(String thumbnail) {

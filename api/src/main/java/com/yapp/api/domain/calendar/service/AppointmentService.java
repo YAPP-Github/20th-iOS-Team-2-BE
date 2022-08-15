@@ -1,23 +1,29 @@
 package com.yapp.api.domain.calendar.service;
 
+import com.yapp.api.domain.calendar.persistence.command.handler.AppointmentCommandHandler;
+import com.yapp.api.domain.calendar.persistence.query.handler.AppointmentQueryHandler;
+import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.core.entity.calander.appointment.entity.Appointment;
+import com.yapp.core.entity.family.persistence.entity.Family;
 import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.yapp.core.error.exception.ErrorCode.APPOINTMENT_NOT_FOUND;
+import static com.yapp.core.util.DateUtils.yearMonth;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AppointmentService {
-    private final AppointmentCommand appointmentCommand;
-    private final AppointmentQuery appointmentQuery;
+public class AppointmentService implements ExceptionThrowableLayer {
+    private final AppointmentCommandHandler appointmentCommandHandler;
+    private final AppointmentQueryHandler appointmentQueryHandler;
 
     @Transactional
     public void create(
@@ -25,14 +31,14 @@ public class AppointmentService {
             String title,
             String content,
             boolean allDay,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             boolean visibility,
             String color) {
 
         // allDay 관련 작업
         // visibility 관련 작업
-        appointmentCommand.save(Appointment.of(title, content, date, time, allDay, color, user.getFamily(), user));
+        appointmentCommandHandler.save(Appointment.of(title, content, date, time, allDay, color, user.getFamily(), user));
     }
 
     @Transactional
@@ -41,32 +47,26 @@ public class AppointmentService {
             Long appointmentId,
             String color,
             String content,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             String title,
             boolean allDay) {
-        appointmentQuery.findOne(repository -> repository.findByIdAndTitle(appointmentId, title))
-                .orElseThrow(() -> new BaseBusinessException(APPOINTMENT_NOT_FOUND, new RuntimeException("Appointment not found error : which occurred PATCH /calendar/{id}")));
+        Appointment appointment = appointmentQueryHandler.findOne(appointmentId)
+                .orElseThrow(() -> new ApiException(APPOINTMENT_NOT_FOUND, packageName(this.getClass())));
+
+        appointment.patch(title, color, content, date, time);
     }
 
-    public List<Appointment> retrieveAsMonth(User user, String year, String month) {
-        return appointmentQueryHandler.findAll(repository -> repository.findByFamilyAndDateUntilMonth(user.getFamily()
-                .getId(), dateUtilMonth(year, month)));
+    public List<Appointment> retrieveAsMonth(Family family, String year, String month) {
+        return appointmentQueryHandler.findAll(family.getId(), yearMonth(year, month));
     }
 
-    private String dateUtilMonth(String year, String month) {
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        return year + "-" + month;
-    }
-
-    public List<Appointment> retrieveAsDay(User user, String date) {
-        return appointmentQueryHandler.findAll(repository -> repository.findAllByFamilyAndDate(user.getFamily(), LocalDate.parse(date, DateTimeFormatter.ISO_DATE)));
+    public List<Appointment> retrieveAsDay(Family family, LocalDate date) {
+        return appointmentQueryHandler.findAll(family, date);
     }
 
     @Transactional
-    public void remove(User user, Long eventId) {
-        appointmentCommandHandler.remove(appointRepository -> appointRepository.deleteByIdAndFamily(eventId, user.getFamily()));
+    public void remove(Family family, Long appointmentId) {
+        appointmentCommandHandler.remove(appointmentId, family);
     }
 }

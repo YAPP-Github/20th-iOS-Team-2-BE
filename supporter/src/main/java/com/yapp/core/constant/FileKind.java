@@ -8,7 +8,7 @@ import static com.yapp.core.constant.EntityConstant.*;
  * Info :
  **/
 public enum FileKind {
-    PHOTO(KIND_PHOTO), RECORDING(KIND_RECORDING), NULL(KIND_NULL);
+    PHOTO(KIND_PHOTO), RECORDING(KIND_RECORDING), FAVOURITE(KIND_FAVOURITE), NULL(KIND_NULL);
     private final String value;
 
     FileKind(String value) {

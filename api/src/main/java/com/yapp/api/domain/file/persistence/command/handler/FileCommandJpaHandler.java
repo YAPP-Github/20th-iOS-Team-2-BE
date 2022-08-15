@@ -1,7 +1,11 @@
 package com.yapp.api.domain.file.persistence.command.handler;
 
-import com.yapp.api.domain.file.persistence.command.repository.FileCommand;
+import com.yapp.api.domain.file.persistence.repository.FileJpaRepository;
+import com.yapp.core.entity.file.persistence.entity.File;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Author : daehwan2yo
@@ -9,10 +13,30 @@ import org.springframework.stereotype.Component;
  * Info :
  **/
 @Component
-public class FileCommandJpaHandler implements FileCommandHandler{
-    private final FileCommand fileCommand;
+public class FileCommandJpaHandler implements FileCommandHandler {
+    private final FileJpaRepository fileJpaRepository;
 
-    public FileCommandJpaHandler(FileCommand fileCommand) {
-        this.fileCommand = fileCommand;
+    public FileCommandJpaHandler(FileJpaRepository fileJpaRepository) {
+        this.fileJpaRepository = fileJpaRepository;
+    }
+
+    @Override
+    public void save(File file) {
+        fileJpaRepository.save(file);
+    }
+
+    @Override
+    public void saveAll(Collection<File> files) {
+        fileJpaRepository.saveAllAndFlush(files);
+    }
+
+    @Override
+    public void update(List<File> files) {
+        fileJpaRepository.saveAllAndFlush(files);
+    }
+
+    @Override
+    public void remove(File file) {
+        fileJpaRepository.delete(file);
     }
 }

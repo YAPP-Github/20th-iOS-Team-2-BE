@@ -1,6 +1,6 @@
 package com.yapp.api.domain.calendar.persistence.command.handler;
 
-import com.yapp.api.domain.calendar.persistence.command.repository.AppointmentCommand;
+import com.yapp.api.domain.calendar.persistence.repository.AppointmentJpaRepository;
 import com.yapp.core.entity.calander.appointment.entity.Appointment;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import org.springframework.stereotype.Component;
@@ -12,19 +12,19 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class AppointmentCommandJpaHandler implements AppointmentCommandHandler {
-    private final AppointmentCommand appointmentCommand;
+    private final AppointmentJpaRepository appointmentJpaRepository;
 
-    public AppointmentCommandJpaHandler(AppointmentCommand appointmentCommand) {
-        this.appointmentCommand = appointmentCommand;
+    public AppointmentCommandJpaHandler(AppointmentJpaRepository appointmentJpaRepository) {
+        this.appointmentJpaRepository = appointmentJpaRepository;
     }
 
     @Override
     public void save(Appointment target) {
-
+        appointmentJpaRepository.save(target);
     }
 
     @Override
-    public void remove(Long eventId, Family family) {
-
+    public void remove(Long appointmentId, Family family) {
+        appointmentJpaRepository.deleteByIdAndFamily(appointmentId, family);
     }
 }

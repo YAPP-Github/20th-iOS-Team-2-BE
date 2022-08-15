@@ -12,5 +12,5 @@ public class EntityConstant {
     public static final String KIND_PHOTO = "photo";
     public static final String KIND_RECORDING = "recording";
     public static final String KIND_NULL = "null";
-    public static final String FAVOURITE = "favourite";
+    public static final String KIND_FAVOURITE = "favourite";
 }

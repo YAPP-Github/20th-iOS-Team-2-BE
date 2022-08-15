@@ -1,10 +1,10 @@
 package com.yapp.api.domain.folder.persistence.query.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.query.handler.CommentQueryHandler;
-import com.yapp.api.domain.folder.persistence.query.repository.CommentQuery;
+import com.yapp.api.domain.folder.persistence.repository.CommentJpaRepository;
 import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.file.persistence.entity.File;
 import com.yapp.core.entity.folder.comment.entity.Comment;
-import com.yapp.core.entity.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,21 +17,20 @@ import java.util.Optional;
  **/
 @Component
 public class CommentQueryJpaHandler implements CommentQueryHandler {
-    private final CommentQuery commentQuery;
+    private final CommentJpaRepository commentJpaRepository;
 
-    public CommentQueryJpaHandler(CommentQuery commentQuery) {
-        this.commentQuery = commentQuery;
+    public CommentQueryJpaHandler(CommentJpaRepository commentJpaRepository) {
+        this.commentJpaRepository = commentJpaRepository;
     }
 
     @Override
-    public Optional<Comment> findOne(
-            User user, Long fileId) {
-        return Optional.empty();
+    public Optional<Comment> findOne(Long commentId) {
+        return commentJpaRepository.findById(commentId);
     }
 
     @Override
     public List<Comment> findAll(
-            Family family, Long fileId) {
-        return null;
+            Family family, File file) {
+        return commentJpaRepository.findAllByFamilyAndFile(family, file);
     }
 }

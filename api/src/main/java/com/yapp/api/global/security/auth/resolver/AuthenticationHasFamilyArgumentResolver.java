@@ -2,6 +2,7 @@ package com.yapp.api.global.security.auth.resolver;
 
 import static com.yapp.core.error.exception.ErrorCode.*;
 
+import com.yapp.api.global.error.exception.ApiException;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,9 +39,9 @@ public class AuthenticationHasFamilyArgumentResolver implements HandlerMethodArg
 			if (user.getFamily() != null) {
 				return user;
 			}
-			throw new BaseBusinessException(USER_NOT_FOUND_FAMILY);
+			throw new ApiException(USER_NOT_FOUND_FAMILY);
 		}
 
-		throw new BaseBusinessException(NO_AUTHENTICATION_ACCESS);
+		throw new ApiException(NO_AUTHENTICATION_ACCESS);
 	}
 }

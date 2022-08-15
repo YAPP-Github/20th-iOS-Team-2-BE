@@ -1,212 +1,163 @@
 package com.yapp.api.domain.folder.service;
 
-import static com.yapp.core.error.exception.ErrorCode.*;
-import static java.util.Comparator.*;
-import static lombok.AccessLevel.*;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.yapp.core.constant.FileKind;
+import com.yapp.api.domain.file.persistence.command.handler.FileCommandHandler;
+import com.yapp.api.domain.file.persistence.query.handler.FileQueryHandler;
+import com.yapp.api.domain.folder.persistence.command.handler.AlbumCommandHandler;
+import com.yapp.api.domain.folder.persistence.query.handler.AlbumQueryHandler;
+import com.yapp.api.global.error.exception.ApiException;
+import com.yapp.core.constant.ServiceConstant;
+import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.core.entity.file.persistence.entity.File;
+import com.yapp.core.entity.folder.album.persistence.entity.Album;
+import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ErrorCode;
+import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.yapp.core.entity.folder.album.persistence.entity.Album;
-import com.yapp.core.entity.folder.album.persistence.handler.AlbumCommandHandler;
-import com.yapp.core.entity.folder.album.persistence.handler.AlbumQueryHandler;
-import com.yapp.core.entity.family.persistence.handler.FamilyQueryHandler;
-import com.yapp.core.entity.file.persistence.entity.File;
-import com.yapp.core.entity.file.persistence.handler.FileCommandHandler;
-import com.yapp.core.entity.file.persistence.handler.FileQueryHandler;
-import com.yapp.core.entity.user.entity.User;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import static com.yapp.core.error.exception.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AlbumService {
-	private static final int FIRST_INDEX = 0;
+public class AlbumService implements ExceptionThrowableLayer {
+    private static final int FIRST_INDEX = 0;
 
-	private final AlbumCommandHandler albumCommandHandler;
-	private final AlbumQueryHandler albumQueryHandler;
-	private final FileCommandHandler fileCommandHandler;
-	private final FileQueryHandler fileQueryHandler;
-	private final FamilyQueryHandler familyQueryHandler;
+    private final AlbumCommandHandler albumCommandHandler;
+    private final AlbumQueryHandler albumQueryHandler;
+    private final FileCommandHandler fileCommandHandler;
+    private final FileQueryHandler fileQueryHandler;
 
-	public Album get(User user, Long albumId) {
-		return albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
-																								albumId))
-								.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND,
-																			 new RuntimeException(
-																				 "FileNotFoundErrorCode : which {albumId} in GET /albums/details/{albumId}")));
-	}
+    public Album get(Family family, Long albumId) {
+        return getAlbum(family, albumId);
+    }
 
-	public List<Album> getList(User user) {
-		return albumQueryHandler.findAll(albumRepository -> albumRepository.findByFamilyOrderByDateDesc(user.getFamily()));
-	}
+    public Map<String, List<File>> getList(Family family) {
+        List<Album> albums = albumQueryHandler.findAll(family);
 
-	public Page<Album> getList(User user, Pageable pageable) {
-		return albumQueryHandler.findAllAsPage(albumRepository -> albumRepository.findAllByFamilyOrderByDateDesc(
-			pageable,
-			user.getFamily()));
-	}
+        Map<String, List<File>> filesByKindName = albums.stream()
+                .flatMap(album -> album.getFiles()
+                        .stream())
+                .collect(Collectors.groupingBy(file -> file.getKind()
+                        .getValue()));
 
-	public Map<String, KindInfo> getCountForEachCategory(User user) {
-		HashMap<FileKind, List<File>> kindInfoMap = new HashMap<>();
-		kindInfoMap.put(FileKind.PHOTO, new ArrayList<>());
-		kindInfoMap.put(FileKind.RECORDING, new ArrayList<>());
+        filesByKindName.put("favourite", albums.stream()
+                .flatMap(album -> album.getFiles()
+                        .stream())
+                .filter(File::isFavourite)
+                .collect(Collectors.toList()));
 
-		List<File> files = fileQueryHandler.findAll(fileRepository -> fileRepository.findAllByFamily(user.getFamily()));
+        return filesByKindName;
+    }
 
-		files.forEach(file -> {
-			if (file.isPhoto()) {
-				kindInfoMap.get(FileKind.PHOTO)
-						   .add(file);
-			}
-			if (file.isRecording()) {
-				kindInfoMap.get(FileKind.RECORDING)
-						   .add(file);
-			}
-		});
+    public Page<Album> getList(Family family, Pageable pageable) {
+        return albumQueryHandler.findAll(family, pageable);
+    }
 
-		return Map.of(File.FAVOURITE,
-					  new KindInfo((int)files.stream()
-											 .filter(File::isFavourite)
-											 .count(),
-								   files.stream()
-										.filter(File::isFavourite)
-										.findFirst()
-										.orElseGet(() -> File.INVALID)
-										.getLink()),
-					  File.KIND_PHOTO,
-					  new KindInfo(kindInfoMap.get(File.KIND_PHOTO)
-											  .size(),
-								   kindInfoMap.get(File.KIND_PHOTO)
-											  .stream()
-											  .max(comparing(File::getDateTime))
-											  .orElse(File.INVALID)
-											  .getLink()),
-					  File.KIND_RECORDING,
-					  new KindInfo(kindInfoMap.get(File.KIND_RECORDING)
-											  .size(),
-								   kindInfoMap.get(File.KIND_RECORDING)
-											  .stream()
-											  .max(comparing(File::getDateTime))
-											  .orElse(File.INVALID)
-											  .getLink()));
-	}
+    @Transactional
+    public void uploadPhotos(User user, LocalDateTime dateTime, List<String> photos) {
+        Album album = getAlbumOrCreate(user, dateTime);
 
-	@Transactional
-	public void uploadPhotos(User user, LocalDateTime dateTime, List<String> photos) {
-		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
-									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
+        fileCommandHandler.saveAll(photos.stream()
+                .map(link -> File.photoFile("-", link, album, dateTime, user.getFamily()))
+                .collect(Collectors.toList()));
 
-		fileCommandHandler.create(fileRepository -> fileRepository.saveAll(photos.stream()
-																			   .map(link -> File.of("-",
-																									link,
-																									File.KIND_PHOTO,
-																									album,
-																									dateTime,
-																									user.getFamily()))
-																			   .collect(Collectors.toList())));
+        if (album.noThumbnail()) {
+            album.updateThumbnail(photos.get(FIRST_INDEX));
+            albumCommandHandler.save(album);
+        }
+    }
 
-		if (album.noThumbnail()) {
-			album.setThumbnail(photos.get(FIRST_INDEX));
-			albumCommandHandler.create(repository -> repository.save(album));
-		}
-	}
+    @Transactional
+    public void uploadRecordings(User user, LocalDateTime dateTime, String title, String link) {
+        Album album = getAlbumOrCreate(user, dateTime);
 
-	@Transactional
-	public void uploadRecordings(User user, LocalDateTime dateTime, String title, String link) {
-		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
-									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
+        if (Objects.isNull(title) || title.isBlank()) {
+            title = dateTime.toLocalTime() + " 녹음";
+        }
 
-		fileCommandHandler.create(fileRepository -> fileRepository.save(File.of(title,
-																			  link,
-																			  File.KIND_RECORDING,
-																			  album,
-																			  dateTime,
-																			  user.getFamily())));
+        fileCommandHandler.save(File.recordingFile(title, link, album, dateTime, user.getFamily()));
 
-		if (album.noThumbnail()) {
-			// album.setThumbnail("default image");
-			albumCommandHandler.create(repository -> repository.save(album));
-		}
-	}
+        if (album.noThumbnail()) {
+            album.updateThumbnail(ServiceConstant.DEFAULT_IMAGE);
+            albumCommandHandler.save(album);
+        }
+    }
 
-	@Transactional
-	public void modifyTitle(User user, Long albumId, String toBe) {
-		Album album = getAlbumByUserAndId(user, albumId);
-		album.modifyTitle(toBe);
-	}
+    private Album getAlbumOrCreate(User user, LocalDateTime dateTime) {
+        return albumQueryHandler.findOne(dateTime.toLocalDate())
+                .orElseGet(() -> Album.builder()
+                        .family(user.getFamily())
+                        .date(dateTime.toLocalDate())
+                        .build());
+    }
 
-	@Transactional
-	public void modifyDate(User user, Long albumId, LocalDateTime date) {
-		Album album = getAlbumByUserAndId(user, albumId);
-		album.modifyDate(date);
-	}
+    @Transactional
+    public void modifyTitle(Family family, Long albumId, String toBe) {
+        Album album = getAlbum(family, albumId);
+        album.modifyTitle(toBe);
+    }
 
-	// 비동기 처리 예정
-	@Transactional
-	public void remove(User user, Long albumId) {
-		Album album = getAlbumByUserAndId(user, albumId);
-		albumCommandHandler.remove(albumRepository -> albumRepository.delete(album));
-	}
+    @Transactional
+    public void modifyDate(Family family, Long albumId, LocalDateTime date) {
+        Album album = getAlbum(family, albumId);
+        album.modifyDate(date);
 
-	private Album getAlbumByUserAndId(User user, Long albumId) {
-		Album album = albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
-																									   albumId))
-									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND,
-																					new RuntimeException(
-																						"albumNotFoundError : which {albumId} in PATCH /album/{albumId}")));
-		return album;
-	}
+        List<File> files = album.getFiles();
+        files.forEach(file -> file.modifyDate(date));
+        fileCommandHandler.update(files);
+    }
 
-	@Transactional
-	public void delegate(User user, Long albumId, Long fileId) {
-		Album album = albumQueryHandler.findOne(albumRepository -> albumRepository.findByFamilyAndId(user.getFamily(),
-																									   albumId))
-									   .orElseThrow(() -> new BaseBusinessException(ALBUM_NOT_FOUND));
-		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
-									.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND));
+    @Transactional
+    public void remove(Family family, Long albumId) {
+        Album album = getAlbum(family, albumId);
+        albumCommandHandler.remove(album);
+    }
 
-		if (album.contains(file) && file.isPhoto()) {
-			album.setThumbnail(file.getLink());
-			return ;
-		}
+    @Transactional
+    public void delegate(Family family, Long albumId, Long fileId) {
+        Album album = getAlbum(family, albumId);
+        File file = fileQueryHandler.findOne(family, fileId)
+                .orElseThrow(() -> new ApiException(FILE_NOT_FOUND, packageName(this.getClass())));
 
-		throw new BaseBusinessException(ALBUM_FILE_NOT_MATCH);
-	}
+        if (album.contains(file)) {
+            if (file.isPhoto()) {
+                album.updateThumbnail(file.getLink());
+                return;
+            }
+            throw new ApiException(ErrorCode.RECORDING_CAN_NOT_BE_DELEGATOR, packageName(this.getClass()));
+        }
+        throw new ApiException(ALBUM_FILE_NOT_MATCH, packageName(this.getClass()));
+    }
 
-	@Transactional
-	public void modifyFileDate(User user, Long fileId, LocalDateTime dateTime) {
-		File file = fileQueryHandler.findOne(fileRepository -> fileRepository.findById(fileId))
-									.orElseThrow(() -> new BaseBusinessException(FILE_NOT_FOUND));
-		file.modifyDate(dateTime);
+    @Transactional
+    public void modifyFileDate(Family family, Long fileId, LocalDateTime dateTime) {
+        File file = fileQueryHandler.findOne(family, fileId)
+                .orElseThrow(() -> new ApiException(FILE_NOT_FOUND, packageName(this.getClass())));
+        file.modifyDate(dateTime);
 
-		Album album = albumQueryHandler.findAlbumByDate(dateTime.toLocalDate())
-									   .orElseGet(() -> new Album(user.getFamily(), dateTime.toLocalDate()));
+        Album album = albumQueryHandler.findOne(dateTime.toLocalDate())
+                .orElseGet(() -> Album.builder()
+                        .date(dateTime.toLocalDate())
+                        .family(family)
+                        .build());
+        file.modifyAlbum(album);
 
-		file.modifyAlbum(album);
-		fileCommandHandler.create(fileRepository -> fileRepository.save(file));
-		albumCommandHandler.create(albumRepository -> albumRepository.save(album));
-	}
+        fileCommandHandler.save(file);
+        albumCommandHandler.save(album);
+    }
 
-	@Getter
-	@NoArgsConstructor(access = PROTECTED)
-	@AllArgsConstructor
-	public static class KindInfo {
-		private int count;
-		private String link = "";
-	}
+    private Album getAlbum(Family family, Long albumId) {
+        return albumQueryHandler.findOne(family, albumId)
+                .orElseThrow(() -> new ApiException(ALBUM_NOT_FOUND, packageName(this.getClass())));
+    }
 }

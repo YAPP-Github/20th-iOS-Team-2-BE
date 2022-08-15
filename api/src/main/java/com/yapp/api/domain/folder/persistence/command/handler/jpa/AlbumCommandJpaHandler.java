@@ -1,7 +1,8 @@
 package com.yapp.api.domain.folder.persistence.command.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.command.handler.AlbumCommandHandler;
-import com.yapp.api.domain.folder.persistence.command.repository.AlbumCommand;
+import com.yapp.api.domain.folder.persistence.repository.AlbumJpaRepository;
+import com.yapp.core.entity.folder.album.persistence.entity.Album;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,9 +12,19 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class AlbumCommandJpaHandler implements AlbumCommandHandler {
-    private final AlbumCommand albumCommand;
+    private final AlbumJpaRepository albumJpaRepository;
 
-    public AlbumCommandJpaHandler(AlbumCommand albumCommand) {
-        this.albumCommand = albumCommand;
+    public AlbumCommandJpaHandler(AlbumJpaRepository albumJpaRepository) {
+        this.albumJpaRepository = albumJpaRepository;
+    }
+
+    @Override
+    public void save(Album album) {
+        albumJpaRepository.save(album);
+    }
+
+    @Override
+    public void remove(Album album) {
+        albumJpaRepository.delete(album);
     }
 }

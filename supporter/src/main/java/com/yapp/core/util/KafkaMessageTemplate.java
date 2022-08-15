@@ -3,6 +3,7 @@ package com.yapp.core.util;
 import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.entity.user.entity.User;
 
+import com.yapp.core.error.exception.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class KafkaMessageTemplate {
 			return KafkaMessage.emoji(user, body);
 		}
 
-		throw new BaseBusinessException(ErrorCode.CONSUMED_MESSAGE_EMPTY);
+		throw new PersistenceException(ErrorCode.CONSUMED_MESSAGE_EMPTY);
 	}
 
 	@Getter

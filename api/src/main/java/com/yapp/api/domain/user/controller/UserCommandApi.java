@@ -5,12 +5,14 @@ import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.error.exception.ErrorCode;
 import com.yapp.core.entity.user.entity.User;
+import com.yapp.core.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.yapp.core.constant.ApiConstant.MESSAGE_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,8 +24,9 @@ public class UserCommandApi {
     private final UserService userService;
 
     @PostMapping(value = "/user", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createUser(@MustAuthenticated User user, @RequestBody UserRequest.Create request) {
-
+    ResponseEntity<Void> createUser(
+            @MustAuthenticated User user,
+            @Valid @RequestBody UserRequest.Create request) {
         if (user.isEmpty()) {
             userService.create(user, request.getName(), request.getNickname(), request.getRoleInFamily(), request.getBirthDay());
 
@@ -36,7 +39,8 @@ public class UserCommandApi {
 
     @DeleteMapping("/user/history/{messageId}")
     ResponseEntity<Void> removeProfileMessage(
-            @AuthenticationHasFamily User user, @PathVariable(value = MESSAGE_ID) Long messageId) {
+            @AuthenticationHasFamily User user,
+            @PathVariable(value = MESSAGE_ID) Long messageId) {
         userService.removeHistory(user, messageId);
         return ResponseEntity.ok()
                 .build();

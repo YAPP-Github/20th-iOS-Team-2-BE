@@ -1,6 +1,6 @@
 package com.yapp.api.domain.family.persitence.query.handler;
 
-import com.yapp.api.domain.family.persitence.query.repository.FamilyQuery;
+import com.yapp.api.domain.family.persitence.FamilyJpaRepository;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +13,19 @@ import java.util.Optional;
  **/
 @Component
 public class FamilyQueryJpaHandler implements FamilyQueryHandler {
-    private final FamilyQuery familyQuery;
+    private final FamilyJpaRepository familyJpaRepository;
 
-    public FamilyQueryJpaHandler(FamilyQuery familyQuery) {
-        this.familyQuery = familyQuery;
+    public FamilyQueryJpaHandler(FamilyJpaRepository familyJpaRepository) {
+        this.familyJpaRepository = familyJpaRepository;
     }
 
     @Override
     public Optional<Family> findOne(String code) {
-        return Optional.empty();
+        return familyJpaRepository.findByCode(code);
+    }
+
+    @Override
+    public Optional<Family> findOne(Long familyId) {
+        return familyJpaRepository.findById(familyId);
     }
 }

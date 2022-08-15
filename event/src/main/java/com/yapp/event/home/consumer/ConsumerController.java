@@ -1,40 +1,22 @@
 package com.yapp.event.home.consumer;
 
-import java.io.IOException;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.family.persistence.repository.FamilyCommand;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.entity.user.repository.UserCommand;
-import com.yapp.core.util.KafkaMessageTemplate;
 import com.yapp.event.home.dictionary.SessionDictionary;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Author : daehwan2yo
  * Date : 2022/08/03
- * Info : 
+ * Info :
  **/
 @RestController
 @RequiredArgsConstructor
 public class ConsumerController {
-	private final SessionDictionary<Long, WebSocketSession> sessionDictionary;
-	private final UserCommand userCommand;
-	private final FamilyCommand familyCommand;
+    private final SessionDictionary<Long, WebSocketSession> sessionDictionary;
 
-	@KafkaListener(topics = "sofa-home")
+
+/*	@KafkaListener(topics = "sofa-home")
 	void get(@Payload String message) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		KafkaMessageTemplate.KafkaMessage kafkaMessage = objectMapper.readValue(message,
@@ -70,6 +52,6 @@ public class ConsumerController {
 			}
 			throw new BaseBusinessException(ErrorCode.CONSUMED_MESSAGE_EMPTY);
 		});
-	}
+	}*/
 
 }

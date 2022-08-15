@@ -24,7 +24,7 @@ public class FamilyQueryApi {
         return ResponseEntity.ok(homeService.info(user));
     }
 
-	@Deprecated
+    @Deprecated
     @GetMapping(value = "/family/notifications", produces = APPLICATION_JSON_VALUE)
     ResponseEntity<FamilyResponse.Notifications> retrieveNotifications() {
         return ResponseEntity.ok()

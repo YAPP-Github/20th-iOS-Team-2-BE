@@ -1,6 +1,6 @@
 package com.yapp.api.domain.calendar.persistence.query.handler;
 
-import com.yapp.api.domain.calendar.persistence.query.repository.AppointmentQuery;
+import com.yapp.api.domain.calendar.persistence.repository.AppointmentJpaRepository;
 import com.yapp.core.entity.calander.appointment.entity.Appointment;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import org.springframework.stereotype.Component;
@@ -16,39 +16,39 @@ import java.util.Optional;
  **/
 @Component
 public class AppointmentQueryJpaHandler implements AppointmentQueryHandler {
-    private final AppointmentQuery appointmentQuery;
+    private final AppointmentJpaRepository appointmentJpaRepository;
 
-    public AppointmentQueryJpaHandler(AppointmentQuery appointmentQuery) {
-        this.appointmentQuery = appointmentQuery;
+    public AppointmentQueryJpaHandler(AppointmentJpaRepository appointmentJpaRepository) {
+        this.appointmentJpaRepository = appointmentJpaRepository;
     }
 
     @Override
     public Optional<Appointment> findOne(
-            Long appointmentId, String title) {
-        return Optional.empty();
+            Long appointmentId) {
+        return appointmentJpaRepository.findById(appointmentId);
     }
 
     @Override
     public List<Appointment> findAll(
-            Long family, String dateUtilMonth) {
-        return null;
+            Long familyId, String yearMonth) {
+        return appointmentJpaRepository.findAllByFamilyAndYearMonth(familyId, yearMonth);
     }
 
     @Override
     public Optional<Appointment> findOne(
             Family family, LocalDate date) {
-        return Optional.empty();
+        return appointmentJpaRepository.findByFamilyAndDate(family, date);
     }
 
     @Override
     public List<Appointment> findAll(
             Family family, LocalDate date) {
-        return null;
+        return appointmentJpaRepository.findAllByFamilyAndDate(family, date);
     }
 
     @Override
     public List<Appointment> findAll(
             Family family, LocalDate now, LocalDate plusMonths) {
-        return null;
+        return appointmentJpaRepository.findAllByFamilyAndDateBetween(family, now, plusMonths);
     }
 }

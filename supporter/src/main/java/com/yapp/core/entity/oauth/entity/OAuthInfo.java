@@ -49,6 +49,10 @@ public class OAuthInfo {
         return new OAuthInfo(OAuthProvider.APPLE, oauthId);
     }
 
+    public static OAuthInfo of(OAuthProvider oAuthProvider, String id) {
+        return new OAuthInfo(oAuthProvider, id);
+    }
+
     private static class INVALID extends OAuthInfo {
         @Override
         public OAuthProvider getProvider() {

@@ -1,7 +1,7 @@
 package com.yapp.api.domain.oauth.persistence.query.handler.jpa;
 
 import com.yapp.api.domain.oauth.persistence.query.handler.OAuthInfoQueryHandler;
-import com.yapp.api.domain.oauth.persistence.query.repository.OAuthInfoQuery;
+import com.yapp.api.domain.oauth.persistence.repository.OAuthInfoJpaRepository;
 import com.yapp.core.constant.OAuthProvider;
 import com.yapp.core.entity.oauth.entity.OAuthInfo;
 import org.springframework.stereotype.Component;
@@ -15,15 +15,14 @@ import java.util.Optional;
  **/
 @Component
 public class OAuthInfoQueryJpaHandler implements OAuthInfoQueryHandler {
-    private final OAuthInfoQuery oAuthInfoQuery;
+    private final OAuthInfoJpaRepository oAuthInfoQuery;
 
-    public OAuthInfoQueryJpaHandler(OAuthInfoQuery oAuthInfoQuery) {
+    public OAuthInfoQueryJpaHandler(OAuthInfoJpaRepository oAuthInfoQuery) {
         this.oAuthInfoQuery = oAuthInfoQuery;
     }
 
     @Override
-    public Optional<OAuthInfo> findOne(
-            OAuthProvider provider, String oauthId) {
-        return Optional.empty();
+    public Optional<OAuthInfo> findOne(OAuthProvider provider, String oauthId) {
+        return oAuthInfoQuery.findByOauthIdAndProvider(oauthId, provider);
     }
 }

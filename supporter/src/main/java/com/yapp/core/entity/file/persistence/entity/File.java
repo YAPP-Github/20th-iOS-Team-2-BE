@@ -43,7 +43,7 @@ public class File extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Family family;
 
-    @OneToMany(mappedBy = "file", fetch = LAZY)
+    @OneToMany(mappedBy = "file", fetch = LAZY, orphanRemoval = true)
     private List<Comment> commentList;
 
     @Builder

@@ -23,8 +23,9 @@ public class UserQueryApi {
 
     @GetMapping("/user/{userId}/history")
     ResponseEntity<ProfileResponse.MessageHistory> retrieveMessageHistory(
-            @AuthenticationHasFamily User user, @PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(userService.history(user, userId));
+            @AuthenticationHasFamily User orderedUser,
+            @PathVariable("userId") Long targetUserId) {
+        return ResponseEntity.ok(userService.history(orderedUser, targetUserId));
 
     }
 
