@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.api.domain.family.controller.model.FamilyRequest;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.api.domain.home.HomeRequest;
 import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
 import com.yapp.core.entity.family.persistence.entity.Family;
 import com.yapp.core.entity.user.entity.User;
@@ -28,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.yapp.core.constant.ApiConstant.*;
+import static com.yapp.core.constant.ApiConstant.FAMILY_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -45,8 +43,7 @@ public class FamilyCommandApi implements ExceptionThrowableLayer {
 
     @PostMapping(value = "/family", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<FamilyResponse.Create> createFamily(
-            @MustAuthenticated User user,
-            @Valid @RequestBody FamilyRequest.Create request) {
+            @MustAuthenticated User user, @Valid @RequestBody FamilyRequest.Create request) {
 
         Family createdFamily = familyService.create(user, request.getFamilyName(), request.getFamilyMotto());
 
@@ -55,8 +52,7 @@ public class FamilyCommandApi implements ExceptionThrowableLayer {
 
     @PatchMapping(value = "/family", consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<Void> modifyFamilyInfo(
-            @MustAuthenticated User user,
-            @Valid @RequestBody FamilyRequest.Modify request) {
+            @MustAuthenticated User user, @Valid @RequestBody FamilyRequest.Modify request) {
 
         familyService.modify(user, request.getFamilyName(), request.getFamilyMotto(), request.getNicknames());
 
@@ -71,38 +67,12 @@ public class FamilyCommandApi implements ExceptionThrowableLayer {
                 .build();
     }
 
-    // Kafka
-    @PostMapping(value = _FAMILY_GREETING_MESSAGE, consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createGreetingWithMessage(
-            @AuthenticationHasFamily User user,
-            @RequestBody HomeRequest.Greeting request) throws JsonProcessingException {
-        homeService.greet(user, request.getContent());
-
-        kafkaSending(user, request.getContent());
-
-        return ResponseEntity.ok()
-                .build();
-    }
-
-    // Kafka
-    @PostMapping(value = _FAMILY_GREETING_EMOJI, consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createGreetingWithEmoji(
-            @AuthenticationHasFamily User user,
-            @RequestBody HomeRequest.GreetWithEmoji request) throws JsonProcessingException {
-        homeService.emoji(user, request.getEmojiNumber());
-
-        kafkaSending(user, request.getEmojiNumber());
-
-        return ResponseEntity.ok()
-                .build();
-    }
-
     @PostMapping(value = "/family/join")
     ResponseEntity<Void> join(@MustAuthenticated User user, @RequestParam(name = "code") String code) {
         if (user.getFamily() != null) {
             throw new ApiException(ErrorCode.ALREADY_JOINED, packageName(this.getClass()));
         }
-        if(code.length() > 10) {
+        if (code.length() > 10) {
             throw new ApiException(ErrorCode.NOT_VALID_CODE_LENGTH, packageName(this.getClass()));
         }
 

@@ -2,8 +2,6 @@ package com.yapp.api.domain.family.controller;
 
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.api.domain.home.HomeResponse;
-import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.core.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +15,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class FamilyQueryApi {
     private final FamilyService familyService;
-    private final HomeService homeService;
-
-    @GetMapping(value = "/family/home", produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<HomeResponse.Info> retrieveHomeInfo(@AuthenticationHasFamily User user) {
-        return ResponseEntity.ok(homeService.info(user));
-    }
 
     @Deprecated
     @GetMapping(value = "/family/notifications", produces = APPLICATION_JSON_VALUE)
