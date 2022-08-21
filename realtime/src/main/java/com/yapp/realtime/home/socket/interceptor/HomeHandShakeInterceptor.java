@@ -1,7 +1,7 @@
 package com.yapp.realtime.home.socket.interceptor;
 
-import com.yapp.supporter.error.exception.ErrorCode;
 import com.yapp.realtime.global.validator.RealTimeValidator;
+import com.yapp.supporter.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -23,6 +23,7 @@ public class HomeHandShakeInterceptor extends OriginHandshakeInterceptor {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
 
+
     @Override
     public boolean beforeHandshake(
             ServerHttpRequest request,
@@ -40,8 +41,12 @@ public class HomeHandShakeInterceptor extends OriginHandshakeInterceptor {
                     .getPath()
                     .substring(PATH_PREFIX.length());
 
-            attributes.put(DEFAULT_SESSION_KEY, Long.parseLong(path.split("/")[0]));
+            long userId = Long.parseLong(path.split("/")[0]);
+
+
+            attributes.put(DEFAULT_SESSION_KEY, userId);
             attributes.put("authToken", authToken);
+
             return true;
         }
 

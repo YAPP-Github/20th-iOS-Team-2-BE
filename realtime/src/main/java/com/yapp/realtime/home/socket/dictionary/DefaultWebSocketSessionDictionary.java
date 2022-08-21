@@ -1,8 +1,9 @@
 package com.yapp.realtime.home.socket.dictionary;
 
-import com.yapp.supporter.error.exception.ErrorCode;
 import com.yapp.realtime.global.error.exception.RealTimeException;
-import org.springframework.web.socket.WebSocketSession;
+import com.yapp.realtime.home.socket.dictionary.session.SessionInfo;
+import com.yapp.supporter.error.exception.ErrorCode;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -12,17 +13,18 @@ import java.util.concurrent.ConcurrentMap;
  * Date : 2022/08/21
  * Info :
  **/
-public class DefaultWebSocketSessionDictionary implements WebSocketSessionDictionary<Long> {
+@Component
+public class DefaultWebSocketSessionDictionary implements SessionInfoDictionary<Long> {
     // 후에 redis 로 옮겨야함
-    private final ConcurrentMap<Long, WebSocketSession> sessionForUser = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, SessionInfo> sessionForUser = new ConcurrentHashMap<>();
 
     @Override
-    public void addSession(Long key, WebSocketSession session) {
+    public void addSession(Long key, SessionInfo session) {
         sessionForUser.put(key, session);
     }
 
     @Override
-    public WebSocketSession get(Long ses) {
+    public SessionInfo get(Long ses) {
         return sessionForUser.get(ses);
     }
 

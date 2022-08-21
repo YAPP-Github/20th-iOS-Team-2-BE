@@ -34,6 +34,7 @@ public enum ErrorCode {
 	FILE_IO_ERROR(500, "파일 업로드에 문제가 발생했습니다."),
 	OAUTH_ERROR(500, "OAuth 인증과정에서 문제가 발생했습니다. (유효하지 않는 accessToken)"),
 
+	REALTIME_INTERNAL_ERROR(500, "realtime 에서 session 에 대한 key 입력 과정에서 에러가 발생했습니다."),
 	SESSION_REMOVE_ERROR(500, "realtime 에서 session 을 지우는 과정에서 에러가 발생했습니다."),
 	ENTITY_PARAMETER_NOT_ACCEPT(500, "엔티티생성 과정에서 값이 누락되었습니다.");
 

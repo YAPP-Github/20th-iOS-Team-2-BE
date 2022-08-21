@@ -96,7 +96,7 @@ public class ProfileInfo {
         return Arrays.stream(this.nickname.split(NICKNAME_SET_SPLITTER))
                 .filter(nicknameSet -> getIdFromSet(nicknameSet) == otherUserId)
                 .findAny()
-                .orElse(originalNickname())
+                .orElseGet(this::getNickname)
                 .split(ID_NAME_SPLITTER)[NICKNAME_KEY];
     }
 
