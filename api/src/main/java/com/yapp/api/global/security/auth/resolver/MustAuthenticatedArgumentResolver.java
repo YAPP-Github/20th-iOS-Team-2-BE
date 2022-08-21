@@ -1,6 +1,6 @@
 package com.yapp.api.global.security.auth.resolver;
 
-import static com.yapp.core.error.exception.ErrorCode.*;
+import static com.yapp.realtime.error.exception.ErrorCode.*;
 
 import com.yapp.api.global.error.exception.ApiException;
 import org.springframework.core.MethodParameter;

@@ -5,13 +5,13 @@ import com.yapp.api.domain.file.persistence.query.handler.FileQueryHandler;
 import com.yapp.api.domain.folder.persistence.command.handler.AlbumCommandHandler;
 import com.yapp.api.domain.folder.persistence.query.handler.AlbumQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.core.constant.ServiceConstant;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.file.persistence.entity.File;
-import com.yapp.core.entity.folder.album.persistence.entity.Album;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import com.yapp.realtime.constant.ServiceConstant;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.file.persistence.entity.File;
+import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
+import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.realtime.error.exception.ErrorCode;
+import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.yapp.core.error.exception.ErrorCode.*;
+import static com.yapp.realtime.error.exception.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -68,7 +68,7 @@ public class AlbumService implements ExceptionThrowableLayer {
         Album album = getAlbumOrCreate(user, dateTime);
 
         fileCommandHandler.saveAll(photos.stream()
-                .map(link -> File.photoFile("-", link, album, dateTime, user.getFamily()))
+                .map(link -> File.photoFile(link, album, dateTime, user.getFamily()))
                 .collect(Collectors.toList()));
 
         if (album.noThumbnail()) {

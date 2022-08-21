@@ -1,7 +1,7 @@
 package com.yapp.api.domain.family.controller.model;
 
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

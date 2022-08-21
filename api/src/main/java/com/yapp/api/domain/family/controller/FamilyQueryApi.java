@@ -3,7 +3,7 @@ package com.yapp.api.domain.family.controller;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.realtime.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

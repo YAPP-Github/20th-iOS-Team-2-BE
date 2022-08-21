@@ -1,6 +1,6 @@
 package com.yapp.api.domain.folder.persistence.command.handler;
 
-import com.yapp.core.entity.folder.album.persistence.entity.Album;
+import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
 
 /**
  * Author : daehwan2yo

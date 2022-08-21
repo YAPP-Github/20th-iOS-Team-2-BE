@@ -1,7 +1,7 @@
 package com.yapp.api.domain.family.persitence.command.handler;
 
 import com.yapp.api.domain.family.persitence.FamilyJpaRepository;
-import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
 import org.springframework.stereotype.Component;
 
 /**

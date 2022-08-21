@@ -1,8 +1,8 @@
 package com.yapp.api.domain.folder.persistence.repository;
 
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.file.persistence.entity.File;
-import com.yapp.core.entity.folder.comment.entity.Comment;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.file.persistence.entity.File;
+import com.yapp.realtime.entity.folder.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

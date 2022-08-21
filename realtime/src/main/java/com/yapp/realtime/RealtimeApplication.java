@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @EntityScan("com.yapp.core")
-@SpringBootApplication(scanBasePackages = {"com.yapp.realtime", "com.yapp.core"})
+@SpringBootApplication(scanBasePackages = {"com.yapp.realtime", "com.yapp.realtime"})
 public class RealtimeApplication {
 
     public static void main(String[] args) {

@@ -6,7 +6,7 @@ import com.yapp.api.domain.file.service.CloudService;
 import com.yapp.api.domain.file.service.FileService;
 import com.yapp.api.domain.folder.service.AlbumService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.realtime.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.yapp.core.constant.ApiConstant.FILE_ID;
-import static com.yapp.core.constant.ApiConstant._FILES_RESOURCE;
+import static com.yapp.realtime.constant.ApiConstant.FILE_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 

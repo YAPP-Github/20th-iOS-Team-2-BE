@@ -1,8 +1,8 @@
 package com.yapp.api.global.error;
 
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.core.error.exception.PersistenceException;
-import com.yapp.core.error.response.ErrorResponse;
+import com.yapp.realtime.error.exception.PersistenceException;
+import com.yapp.realtime.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -3,10 +3,10 @@ package com.yapp.api.domain.calendar.service;
 import com.yapp.api.domain.calendar.persistence.command.handler.AppointmentCommandHandler;
 import com.yapp.api.domain.calendar.persistence.query.handler.AppointmentQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.core.entity.calander.appointment.entity.Appointment;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import com.yapp.realtime.entity.calander.appointment.entity.Appointment;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.yapp.core.error.exception.ErrorCode.APPOINTMENT_NOT_FOUND;
-import static com.yapp.core.util.DateUtils.yearMonth;
+import static com.yapp.realtime.error.exception.ErrorCode.APPOINTMENT_NOT_FOUND;
+import static com.yapp.realtime.util.DateUtils.yearMonth;
 
 @Service
 @Transactional(readOnly = true)

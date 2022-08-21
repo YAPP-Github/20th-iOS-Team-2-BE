@@ -3,22 +3,18 @@ package com.yapp.api.domain.file.service;
 import com.yapp.api.domain.file.persistence.command.handler.FileCommandHandler;
 import com.yapp.api.domain.file.persistence.query.handler.FileQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.core.constant.FileKind;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.file.persistence.entity.File;
-import com.yapp.core.entity.folder.album.persistence.entity.Album;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.error.exception.ExceptionThrowableLayer;
+import com.yapp.realtime.constant.FileKind;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.file.persistence.entity.File;
+import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
+import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.yapp.core.error.exception.ErrorCode.FILE_NOT_FOUND;
+import static com.yapp.realtime.error.exception.ErrorCode.FILE_NOT_FOUND;
 import static java.util.Comparator.comparing;
 
 @Service

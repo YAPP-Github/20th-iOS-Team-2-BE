@@ -1,7 +1,7 @@
 package com.yapp.api.domain.folder.persistence.repository;
 
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.folder.album.persistence.entity.Album;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

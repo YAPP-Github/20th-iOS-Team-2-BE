@@ -1,7 +1,7 @@
 package com.yapp.api.domain.calendar.persistence.query.handler;
 
-import com.yapp.core.entity.calander.appointment.entity.Appointment;
-import com.yapp.core.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.calander.appointment.entity.Appointment;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
 
 import java.time.LocalDate;
 import java.util.List;

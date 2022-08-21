@@ -1,8 +1,8 @@
 package com.yapp.api.domain.user.persistence.query.handler;
 
 import com.yapp.api.domain.user.persistence.repository.ProfileMessageJpaRepository;
-import com.yapp.core.entity.user.entity.ProfileMessage;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.realtime.entity.user.entity.ProfileMessage;
+import com.yapp.realtime.entity.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

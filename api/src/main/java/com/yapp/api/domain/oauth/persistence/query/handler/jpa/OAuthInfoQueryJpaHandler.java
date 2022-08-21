@@ -2,8 +2,8 @@ package com.yapp.api.domain.oauth.persistence.query.handler.jpa;
 
 import com.yapp.api.domain.oauth.persistence.query.handler.OAuthInfoQueryHandler;
 import com.yapp.api.domain.oauth.persistence.repository.OAuthInfoJpaRepository;
-import com.yapp.core.constant.OAuthProvider;
-import com.yapp.core.entity.oauth.entity.OAuthInfo;
+import com.yapp.realtime.constant.OAuthProvider;
+import com.yapp.realtime.entity.oauth.entity.OAuthInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

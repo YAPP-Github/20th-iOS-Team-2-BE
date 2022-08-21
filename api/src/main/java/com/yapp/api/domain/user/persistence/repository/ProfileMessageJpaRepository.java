@@ -1,7 +1,7 @@
 package com.yapp.api.domain.user.persistence.repository;
 
-import com.yapp.core.entity.user.entity.ProfileMessage;
-import com.yapp.core.entity.user.entity.User;
+import com.yapp.realtime.entity.user.entity.ProfileMessage;
+import com.yapp.realtime.entity.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -1,6 +1,6 @@
 package com.yapp.api.domain.folder.persistence.command.handler;
 
-import com.yapp.core.entity.folder.comment.entity.Comment;
+import com.yapp.realtime.entity.folder.comment.entity.Comment;
 
 /**
  * Author : daehwan2yo

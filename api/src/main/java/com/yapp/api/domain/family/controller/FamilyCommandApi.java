@@ -5,14 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.api.domain.family.controller.model.FamilyRequest;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
-import com.yapp.api.domain.home.HomeService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.core.entity.family.persistence.entity.Family;
-import com.yapp.core.entity.user.entity.User;
-import com.yapp.core.error.exception.ErrorCode;
-import com.yapp.core.error.exception.ExceptionThrowableLayer;
-import com.yapp.core.util.KafkaMessageTemplate;
+import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.realtime.error.exception.ErrorCode;
+import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
+import com.yapp.realtime.util.KafkaMessageTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.yapp.core.constant.ApiConstant.FAMILY_ID;
+import static com.yapp.realtime.constant.ApiConstant.FAMILY_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -37,7 +36,6 @@ public class FamilyCommandApi implements ExceptionThrowableLayer {
     private String TOPIC;
 
     private final FamilyService familyService;
-    private final HomeService homeService;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 

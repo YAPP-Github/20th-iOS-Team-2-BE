@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.yapp.core.error.exception.ErrorCode.*;
+import static com.yapp.realtime.error.exception.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
