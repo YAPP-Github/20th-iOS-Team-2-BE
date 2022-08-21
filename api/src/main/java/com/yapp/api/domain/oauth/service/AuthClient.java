@@ -4,7 +4,7 @@ import com.yapp.api.domain.oauth.controller.dto.AuthInfoProvider;
 import com.yapp.api.domain.oauth.controller.dto.internal.OAuthResponse;
 import com.yapp.api.domain.oauth.controller.dto.request.AuthRequest;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
+import com.yapp.supporter.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
-import static com.yapp.realtime.error.exception.ErrorCode.OAUTH_ERROR;
+import static com.yapp.supporter.error.exception.ErrorCode.OAUTH_ERROR;
 import static org.springframework.http.HttpMethod.GET;
 
 /**

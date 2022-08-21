@@ -7,11 +7,11 @@ import com.yapp.api.domain.folder.service.AlbumService;
 import com.yapp.api.domain.folder.service.CommentService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
-import com.yapp.realtime.entity.user.entity.User;
-import com.yapp.realtime.error.exception.ErrorCode;
-import com.yapp.realtime.util.validator.ArgumentValidator;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.album.persistence.entity.Album;
+import com.yapp.supporter.entity.user.entity.User;
+import com.yapp.supporter.error.exception.ErrorCode;
+import com.yapp.supporter.util.validator.ArgumentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.stream.Collectors;
 
-import static com.yapp.realtime.constant.ApiConstant.*;
+import static com.yapp.supporter.constant.ApiConstant.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController

@@ -1,6 +1,6 @@
 package com.yapp.api.domain.file.persistence.command.handler;
 
-import com.yapp.realtime.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.file.persistence.entity.File;
 
 import java.util.Collection;
 import java.util.List;

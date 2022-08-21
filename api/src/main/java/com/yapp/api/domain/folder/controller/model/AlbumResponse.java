@@ -1,7 +1,7 @@
 package com.yapp.api.domain.folder.controller.model;
 
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.album.persistence.entity.Album;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

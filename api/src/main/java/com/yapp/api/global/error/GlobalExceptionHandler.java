@@ -1,8 +1,7 @@
 package com.yapp.api.global.error;
 
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.realtime.error.exception.PersistenceException;
-import com.yapp.realtime.error.response.ErrorResponse;
+import com.yapp.supporter.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,15 +21,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException e) {
         log.error("[Api error] : {}", e.getMessage());
-
-        return ResponseEntity.status(e.getErrorCode()
-                        .getStatus())
-                .body(ErrorResponse.from(e.getErrorCode()));
-    }
-
-    @ExceptionHandler(PersistenceException.class)
-    public ResponseEntity<ErrorResponse> handlePersistenceException(PersistenceException e) {
-        log.error("Persistence error : {} ", e.toString());
 
         return ResponseEntity.status(e.getErrorCode()
                         .getStatus())

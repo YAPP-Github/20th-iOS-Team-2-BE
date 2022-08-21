@@ -2,7 +2,7 @@ package com.yapp.api.domain.folder.persistence.command.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.command.handler.AlbumCommandHandler;
 import com.yapp.api.domain.folder.persistence.repository.AlbumJpaRepository;
-import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
+import com.yapp.supporter.entity.folder.album.persistence.entity.Album;
 import org.springframework.stereotype.Component;
 
 /**

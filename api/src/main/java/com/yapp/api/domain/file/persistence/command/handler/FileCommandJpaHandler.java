@@ -1,7 +1,7 @@
 package com.yapp.api.domain.file.persistence.command.handler;
 
 import com.yapp.api.domain.file.persistence.repository.FileJpaRepository;
-import com.yapp.realtime.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.file.persistence.entity.File;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

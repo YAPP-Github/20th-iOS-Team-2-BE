@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.supporter.entity.user.entity.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

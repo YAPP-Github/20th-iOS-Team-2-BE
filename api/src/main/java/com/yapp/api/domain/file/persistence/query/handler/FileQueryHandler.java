@@ -1,9 +1,9 @@
 package com.yapp.api.domain.file.persistence.query.handler;
 
-import com.yapp.realtime.constant.FileKind;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
+import com.yapp.supporter.constant.FileKind;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.album.persistence.entity.Album;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -5,12 +5,12 @@ import com.yapp.api.domain.folder.controller.model.AlbumResponse;
 import com.yapp.api.domain.folder.persistence.command.handler.CommentCommandHandler;
 import com.yapp.api.domain.folder.persistence.query.handler.CommentQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.comment.entity.Comment;
-import com.yapp.realtime.entity.user.entity.User;
-import com.yapp.realtime.error.exception.ErrorCode;
-import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.comment.entity.Comment;
+import com.yapp.supporter.entity.user.entity.User;
+import com.yapp.supporter.error.exception.ErrorCode;
+import com.yapp.supporter.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.yapp.realtime.error.exception.ErrorCode.COMMENT_NOT_FOUND;
-import static com.yapp.realtime.error.exception.ErrorCode.FILE_NOT_FOUND;
+import static com.yapp.supporter.error.exception.ErrorCode.COMMENT_NOT_FOUND;
+import static com.yapp.supporter.error.exception.ErrorCode.FILE_NOT_FOUND;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Service

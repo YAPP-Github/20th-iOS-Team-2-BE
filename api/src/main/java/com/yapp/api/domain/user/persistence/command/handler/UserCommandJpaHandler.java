@@ -1,7 +1,7 @@
 package com.yapp.api.domain.user.persistence.command.handler;
 
 import com.yapp.api.domain.user.persistence.repository.UserJpaRepository;
-import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.supporter.entity.user.entity.User;
 import org.springframework.stereotype.Component;
 
 /**

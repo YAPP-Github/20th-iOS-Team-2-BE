@@ -1,6 +1,6 @@
 package com.yapp.api.domain.family.persitence.command.handler;
 
-import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
 
 /**
  * Author : daehwan2yo

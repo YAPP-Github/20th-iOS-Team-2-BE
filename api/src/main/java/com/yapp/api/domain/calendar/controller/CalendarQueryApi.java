@@ -3,7 +3,7 @@ package com.yapp.api.domain.calendar.controller;
 import com.yapp.api.domain.calendar.controller.model.CalendarResponse;
 import com.yapp.api.domain.calendar.service.AppointmentService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.supporter.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

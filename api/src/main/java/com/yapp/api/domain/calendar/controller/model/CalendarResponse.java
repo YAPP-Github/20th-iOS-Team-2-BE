@@ -1,6 +1,6 @@
 package com.yapp.api.domain.calendar.controller.model;
 
-import com.yapp.realtime.entity.calander.appointment.entity.Appointment;
+import com.yapp.supporter.entity.calander.appointment.entity.Appointment;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

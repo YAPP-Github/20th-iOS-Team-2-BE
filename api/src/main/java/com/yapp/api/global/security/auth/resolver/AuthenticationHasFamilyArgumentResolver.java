@@ -1,6 +1,6 @@
 package com.yapp.api.global.security.auth.resolver;
 
-import static com.yapp.realtime.error.exception.ErrorCode.*;
+import static com.yapp.supporter.error.exception.ErrorCode.*;
 
 import com.yapp.api.global.error.exception.ApiException;
 import org.springframework.core.MethodParameter;
@@ -13,7 +13,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.yapp.api.global.security.auth.bearer.service.JwtUserDetailsService;
-import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.supporter.entity.user.entity.User;
 
 /**
  * Author : daehwan2yo

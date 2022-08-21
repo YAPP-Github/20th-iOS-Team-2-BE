@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.yapp.realtime.error.exception.ErrorCode.FILE_IO_ERROR;
+import static com.yapp.supporter.error.exception.ErrorCode.FILE_IO_ERROR;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toUnmodifiableList;
 

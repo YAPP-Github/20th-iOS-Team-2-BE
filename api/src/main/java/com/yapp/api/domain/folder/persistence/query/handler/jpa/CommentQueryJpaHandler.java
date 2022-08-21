@@ -2,9 +2,9 @@ package com.yapp.api.domain.folder.persistence.query.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.query.handler.CommentQueryHandler;
 import com.yapp.api.domain.folder.persistence.repository.CommentJpaRepository;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.comment.entity.Comment;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.comment.entity.Comment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

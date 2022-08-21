@@ -2,7 +2,7 @@ package com.yapp.api.domain.folder.persistence.command.handler.jpa;
 
 import com.yapp.api.domain.folder.persistence.command.handler.CommentCommandHandler;
 import com.yapp.api.domain.folder.persistence.repository.CommentJpaRepository;
-import com.yapp.realtime.entity.folder.comment.entity.Comment;
+import com.yapp.supporter.entity.folder.comment.entity.Comment;
 import org.springframework.stereotype.Component;
 
 /**

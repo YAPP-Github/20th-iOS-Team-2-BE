@@ -1,8 +1,8 @@
 package com.yapp.api.domain.calendar.persistence.query.handler;
 
 import com.yapp.api.domain.calendar.persistence.repository.AppointmentJpaRepository;
-import com.yapp.realtime.entity.calander.appointment.entity.Appointment;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.calander.appointment.entity.Appointment;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

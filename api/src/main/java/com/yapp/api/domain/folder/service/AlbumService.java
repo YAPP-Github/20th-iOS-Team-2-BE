@@ -5,13 +5,13 @@ import com.yapp.api.domain.file.persistence.query.handler.FileQueryHandler;
 import com.yapp.api.domain.folder.persistence.command.handler.AlbumCommandHandler;
 import com.yapp.api.domain.folder.persistence.query.handler.AlbumQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
-import com.yapp.realtime.constant.ServiceConstant;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
-import com.yapp.realtime.entity.file.persistence.entity.File;
-import com.yapp.realtime.entity.folder.album.persistence.entity.Album;
-import com.yapp.realtime.entity.user.entity.User;
-import com.yapp.realtime.error.exception.ErrorCode;
-import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
+import com.yapp.supporter.constant.ServiceConstant;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.file.persistence.entity.File;
+import com.yapp.supporter.entity.folder.album.persistence.entity.Album;
+import com.yapp.supporter.entity.user.entity.User;
+import com.yapp.supporter.error.exception.ErrorCode;
+import com.yapp.supporter.error.exception.ExceptionThrowableLayer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.yapp.realtime.error.exception.ErrorCode.*;
+import static com.yapp.supporter.error.exception.ErrorCode.*;
 
 @Service
 @Transactional(readOnly = true)

@@ -5,8 +5,8 @@ import com.yapp.api.domain.user.service.UserService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.realtime.entity.user.entity.User;
-import com.yapp.realtime.error.exception.ErrorCode;
+import com.yapp.supporter.entity.user.entity.User;
+import com.yapp.supporter.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.yapp.realtime.constant.ApiConstant.MESSAGE_ID;
+import static com.yapp.supporter.constant.ApiConstant.MESSAGE_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j

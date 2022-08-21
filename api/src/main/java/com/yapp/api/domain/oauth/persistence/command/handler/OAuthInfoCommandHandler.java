@@ -1,7 +1,7 @@
 package com.yapp.api.domain.oauth.persistence.command.handler;
 
-import com.yapp.realtime.constant.OAuthProvider;
-import com.yapp.realtime.entity.oauth.entity.OAuthInfo;
+import com.yapp.supporter.constant.OAuthProvider;
+import com.yapp.supporter.entity.oauth.entity.OAuthInfo;
 
 import java.util.Optional;
 

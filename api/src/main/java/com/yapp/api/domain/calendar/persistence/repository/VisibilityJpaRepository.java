@@ -1,6 +1,6 @@
 package com.yapp.api.domain.calendar.persistence.repository;
 
-import com.yapp.realtime.entity.calander.visibility.entity.Visibility;
+import com.yapp.supporter.entity.calander.visibility.entity.Visibility;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

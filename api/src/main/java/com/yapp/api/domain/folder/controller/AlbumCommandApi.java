@@ -7,7 +7,7 @@ import com.yapp.api.domain.folder.controller.model.CommentResponse;
 import com.yapp.api.domain.folder.service.AlbumService;
 import com.yapp.api.domain.folder.service.CommentService;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
-import com.yapp.realtime.entity.user.entity.User;
+import com.yapp.supporter.entity.user.entity.User;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.yapp.realtime.constant.ApiConstant.*;
+import static com.yapp.supporter.constant.ApiConstant.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j

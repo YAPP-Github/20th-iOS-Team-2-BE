@@ -1,6 +1,6 @@
 package com.yapp.api.global.error.exception;
 
-import com.yapp.realtime.error.exception.ErrorCode;
+import com.yapp.supporter.error.exception.ErrorCode;
 
 /**
  * Author : daehwan2yo

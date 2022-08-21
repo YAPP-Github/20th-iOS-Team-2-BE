@@ -7,11 +7,11 @@ import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
 import com.yapp.api.global.error.exception.ApiException;
 import com.yapp.api.global.security.auth.resolver.MustAuthenticated;
-import com.yapp.realtime.entity.family.persistence.entity.Family;
-import com.yapp.realtime.entity.user.entity.User;
-import com.yapp.realtime.error.exception.ErrorCode;
-import com.yapp.realtime.error.exception.ExceptionThrowableLayer;
-import com.yapp.realtime.util.KafkaMessageTemplate;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
+import com.yapp.supporter.entity.user.entity.User;
+import com.yapp.supporter.error.exception.ErrorCode;
+import com.yapp.supporter.error.exception.ExceptionThrowableLayer;
+import com.yapp.supporter.util.KafkaMessageTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.yapp.realtime.constant.ApiConstant.FAMILY_ID;
+import static com.yapp.supporter.constant.ApiConstant.FAMILY_ID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
