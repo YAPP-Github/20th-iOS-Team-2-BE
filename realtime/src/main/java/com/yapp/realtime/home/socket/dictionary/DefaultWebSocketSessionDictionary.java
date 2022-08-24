@@ -4,9 +4,14 @@ import com.yapp.realtime.global.error.exception.RealTimeException;
 import com.yapp.realtime.home.socket.dictionary.session.SessionInfo;
 import com.yapp.supporter.error.exception.ErrorCode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.WebSocketSession;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+
+import static com.yapp.supporter.constant.RealTimeConstant.SESSION_INFO_KEY;
 
 /**
  * Author : daehwan2yo
@@ -40,5 +45,15 @@ public class DefaultWebSocketSessionDictionary implements SessionInfoDictionary<
         } catch (Exception e) {
             throw new RealTimeException(ErrorCode.SESSION_REMOVE_ERROR);
         }
+    }
+
+    @Override
+    public List<WebSocketSession> getMembers(Long familyId) {
+        return sessionForUser.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue()
+                        .contains(familyId))
+                .map(entry -> (WebSocketSession) entry.getValue().getDetail(SESSION_INFO_KEY))
+                .collect(Collectors.toList());
     }
 }

@@ -18,6 +18,7 @@ public enum ErrorCode {
 	ALBUM_RETRIEVE_TYPE_NOT_VALID(400, "앨범 리스트 조회시 타입이 잘못 입력되었습니다."),
 	NO_AUTHENTICATION_ACCESS(401, "인증이 필요합니다."),
 	USER_NOT_FOUND(400, "없는 회원에 대한 접근입니다."),
+	NO_FAMILY_IN_HEADER(400, "realtime 요청 시 familyId 가 header 에 존재하지 않습니다."),
 
 	NOT_VALID_CODE(403, "유효하지 않는 코드의 접근입니다."),
 

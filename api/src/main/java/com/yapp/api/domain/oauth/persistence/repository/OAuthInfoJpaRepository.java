@@ -13,6 +13,4 @@ import java.util.Optional;
  **/
 public interface OAuthInfoJpaRepository extends JpaRepository<OAuthInfo, Long> {
     Optional<OAuthInfo> findByOauthIdAndProvider(String oauthId, OAuthProvider provider);
-
-    Optional<OAuthInfo> findByIdAndProvider(String id, OAuthProvider provider);
 }

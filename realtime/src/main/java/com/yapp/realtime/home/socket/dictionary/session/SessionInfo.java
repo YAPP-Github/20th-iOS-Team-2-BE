@@ -11,4 +11,6 @@ public interface SessionInfo<KEY> {
     Map<String, Object> get();
 
     Object getDetail(KEY key);
+
+    boolean contains(Long familyId);
 }

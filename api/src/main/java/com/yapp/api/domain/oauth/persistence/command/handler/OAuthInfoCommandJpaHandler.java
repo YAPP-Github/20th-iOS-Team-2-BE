@@ -23,6 +23,6 @@ public class OAuthInfoCommandJpaHandler implements OAuthInfoCommandHandler {
     @Override
     public Optional<OAuthInfo> findOne(
             OAuthProvider provider, String id) {
-        return oAuthInfoCommand.findByIdAndProvider(id, provider);
+        return oAuthInfoCommand.findByOauthIdAndProvider(id, provider);
     }
 }

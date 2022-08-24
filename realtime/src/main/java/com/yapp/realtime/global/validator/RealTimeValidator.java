@@ -26,4 +26,10 @@ public class RealTimeValidator {
             throw new RealTimeException(bearerTokenInvalid);
         }
     }
+
+    public static void familyId(boolean noFamilyId, ErrorCode noFamilyInHeader) {
+        if(noFamilyId) {
+            throw new RealTimeException(noFamilyInHeader);
+        }
+    }
 }

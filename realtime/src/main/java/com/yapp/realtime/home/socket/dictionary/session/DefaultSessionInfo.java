@@ -1,6 +1,7 @@
 package com.yapp.realtime.home.socket.dictionary.session;
 
 import com.yapp.realtime.global.error.exception.RealTimeException;
+import com.yapp.supporter.entity.family.persistence.entity.Family;
 import com.yapp.supporter.entity.user.entity.User;
 import com.yapp.supporter.error.exception.ErrorCode;
 import org.springframework.web.socket.WebSocketSession;
@@ -8,8 +9,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yapp.supporter.constant.RealTimeConstant.SESSION_INFO_KEY;
-import static com.yapp.supporter.constant.RealTimeConstant.SESSION_USER_KEY;
+import static com.yapp.supporter.constant.RealTimeConstant.*;
 
 /**
  * Author : daehwan2yo
@@ -26,6 +26,7 @@ public final class DefaultSessionInfo implements SessionInfo<String> {
     public DefaultSessionInfo(WebSocketSession session, User user) {
         sessionMap.put(SESSION_INFO_KEY, session);
         sessionMap.put(SESSION_USER_KEY, user);
+        sessionMap.put(SESSION_FAMILY_KEY, user.getFamily().getId());
     }
 
     @Override
@@ -39,5 +40,9 @@ public final class DefaultSessionInfo implements SessionInfo<String> {
             throw new RealTimeException(ErrorCode.REALTIME_INTERNAL_ERROR);
         }
         return sessionMap.get(s);
+    }
+
+    public boolean contains(Long familyId) {
+        return sessionMap.containsValue(familyId);
     }
 }

@@ -1,6 +1,9 @@
 package com.yapp.realtime.home.socket.handler;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yapp.realtime.global.validator.RealTimeValidator;
+import com.yapp.realtime.home.model.request.GreetingMessageRequest;
 import com.yapp.realtime.home.response.HomeResponse;
 import com.yapp.realtime.home.socket.dictionary.SessionDictionary;
 import com.yapp.realtime.home.socket.dictionary.session.DefaultSessionInfo;
@@ -14,8 +17,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.yapp.supporter.constant.RealTimeConstant.DEFAULT_SESSION_KEY;
+import static com.yapp.supporter.constant.RealTimeConstant.SESSION_FAMILY_KEY;
 
 /**
  * Author : daehwan2yo
@@ -47,7 +52,18 @@ public class HomeWebSocketHandler implements WebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+        Map<String, Object> sessionInfos = session.getAttributes();
+        RealTimeValidator.familyId(sessionInfos.containsKey(SESSION_FAMILY_KEY), ErrorCode.NO_FAMILY_IN_HEADER);
 
+        Long familyId = (Long) sessionInfos.get(SESSION_FAMILY_KEY);
+
+        List<WebSocketSession> memberSessions = sessionDictionary.getMembers(familyId);
+
+        GreetingMessageRequest greetingMessageRequest = objectMapper.readValue((String) message.getPayload(), GreetingMessageRequest.class);
+
+        // 내 상태 변경
+
+        // members에 전송
     }
 
     @Override

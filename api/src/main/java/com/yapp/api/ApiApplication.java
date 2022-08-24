@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EntityScan("com.yapp.core")
+@EntityScan("com.yapp.supporter")
 @EnableJpaRepositories("com.yapp.**")
 @EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = "com.yapp.**")

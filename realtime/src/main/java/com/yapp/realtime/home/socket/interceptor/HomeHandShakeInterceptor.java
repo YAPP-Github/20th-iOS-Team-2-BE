@@ -11,6 +11,7 @@ import org.springframework.web.socket.server.support.OriginHandshakeInterceptor;
 import java.util.Map;
 
 import static com.yapp.supporter.constant.RealTimeConstant.DEFAULT_SESSION_KEY;
+import static com.yapp.supporter.constant.RealTimeConstant.SESSION_FAMILY_KEY;
 
 /**
  * Author : daehwan2yo
@@ -43,6 +44,15 @@ public class HomeHandShakeInterceptor extends OriginHandshakeInterceptor {
 
             long userId = Long.parseLong(path.split("/")[0]);
 
+            // familyId header
+            if (request.getHeaders().containsKey(SESSION_FAMILY_KEY)) {
+                Long familyId = Long.parseLong(request.getHeaders()
+                        .get(SESSION_FAMILY_KEY)
+                        .get(0));
+
+
+                attributes.put(SESSION_FAMILY_KEY, familyId);
+            }
 
             attributes.put(DEFAULT_SESSION_KEY, userId);
             attributes.put("authToken", authToken);

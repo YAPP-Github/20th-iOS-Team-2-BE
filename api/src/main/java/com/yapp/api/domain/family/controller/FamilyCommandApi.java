@@ -1,6 +1,5 @@
 package com.yapp.api.domain.family.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yapp.api.domain.family.controller.model.FamilyRequest;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
@@ -11,16 +10,10 @@ import com.yapp.supporter.entity.family.persistence.entity.Family;
 import com.yapp.supporter.entity.user.entity.User;
 import com.yapp.supporter.error.exception.ErrorCode;
 import com.yapp.supporter.error.exception.ExceptionThrowableLayer;
-import com.yapp.supporter.util.KafkaMessageTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,11 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequiredArgsConstructor
 public class FamilyCommandApi implements ExceptionThrowableLayer {
-    @Value("${kafka.topic-name}")
-    private String TOPIC;
-
     private final FamilyService familyService;
-    private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
     @PostMapping(value = "/family", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -77,25 +66,6 @@ public class FamilyCommandApi implements ExceptionThrowableLayer {
         familyService.join(user, code);
         return ResponseEntity.ok()
                 .build();
-    }
-
-    private <T> void kafkaSending(User user, T body) throws JsonProcessingException {
-        String message = objectMapper.writeValueAsString(KafkaMessageTemplate.message(user, body));
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(new ProducerRecord<String, String>(TOPIC, message));
-
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-
-            @Override
-            public void onSuccess(SendResult<String, String> result) {
-                System.out.println("Sent message=[" + message + "] with offset=[" + result.getRecordMetadata()
-                        .offset() + "]");
-            }
-
-            @Override
-            public void onFailure(Throwable ex) {
-                System.out.println("Unable to send message=[" + message + "] due to : " + ex.getMessage());
-            }
-        });
     }
 }
 
