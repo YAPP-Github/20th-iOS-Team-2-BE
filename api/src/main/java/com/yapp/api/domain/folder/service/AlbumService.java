@@ -126,11 +126,15 @@ public class AlbumService implements ExceptionThrowableLayer {
     @Transactional
     public void delegate(Family family, Long albumId, Long fileId) {
         Album album = getAlbum(family, albumId);
+
+        fileQueryHandler.findAll(family, album.getThumbnail()).forEach(File::cancelThumbnail);
+
         File file = fileQueryHandler.findOne(family, fileId)
                 .orElseThrow(() -> new ApiException(FILE_NOT_FOUND, packageName(this.getClass())));
 
         if (album.contains(file)) {
             if (file.isPhoto()) {
+                file.isThumbnail();
                 album.updateThumbnail(file.getLink());
                 return;
             }

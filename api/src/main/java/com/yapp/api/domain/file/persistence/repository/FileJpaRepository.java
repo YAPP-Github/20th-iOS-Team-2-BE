@@ -25,5 +25,7 @@ public interface FileJpaRepository extends JpaRepository<File, Long> {
 
     Page<File> findAllByFamilyAndFavourite(Family family, Boolean favourite, Pageable pageable);
 
-    Page<File> findAllByFamilyAndAlbum(Family family, Album album, Pageable pageable);
+    Page<File> findAllByFamilyAndAlbumOrderByPriorityDescDateTimeDesc(Family family, Album album, Pageable pageable);
+
+    List<File> findAllByFamilyAndLink(Family family, String thumbnail);
 }

@@ -47,6 +47,11 @@ public class FileQueryJpaHandler implements FileQueryHandler {
 
     @Override
     public Page<File> findAll(Family family, Album album, Pageable pageable) {
-        return fileJpaRepository.findAllByFamilyAndAlbum(family, album, pageable);
+        return fileJpaRepository.findAllByFamilyAndAlbumOrderByPriorityDescDateTimeDesc(family, album, pageable);
+    }
+
+    @Override
+    public List<File> findAll(Family family, String thumbnail) {
+        return fileJpaRepository.findAllByFamilyAndLink(family, thumbnail);
     }
 }

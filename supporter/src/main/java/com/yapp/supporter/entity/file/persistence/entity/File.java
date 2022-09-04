@@ -34,6 +34,8 @@ public class File extends BaseEntity {
     private boolean favourite;
     private LocalDateTime dateTime;
 
+    private int priority;
+
     @Enumerated(STRING)
     private FileKind kind;
 
@@ -55,6 +57,7 @@ public class File extends BaseEntity {
         this.dateTime = dateTime;
         this.favourite = false;
         this.family = family;
+        this.priority = 0;
     }
 
     public static File recordingFile(
@@ -94,6 +97,14 @@ public class File extends BaseEntity {
         this.album.removeFile(this);
 
         this.album = album;
+    }
+
+    public void isThumbnail() {
+        this.priority = 1;
+    }
+
+    public void cancelThumbnail() {
+        this.priority = 0;
     }
 
     private static class INVALID extends File {

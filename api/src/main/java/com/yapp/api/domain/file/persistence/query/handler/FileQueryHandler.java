@@ -25,4 +25,6 @@ public interface FileQueryHandler {
     Page<File> findAll(Family family, Boolean value, Pageable pageable);
 
     Page<File> findAll(Family family, Album album, Pageable pageable);
+
+    List<File> findAll(Family family, String thumbnail);
 }
