@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class HomeResponse {
     @Getter
     @NoArgsConstructor
