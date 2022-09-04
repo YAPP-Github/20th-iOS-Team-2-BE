@@ -2,6 +2,7 @@ package com.yapp.api.domain.family.controller;
 
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.service.FamilyService;
+import com.yapp.api.domain.home.model.HomeResponse;
 import com.yapp.api.global.security.auth.resolver.AuthenticationHasFamily;
 import com.yapp.supporter.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class FamilyQueryApi {
 
     @Deprecated
     @GetMapping(value = "/family/notifications", produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<FamilyResponse.Notifications> retrieveNotifications() {
+    ResponseEntity<HomeResponse.Notifications> retrieveNotifications() {
         return ResponseEntity.ok()
                 .build();
     }

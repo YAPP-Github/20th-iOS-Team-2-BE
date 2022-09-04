@@ -1,11 +1,13 @@
 package com.yapp.api.domain.family.controller.model;
 
+import com.yapp.supporter.entity.calander.appointment.entity.Appointment;
 import com.yapp.supporter.entity.family.persistence.entity.Family;
 import com.yapp.supporter.entity.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,40 +19,6 @@ public class FamilyResponse {
     public static class Create {
         private Long familyId;
         private String familyCode;
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class HomeInfo {
-        private String familyName;
-        private List<EventInfo> events = new ArrayList<>();
-
-        @Getter
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class EventInfo {
-            private String title;
-            private String eventDate;
-            private String color;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Notifications {
-        private List<Notification> notifications = new ArrayList<>();
-
-        @Getter
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class Notification {
-            private String type;
-            private String content;
-            private Long targetId;
-            private String createdDate;
-        }
     }
 
     @Getter

@@ -1,12 +1,15 @@
 package com.yapp.api.domain.family.service;
 
+import com.yapp.api.domain.calendar.persistence.query.handler.AppointmentQueryHandler;
 import com.yapp.api.domain.family.controller.model.FamilyRequest;
 import com.yapp.api.domain.family.controller.model.FamilyResponse;
 import com.yapp.api.domain.family.persitence.command.handler.FamilyCommandHandler;
 import com.yapp.api.domain.family.persitence.query.handler.FamilyQueryHandler;
+import com.yapp.api.domain.home.model.HomeResponse;
 import com.yapp.api.domain.user.persistence.command.handler.UserCommandHandler;
 import com.yapp.api.domain.user.persistence.query.handler.UserQueryHandler;
 import com.yapp.api.global.error.exception.ApiException;
+import com.yapp.supporter.entity.calander.appointment.entity.Appointment;
 import com.yapp.supporter.entity.family.persistence.entity.Family;
 import com.yapp.supporter.entity.user.entity.User;
 import com.yapp.supporter.error.exception.ErrorCode;
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,6 +29,7 @@ public class FamilyService implements ExceptionThrowableLayer {
     private final FamilyQueryHandler familyQueryHandler;
     private final UserCommandHandler userCommandHandler;
     private final UserQueryHandler userQueryHandler;
+    private final AppointmentQueryHandler appointmentQueryHandler;
 
     public FamilyResponse.Info get(User user) {
         return FamilyResponse.Info.from(user.getFamily(), user);
@@ -75,5 +80,14 @@ public class FamilyService implements ExceptionThrowableLayer {
 
         foundFamily.addUser(user);
         userCommandHandler.update(user);
+    }
+
+    public HomeResponse.HomeInfo getEvents(User user) {
+        Family family = user.getFamily();
+
+        List<Appointment> appointments = appointmentQueryHandler.findAll(family, LocalDate.now(), LocalDate.now()
+                .plusMonths(1));
+
+        return HomeResponse.HomeInfo.of(family, appointments);
     }
 }
