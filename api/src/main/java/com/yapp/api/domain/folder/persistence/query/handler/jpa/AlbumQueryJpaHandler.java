@@ -42,6 +42,6 @@ public class AlbumQueryJpaHandler implements AlbumQueryHandler {
 
     @Override
     public Page<Album> findAll(Family family, Pageable pageable) {
-        return albumJpaRepository.findAllByFamily(family, pageable);
+        return albumJpaRepository.findAllByFamilyOrderByDateDesc(family, pageable);
     }
 }

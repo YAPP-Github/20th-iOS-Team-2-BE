@@ -37,7 +37,7 @@ public class File extends BaseEntity {
     @Enumerated(STRING)
     private FileKind kind;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     private Album album;
 
     @ManyToOne(fetch = LAZY)
