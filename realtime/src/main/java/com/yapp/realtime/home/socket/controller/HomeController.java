@@ -45,6 +45,7 @@ public class HomeController {
         List<User> members = greetingService.findMembers(familyId);
 
         List<WebSocketSession> memberSessions = members.stream()
+                .filter(member -> sessionDictionary.contains(member.getId()))
                 .map(user -> (WebSocketSession) sessionDictionary.get(user.getId())
                         .getDetail(SESSION_INFO_KEY))
                 .collect(Collectors.toList());

@@ -56,4 +56,9 @@ public class DefaultWebSocketSessionDictionary implements SessionInfoDictionary<
                 .map(entry -> (WebSocketSession) entry.getValue().getDetail(SESSION_INFO_KEY))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean contains(Long userId) {
+        return sessionForUser.containsKey(userId);
+    }
 }

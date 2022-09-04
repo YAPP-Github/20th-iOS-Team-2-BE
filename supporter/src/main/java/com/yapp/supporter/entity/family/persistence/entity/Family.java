@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PRIVATE;
@@ -32,7 +33,7 @@ public class Family extends BaseEntity {
     private String imageLink;
     private String code;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = EAGER)
     private User owner;
 
     @Embedded

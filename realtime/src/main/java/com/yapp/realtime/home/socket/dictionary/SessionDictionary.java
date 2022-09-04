@@ -1,5 +1,6 @@
 package com.yapp.realtime.home.socket.dictionary;
 
+import com.yapp.supporter.entity.user.entity.User;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface SessionDictionary<KEY, VALUE> {
 	boolean isEmpty();
 
     List<WebSocketSession> getMembers(KEY familyId);
+
+    boolean contains(KEY key);
 }
