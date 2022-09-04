@@ -28,6 +28,13 @@ public class ErrorResponse {
                 .build();
     }
 
+    public static ErrorResponse noRequestBody() {
+        return ErrorResponse.builder()
+                .status(400)
+                .detail("Request Body 가 정상적으로 입력되지 않았습니다.")
+                .build();
+    }
+
     public static ErrorResponse validError() {
         return ErrorResponse.builder()
                 .status(400)

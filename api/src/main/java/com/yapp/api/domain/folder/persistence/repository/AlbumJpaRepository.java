@@ -22,5 +22,5 @@ public interface AlbumJpaRepository extends JpaRepository<Album, Long> {
 
     List<Album> findAllByFamily(Family family);
 
-    Page<Album> findAllByFamily(Family family, Pageable pageable);
+    Page<Album> findAllByFamilyOrderByDateDesc(Family family, Pageable pageable);
 }
