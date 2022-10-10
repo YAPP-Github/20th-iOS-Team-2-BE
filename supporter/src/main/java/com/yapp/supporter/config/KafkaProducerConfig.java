@@ -2,9 +2,6 @@ package com.yapp.supporter.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,13 +16,13 @@ import java.util.Map;
  * Date : 2022/08/20
  * Info :
  **/
-@EnableKafka
-@Configuration
+@Deprecated
+// @EnableKafka
+// @Configuration
 public class KafkaProducerConfig {
-    @Value("${kafka.end-point}")
+    // @Value("${kafka.end-point}")
     private String endPoint;
 
-    @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> producerProps = new HashMap<>();
         producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, endPoint);
@@ -36,7 +33,6 @@ public class KafkaProducerConfig {
         return new DefaultKafkaProducerFactory<>(producerProps);
     }
 
-    @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }

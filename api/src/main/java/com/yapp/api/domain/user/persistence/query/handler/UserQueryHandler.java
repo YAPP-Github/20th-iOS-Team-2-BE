@@ -1,7 +1,9 @@
 package com.yapp.api.domain.user.persistence.query.handler;
 
+import com.yapp.supporter.entity.family.persistence.entity.Family;
 import com.yapp.supporter.entity.user.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,5 +13,4 @@ import java.util.Optional;
  **/
 public interface UserQueryHandler {
     Optional<User> findOne(Long targetUserId);
-
 }

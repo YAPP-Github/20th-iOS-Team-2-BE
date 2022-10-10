@@ -95,7 +95,7 @@ public class Family extends BaseEntity {
     @NoArgsConstructor
     @AllArgsConstructor(access = PRIVATE)
     public static class FamilyMembers {
-        @OneToMany(mappedBy = "family", fetch = LAZY)
+        @OneToMany(mappedBy = "family")
         private Set<User> members = new HashSet<>();
 
         void add(User user) {

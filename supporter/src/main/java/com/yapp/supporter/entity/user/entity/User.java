@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -44,7 +44,7 @@ public class User extends BaseEntity {
     @Embedded
     private OAuthInfos oAuthInfos;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = LAZY)
     private Family family;
 
     @Builder

@@ -1,0 +1,50 @@
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+
+
+dependencies {
+    implementation project(':supporter')
+
+    // web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // persistence
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // IO
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // util
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
